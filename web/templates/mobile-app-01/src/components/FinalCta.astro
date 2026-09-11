@@ -1,6 +1,6 @@
 <section class="final-section">
   <div class="container">
-    <section class="final-cta" id="download">
+    <section class="final-cta reveal" id="download">
       <div class="cta-content">
         <p class="eyebrow">READY FOR THE NEXT ADVENTURE?</p>
 
@@ -132,9 +132,9 @@
     font-size: 14px;
     font-weight: 600;
     transition:
-      transform 180ms ease,
-      background 180ms ease,
-      border-color 180ms ease;
+      transform var(--duration-fast) var(--ease-standard),
+      background var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard);
   }
 
   .button:hover {
@@ -304,7 +304,7 @@
   .footer-links a {
     color: var(--color-text-muted);
     font-size: 13px;
-    transition: color 180ms ease;
+    transition: color var(--duration-fast) var(--ease-standard);
   }
 
   .footer-links a:hover {

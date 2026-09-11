@@ -24,6 +24,11 @@
 
   /* Effects */
   --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.08);
+
+  /* Motion */
+  --duration-fast: 180ms;
+  --duration-normal: 320ms;
+  --ease-standard: cubic-bezier(0.2, 0.65, 0.3, 1);
 }
 
 html {
@@ -89,6 +94,28 @@ p {
 
 .section {
   padding-block: var(--section-space);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity var(--duration-normal) var(--ease-standard),
+    transform var(--duration-normal) var(--ease-standard);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 @media (max-width: 768px) {
