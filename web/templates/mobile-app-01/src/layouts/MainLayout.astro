@@ -6,7 +6,10 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "" } = Astro.props;
+const {
+  title,
+  description = "A modern, responsive mobile app landing page template built with Astro.",
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -16,6 +19,7 @@ const { title, description = "" } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#f8f8f5" />
     <title>{title}</title>
   </head>
 
