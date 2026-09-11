@@ -1,0 +1,561 @@
+<section class="features" id="features">
+  <div class="container">
+    <div class="features-intro">
+      <p class="eyebrow">MADE FOR BETTER JOURNEYS</p>
+
+      <h2>Everything you need<br />to travel better.</h2>
+
+      <p class="intro-description">
+        From finding your next destination to keeping every detail organized,
+        everything stays simple and close at hand.
+      </p>
+    </div>
+
+    <div class="feature-list">
+      <article class="feature feature-discover">
+        <div class="feature-visual">
+          <div class="discover-card">
+            <div class="discover-top">
+              <span>Explore</span>
+              <span>⌕</span>
+            </div>
+
+            <div class="discover-image">
+              <span>Amalfi Coast</span>
+            </div>
+
+            <div class="discover-meta">
+              <strong>Italy</strong>
+              <span>Scenic · Coastal · Relaxing</span>
+            </div>
+
+            <div class="discover-tags">
+              <span>Beach</span>
+              <span>Food</span>
+              <span>Culture</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-content">
+          <span class="feature-number">01</span>
+
+          <h3>Discover places worth going to.</h3>
+
+          <p>
+            Find inspiring destinations and save the places that make you want
+            to pack your bags and go.
+          </p>
+        </div>
+      </article>
+
+      <article class="feature feature-plan">
+        <div class="feature-visual">
+          <div class="plan-card">
+            <div class="plan-header">
+              <div>
+                <span>My trip</span>
+                <strong>Amalfi · 5 days</strong>
+              </div>
+
+              <span class="plan-status">Ready</span>
+            </div>
+
+            <div class="timeline">
+              <div class="timeline-item">
+                <span class="timeline-dot"></span>
+
+                <div>
+                  <strong>Day 01</strong>
+                  <span>Arrive & explore</span>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <span class="timeline-dot"></span>
+
+                <div>
+                  <strong>Day 02</strong>
+                  <span>Coastline & local food</span>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <span class="timeline-dot"></span>
+
+                <div>
+                  <strong>Day 03</strong>
+                  <span>Boat trip & sunset</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-content">
+          <span class="feature-number">02</span>
+
+          <h3>Plan your journey without the clutter.</h3>
+
+          <p>
+            Turn ideas into a simple itinerary so you can spend less time
+            organizing and more time enjoying the journey.
+          </p>
+        </div>
+      </article>
+
+      <article class="feature feature-remember">
+        <div class="feature-visual">
+          <div class="saved-card">
+            <div class="saved-header">
+              <span>Saved places</span>
+              <span>24</span>
+            </div>
+
+            <div class="saved-grid">
+              <div class="saved-place saved-place-one">
+                <span>Lake Como</span>
+              </div>
+
+              <div class="saved-place saved-place-two">
+                <span>Kyoto</span>
+              </div>
+
+              <div class="saved-place saved-place-three">
+                <span>Lisbon</span>
+              </div>
+
+              <div class="saved-place saved-place-four">
+                <span>Cappadocia</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-content">
+          <span class="feature-number">03</span>
+
+          <h3>Keep every adventure close.</h3>
+
+          <p>
+            Save destinations, ideas, and trip details in one calm space you
+            can return to whenever inspiration strikes.
+          </p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .features {
+    padding-block: var(--section-space);
+  }
+
+  .features-intro {
+    max-width: 720px;
+  }
+
+  .eyebrow {
+    margin-bottom: 20px;
+    color: var(--color-accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .features-intro h2 {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 700;
+  }
+
+  .intro-description {
+    max-width: 560px;
+    margin-top: 24px;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  .feature-list {
+    display: grid;
+    gap: 120px;
+    margin-top: 100px;
+  }
+
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.75fr);
+    align-items: center;
+    gap: 80px;
+  }
+
+  .feature:nth-child(even) {
+    grid-template-columns: minmax(280px, 0.75fr) minmax(0, 1fr);
+  }
+
+  .feature:nth-child(even) .feature-visual {
+    order: 2;
+  }
+
+  .feature:nth-child(even) .feature-content {
+    order: 1;
+  }
+
+  .feature-visual {
+    position: relative;
+    min-height: 440px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .feature-visual::before {
+    position: absolute;
+    top: -140px;
+    right: -120px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(91, 92, 226, 0.06);
+    filter: blur(8px);
+    content: "";
+    pointer-events: none;
+  }
+
+  .feature-content {
+    max-width: 470px;
+  }
+
+  .feature-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--color-text);
+    color: var(--color-surface);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .feature-content h3 {
+    margin-top: 24px;
+    font-size: clamp(2.2rem, 4vw, 4rem);
+    font-weight: 700;
+  }
+
+  .feature-content p {
+    margin-top: 22px;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  /* Discover visual */
+
+  .discover-card {
+    width: min(320px, 78%);
+    overflow: hidden;
+    border-radius: 24px;
+    background: var(--color-bg);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+    transform: rotate(-3deg);
+  }
+
+  .discover-top {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 18px 12px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .discover-image {
+    position: relative;
+    min-height: 190px;
+    margin-inline: 12px;
+    overflow: hidden;
+    border-radius: 18px;
+    background:
+      linear-gradient(145deg, #d5c7b2, #9d9d79 45%, #566b5e);
+  }
+
+  .discover-image span {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    left: 14px;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .discover-meta {
+    display: grid;
+    gap: 4px;
+    padding: 16px 18px 10px;
+  }
+
+  .discover-meta strong {
+    font-size: 16px;
+  }
+
+  .discover-meta span {
+    color: var(--color-text-muted);
+    font-size: 11px;
+  }
+
+  .discover-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 18px 18px;
+  }
+
+  .discover-tags span {
+    padding: 6px 9px;
+    border-radius: 999px;
+    background: var(--color-surface);
+    color: var(--color-text-muted);
+    font-size: 10px;
+  }
+
+  /* Planning visual */
+
+  .plan-card {
+    width: min(380px, 80%);
+    padding: 24px;
+    border-radius: 24px;
+    background: var(--color-bg);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  .plan-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .plan-header div {
+    display: grid;
+    gap: 5px;
+  }
+
+  .plan-header span:first-child {
+    color: var(--color-text-muted);
+    font-size: 11px;
+  }
+
+  .plan-header strong {
+    font-size: 18px;
+  }
+
+  .plan-status {
+    padding: 6px 9px;
+    border-radius: 999px;
+    background: rgba(91, 92, 226, 0.1);
+    color: var(--color-accent);
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .timeline {
+    display: grid;
+    gap: 0;
+    margin-top: 28px;
+  }
+
+  .timeline-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 12px;
+    min-height: 72px;
+  }
+
+  .timeline-item:not(:last-child)::before {
+    position: absolute;
+    top: 16px;
+    bottom: 0;
+    left: 6px;
+    width: 1px;
+    background: var(--color-border);
+    content: "";
+  }
+
+  .timeline-dot {
+    position: relative;
+    z-index: 1;
+    width: 13px;
+    height: 13px;
+    margin-top: 3px;
+    border: 3px solid var(--color-surface);
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+
+  .timeline-item div {
+    display: grid;
+    align-content: start;
+    gap: 4px;
+  }
+
+  .timeline-item strong {
+    font-size: 13px;
+  }
+
+  .timeline-item div span {
+    color: var(--color-text-muted);
+    font-size: 11px;
+  }
+
+  /* Saved visual */
+
+  .saved-card {
+    width: min(380px, 80%);
+    padding: 22px;
+    border-radius: 24px;
+    background: var(--color-bg);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+    transform: rotate(3deg);
+  }
+
+  .saved-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .saved-header span:last-child {
+    color: var(--color-accent);
+  }
+
+  .saved-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .saved-place {
+    position: relative;
+    min-height: 125px;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #b8c0b3;
+  }
+
+  .saved-place::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      transparent 45%,
+      rgba(0, 0, 0, 0.55)
+    );
+    content: "";
+  }
+
+  .saved-place span {
+    position: absolute;
+    right: 10px;
+    bottom: 9px;
+    left: 10px;
+    z-index: 1;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .saved-place-one {
+    background: linear-gradient(145deg, #b9c7c1, #6d857c);
+  }
+
+  .saved-place-two {
+    background: linear-gradient(145deg, #c6bca8, #827a69);
+  }
+
+  .saved-place-three {
+    background: linear-gradient(145deg, #b9c5d0, #667c91);
+  }
+
+  .saved-place-four {
+    background: linear-gradient(145deg, #d1b994, #94744f);
+  }
+
+  @media (max-width: 900px) {
+    .feature,
+    .feature:nth-child(even) {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+
+    .feature:nth-child(even) .feature-visual,
+    .feature:nth-child(even) .feature-content {
+      order: initial;
+    }
+
+    .feature-content {
+      max-width: 620px;
+    }
+
+    .feature-visual {
+      min-height: 400px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .features-intro h2 {
+      font-size: clamp(2.7rem, 13vw, 4rem);
+    }
+
+    .intro-description {
+      font-size: 16px;
+    }
+
+    .feature-list {
+      gap: 80px;
+      margin-top: 70px;
+    }
+
+    .feature-visual {
+      min-height: 340px;
+    }
+
+    .feature-content h3 {
+      font-size: clamp(2rem, 10vw, 3rem);
+    }
+
+    .feature-content p {
+      font-size: 16px;
+    }
+
+    .discover-card,
+    .plan-card,
+    .saved-card {
+      width: min(340px, 84%);
+    }
+
+    .discover-image {
+      min-height: 170px;
+    }
+
+    .saved-place {
+      min-height: 110px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .discover-card,
+    .saved-card {
+      transform: none;
+    }
+  }
+</style>
