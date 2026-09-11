@@ -99,10 +99,12 @@
   .cta-content {
     position: relative;
     z-index: 2;
+    min-width: 0;
     max-width: 650px;
   }
 
   .cta-content h2 {
+    max-width: 100%;
     font-size: clamp(3.5rem, 6vw, 6rem);
     font-weight: 700;
   }
@@ -327,6 +329,18 @@
     font-weight: 600;
   }
 
+  .attribution {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .attribution strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
   @media (max-width: 900px) {
     .final-cta {
       grid-template-columns: 1fr;
@@ -347,20 +361,22 @@
   @media (max-width: 600px) {
     .final-cta {
       min-height: auto;
-      padding: 48px 24px;
+      padding: 48px 20px;
       border-radius: 28px;
     }
 
     .cta-content h2 {
-      font-size: clamp(3rem, 14vw, 4.5rem);
+      font-size: clamp(2.75rem, 13vw, 4.25rem);
     }
 
     .cta-description {
+      max-width: 100%;
       font-size: 16px;
     }
 
     .cta-actions {
       flex-direction: column;
+      gap: 12px;
     }
 
     .button {
@@ -368,22 +384,22 @@
     }
 
     .cta-orbit {
-      width: 300px;
+      width: min(300px, 100%);
       height: 390px;
     }
 
     .orbit-one {
-      width: 290px;
-      height: 290px;
+      width: min(290px, 100%);
+      height: min(290px, 100%);
     }
 
     .orbit-two {
-      width: 225px;
-      height: 225px;
+      width: min(225px, 75%);
+      height: min(225px, 75%);
     }
 
     .cta-phone {
-      width: 210px;
+      width: min(210px, 78%);
     }
 
     .cta-phone-screen {
@@ -409,6 +425,28 @@
     }
   }
 
+  @media (max-width: 420px) {
+    .final-cta {
+      padding-inline: 18px;
+    }
+
+    .cta-content h2 {
+      font-size: clamp(2.6rem, 12.5vw, 3.6rem);
+    }
+
+    .cta-orbit {
+      height: 350px;
+    }
+
+    .cta-phone {
+      width: min(200px, 72%);
+    }
+
+    .cta-phone-screen {
+      min-height: 370px;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .cta-phone {
       transform: none;
@@ -418,17 +456,5 @@
     .footer-links a {
       transition: none;
     }
-  }
-
-  .attribution {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .attribution strong {
-    color: var(--color-text);
-    font-weight: 600;
   }
 </style>

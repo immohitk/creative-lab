@@ -10,7 +10,7 @@
         beautifully organized in one simple mobile experience.
       </p>
 
-      <div class="hero-content reveal">
+      <div class="hero-actions reveal">
         <a class="button button-primary" href="#download">Get the app</a>
         <a class="button button-secondary" href="#features">
           Explore features
@@ -122,8 +122,8 @@
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 36px;
+    gap: 20px;
+    margin-top: 56px;
   }
 
   .button {
@@ -139,7 +139,7 @@
     transition:
       transform var(--duration-fast) var(--ease-standard),
       background var(--duration-fast) var(--ease-standard),
-      border-color var(--duration-fast) var(--ease-standard)
+      border-color var(--duration-fast) var(--ease-standard);
   }
 
   .button:hover {
@@ -358,6 +358,8 @@
   @media (max-width: 420px) {
     .hero-actions {
       flex-direction: column;
+      gap: 12px;
+      margin-top: 36px;
     }
 
     .button {
