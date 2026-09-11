@@ -1,0 +1,143 @@
+<section class="highlights" aria-label="Key product highlights">
+  <div class="container">
+    <div class="highlight-grid">
+      <div class="highlight">
+        <span class="highlight-number">01</span>
+        <div>
+          <strong>Discover</strong>
+          <p>Find places that inspire you.</p>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <span class="highlight-number">02</span>
+        <div>
+          <strong>Plan</strong>
+          <p>Shape simple, flexible journeys.</p>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <span class="highlight-number">03</span>
+        <div>
+          <strong>Save</strong>
+          <p>Keep your favorite ideas close.</p>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <span class="highlight-number">04</span>
+        <div>
+          <strong>Explore</strong>
+          <p>Spend more time enjoying the trip.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .highlights {
+    padding-block: 24px 80px;
+  }
+
+  .highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-block: 1px solid var(--color-border);
+  }
+
+  .highlight {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px;
+    padding: 28px 24px;
+    border-right: 1px solid var(--color-border);
+  }
+
+  .highlight:first-child {
+    padding-left: 0;
+  }
+
+  .highlight:last-child {
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  .highlight-number {
+    color: var(--color-accent);
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .highlight strong {
+    font-size: 15px;
+  }
+
+  .highlight p {
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .highlight-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .highlight:nth-child(2) {
+      border-right: 0;
+    }
+
+    .highlight:nth-child(3),
+    .highlight:nth-child(4) {
+      border-top: 1px solid var(--color-border);
+    }
+
+    .highlight:first-child {
+      padding-left: 24px;
+    }
+
+    .highlight:nth-child(3) {
+      padding-left: 24px;
+    }
+
+    .highlight:nth-child(4) {
+      padding-right: 24px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .highlights {
+      padding-block: 8px 60px;
+    }
+
+    .highlight-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .highlight {
+      padding: 20px 0;
+      border-right: 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .highlight:first-child,
+    .highlight:nth-child(3) {
+      padding-left: 0;
+    }
+
+    .highlight:last-child {
+      padding-right: 0;
+      border-bottom: 0;
+    }
+
+    .highlight:nth-child(2) {
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .highlight:nth-child(3) {
+      border-top: 0;
+    }
+  }
+</style>

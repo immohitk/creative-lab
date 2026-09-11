@@ -1,0 +1,434 @@
+<section class="final-section">
+  <div class="container">
+    <section class="final-cta" id="download">
+      <div class="cta-content">
+        <p class="eyebrow">READY FOR THE NEXT ADVENTURE?</p>
+
+        <h2>Go somewhere<br />worth remembering.</h2>
+
+        <p class="cta-description">
+          Discover new places, shape your next journey, and keep every adventure
+          close.
+        </p>
+
+        <div class="cta-actions">
+          <a class="button button-primary" href="#top">Get the app</a>
+          <a class="button button-secondary" href="#features">
+            Explore features
+          </a>
+        </div>
+      </div>
+
+      <div class="cta-orbit" aria-hidden="true">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+
+        <div class="cta-phone">
+          <div class="cta-phone-screen">
+            <div class="cta-phone-top">
+              <span>9:41</span>
+              <span>•••</span>
+            </div>
+
+            <div class="cta-phone-content">
+              <span>Next destination</span>
+              <strong>Somewhere<br />beautiful.</strong>
+            </div>
+
+            <div class="cta-phone-card">
+              <span>AMALFI COAST</span>
+              <strong>Italy</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-main">
+        <a class="brand" href="#top" aria-label="Mobile App home">
+          <span class="brand-mark">M</span>
+          <span>Mobile App</span>
+        </a>
+
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="#features">Features</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#benefits">Benefits</a>
+        </nav>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 Mobile App. Template for Creative Lab.</p>
+
+        <p class="attribution">
+          <span>Designed &amp; Developed by</span>
+          <strong>Mohit Kumar · Creative Lab</strong>
+        </p>
+      </div>
+    </footer>
+  </div>
+</section>
+
+<style>
+  .final-section {
+    padding-top: var(--section-space);
+  }
+
+  .eyebrow {
+    margin-bottom: 20px;
+    color: var(--color-accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .final-cta {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    align-items: center;
+    gap: 60px;
+    min-height: 620px;
+    overflow: hidden;
+    padding: 80px;
+    border-radius: 36px;
+    background: #ecece8;
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 2;
+    max-width: 650px;
+  }
+
+  .cta-content h2 {
+    font-size: clamp(3.5rem, 6vw, 6rem);
+    font-weight: 700;
+  }
+
+  .cta-description {
+    max-width: 480px;
+    margin-top: 24px;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 36px;
+  }
+
+  .button {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    transition:
+      transform 180ms ease,
+      background 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .button:hover {
+    transform: translateY(-2px);
+  }
+
+  .button-primary {
+    background: var(--color-text);
+    color: var(--color-surface);
+  }
+
+  .button-primary:hover {
+    background: var(--color-accent);
+  }
+
+  .button-secondary {
+    border-color: var(--color-border);
+    background: rgba(255, 255, 255, 0.7);
+  }
+
+  .button-secondary:hover {
+    border-color: var(--color-text);
+    background: var(--color-surface);
+  }
+
+  .button:focus-visible,
+  .brand:focus-visible,
+  .footer-links a:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  /* CTA visual */
+
+  .cta-orbit {
+    position: relative;
+    display: grid;
+    width: 380px;
+    height: 460px;
+    place-items: center;
+  }
+
+  .orbit {
+    position: absolute;
+    border: 1px solid rgba(91, 92, 226, 0.14);
+    border-radius: 50%;
+  }
+
+  .orbit-one {
+    width: 360px;
+    height: 360px;
+  }
+
+  .orbit-two {
+    width: 280px;
+    height: 280px;
+  }
+
+  .cta-phone {
+    position: relative;
+    z-index: 1;
+    width: 240px;
+    padding: 10px;
+    border: 1px solid #d7d7d2;
+    border-radius: 34px;
+    background: #202020;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+    transform: rotate(5deg);
+  }
+
+  .cta-phone-screen {
+    min-height: 450px;
+    overflow: hidden;
+    border-radius: 26px;
+    padding: 24px 15px 15px;
+    background: var(--color-bg);
+  }
+
+  .cta-phone-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    font-weight: 700;
+  }
+
+  .cta-phone-content {
+    display: grid;
+    gap: 8px;
+    margin-top: 80px;
+  }
+
+  .cta-phone-content span {
+    color: var(--color-text-muted);
+    font-size: 11px;
+  }
+
+  .cta-phone-content strong {
+    font-size: 28px;
+    line-height: 1;
+    letter-spacing: -0.05em;
+  }
+
+  .cta-phone-card {
+    display: grid;
+    gap: 5px;
+    min-height: 150px;
+    margin-top: 32px;
+    align-content: end;
+    padding: 16px;
+    border-radius: 20px;
+    background:
+      linear-gradient(145deg, #d2d7ce, #9aab99 50%, #617665);
+  }
+
+  .cta-phone-card span {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .cta-phone-card strong {
+    color: #ffffff;
+    font-size: 18px;
+  }
+
+  /* Footer */
+
+  .footer {
+    padding-block: 70px 30px;
+  }
+
+  .footer-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .brand-mark {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--color-text);
+    color: var(--color-surface);
+    font-size: 14px;
+  }
+
+  .footer-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .footer-links a {
+    color: var(--color-text-muted);
+    font-size: 13px;
+    transition: color 180ms ease;
+  }
+
+  .footer-links a:hover {
+    color: var(--color-text);
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    padding-top: 22px;
+  }
+
+  .footer-bottom p {
+    font-size: 11px;
+  }
+
+  .footer-bottom strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .final-cta {
+      grid-template-columns: 1fr;
+      gap: 30px;
+      padding: 60px 40px;
+    }
+
+    .cta-orbit {
+      margin-inline: auto;
+    }
+
+    .footer-main {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .final-cta {
+      min-height: auto;
+      padding: 48px 24px;
+      border-radius: 28px;
+    }
+
+    .cta-content h2 {
+      font-size: clamp(3rem, 14vw, 4.5rem);
+    }
+
+    .cta-description {
+      font-size: 16px;
+    }
+
+    .cta-actions {
+      flex-direction: column;
+    }
+
+    .button {
+      width: 100%;
+    }
+
+    .cta-orbit {
+      width: 300px;
+      height: 390px;
+    }
+
+    .orbit-one {
+      width: 290px;
+      height: 290px;
+    }
+
+    .orbit-two {
+      width: 225px;
+      height: 225px;
+    }
+
+    .cta-phone {
+      width: 210px;
+    }
+
+    .cta-phone-screen {
+      min-height: 390px;
+    }
+
+    .cta-phone-content {
+      margin-top: 60px;
+    }
+
+    .footer {
+      padding-top: 55px;
+    }
+
+    .footer-links {
+      flex-wrap: wrap;
+      gap: 16px 24px;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta-phone {
+      transform: none;
+    }
+
+    .button,
+    .footer-links a {
+      transition: none;
+    }
+  }
+
+  .attribution {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .attribution strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+</style>
