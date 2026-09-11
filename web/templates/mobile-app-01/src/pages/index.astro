@@ -1,17 +1,15 @@
 ---
-
+import MainLayout from "../layouts/MainLayout.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout
+  title="Mobile App Landing Page"
+  description="A modern, responsive mobile app landing page template."
+>
+  <main>
+    <div class="container">
+      <h1>Mobile App Landing Page</h1>
+      <p>Creative Lab · Mobile App 01</p>
+    </div>
+  </main>
+</MainLayout>
