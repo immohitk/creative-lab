@@ -1,0 +1,682 @@
+<section class="workflow" id="how-it-works">
+  <div class="container">
+    <!-- How it works -->
+    <div class="workflow-intro">
+      <div>
+        <p class="eyebrow">HOW IT WORKS</p>
+
+        <h2>Plan your next adventure in three simple steps.</h2>
+      </div>
+
+      <p class="workflow-description">
+        Keep the process simple from the first spark of inspiration to the
+        moment you are ready to go.
+      </p>
+    </div>
+
+    <div class="steps">
+      <article class="step">
+        <span class="step-number">01</span>
+
+        <div class="step-icon">
+          <span></span>
+        </div>
+
+        <h3>Discover</h3>
+
+        <p>Find places that inspire you and save the ones worth exploring.</p>
+      </article>
+
+      <article class="step">
+        <span class="step-number">02</span>
+
+        <div class="step-icon step-icon-plan">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <h3>Plan</h3>
+
+        <p>Turn your ideas into a simple itinerary that works for your trip.</p>
+      </article>
+
+      <article class="step">
+        <span class="step-number">03</span>
+
+        <div class="step-icon step-icon-go">
+          <span>→</span>
+        </div>
+
+        <h3>Go</h3>
+
+        <p>Keep your plans close and enjoy the journey without the clutter.</p>
+      </article>
+    </div>
+
+    <!-- Benefits -->
+    <section class="benefits" id="benefits">
+      <div class="benefits-content">
+        <p class="eyebrow">TRAVEL WITHOUT THE FRICTION</p>
+
+        <h2>Less planning.<br />More discovering.</h2>
+
+        <p class="benefits-description">
+          A calmer way to keep your travel inspiration, plans, and favorite
+          places together.
+        </p>
+      </div>
+
+      <div class="benefit-list">
+        <div class="benefit">
+          <span class="benefit-marker">01</span>
+
+          <div>
+            <h3>Keep inspiration organized</h3>
+            <p>Collect destinations and ideas without losing them in the noise.</p>
+          </div>
+        </div>
+
+        <div class="benefit">
+          <span class="benefit-marker">02</span>
+
+          <div>
+            <h3>Build simple itineraries</h3>
+            <p>Shape your plans around the places and experiences you care about.</p>
+          </div>
+        </div>
+
+        <div class="benefit">
+          <span class="benefit-marker">03</span>
+
+          <div>
+            <h3>Save places for later</h3>
+            <p>Keep future destinations ready whenever the next trip appears.</p>
+          </div>
+        </div>
+
+        <div class="benefit">
+          <span class="benefit-marker">04</span>
+
+          <div>
+            <h3>Keep your trip close</h3>
+            <p>Have important travel details available without unnecessary clutter.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- App showcase -->
+    <section class="app-showcase">
+      <div class="showcase-heading">
+        <p class="eyebrow">YOUR TRIPS, BEAUTIFULLY ORGANIZED</p>
+
+        <h2>Everything important,<br />right where you need it.</h2>
+      </div>
+
+      <div class="showcase">
+        <div class="showcase-copy">
+          <span class="showcase-label">YOUR NEXT TRIP</span>
+
+          <h3>Amalfi Coast</h3>
+
+          <p>5 days · Italy</p>
+
+          <div class="showcase-details">
+            <div>
+              <span>Places</span>
+              <strong>12</strong>
+            </div>
+
+            <div>
+              <span>Days</span>
+              <strong>05</strong>
+            </div>
+
+            <div>
+              <span>Saved</span>
+              <strong>08</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="showcase-phone" aria-label="Travel app trip preview">
+          <div class="showcase-phone-screen">
+            <div class="showcase-phone-top">
+              <span>9:41</span>
+              <span>•••</span>
+            </div>
+
+            <div class="showcase-trip-heading">
+              <span>Upcoming trip</span>
+              <strong>Amalfi Coast</strong>
+            </div>
+
+            <div class="showcase-map">
+              <span class="map-route"></span>
+              <span class="map-point map-point-one"></span>
+              <span class="map-point map-point-two"></span>
+              <span class="map-point map-point-three"></span>
+            </div>
+
+            <div class="showcase-place-list">
+              <div>
+                <span>01</span>
+                <strong>Positano</strong>
+              </div>
+
+              <div>
+                <span>02</span>
+                <strong>Ravello</strong>
+              </div>
+
+              <div>
+                <span>03</span>
+                <strong>Amalfi</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<style>
+  .workflow {
+    padding-block: var(--section-space);
+  }
+
+  .eyebrow {
+    margin-bottom: 20px;
+    color: var(--color-accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .workflow-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.6fr);
+    align-items: end;
+    gap: 80px;
+  }
+
+  .workflow-intro h2 {
+    max-width: 700px;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 700;
+  }
+
+  .workflow-description {
+    max-width: 420px;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  /* Steps */
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 80px;
+  }
+
+  .step {
+    position: relative;
+    min-height: 310px;
+    padding: 28px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+
+  .step-number {
+    color: var(--color-text-muted);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .step-icon {
+    display: grid;
+    width: 64px;
+    height: 64px;
+    margin-top: 48px;
+    place-items: center;
+    border-radius: 20px;
+    background: rgba(91, 92, 226, 0.08);
+  }
+
+  .step-icon span:first-child {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+  }
+
+  .step-icon-plan {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .step-icon-plan span {
+    width: 5px;
+    height: 24px;
+    border-radius: 999px;
+    background: var(--color-accent);
+  }
+
+  .step-icon-plan span:nth-child(2) {
+    height: 34px;
+  }
+
+  .step-icon-plan span:nth-child(3) {
+    height: 18px;
+  }
+
+  .step-icon-go span {
+    border: 0;
+    width: auto;
+    height: auto;
+    color: var(--color-accent);
+    font-size: 28px;
+    font-weight: 500;
+  }
+
+  .step h3 {
+    margin-top: 28px;
+    font-size: 24px;
+  }
+
+  .step p {
+    max-width: 280px;
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* Benefits */
+
+  .benefits {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+    gap: 100px;
+    padding-block: 160px;
+  }
+
+  .benefits-content {
+    position: sticky;
+    top: 40px;
+    align-self: start;
+  }
+
+  .benefits-content h2 {
+    font-size: clamp(3rem, 5vw, 5rem);
+    font-weight: 700;
+  }
+
+  .benefits-description {
+    max-width: 430px;
+    margin-top: 24px;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .benefit-list {
+    display: grid;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .benefit {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 20px;
+    padding-block: 26px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .benefit-marker {
+    color: var(--color-accent);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .benefit h3 {
+    font-size: 19px;
+  }
+
+  .benefit p {
+    max-width: 420px;
+    margin-top: 7px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* App showcase */
+
+  .app-showcase {
+    padding-top: 20px;
+  }
+
+  .showcase-heading {
+    max-width: 760px;
+  }
+
+  .showcase-heading h2 {
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 700;
+  }
+
+  .showcase {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    align-items: center;
+    gap: 80px;
+    min-height: 620px;
+    margin-top: 70px;
+    overflow: hidden;
+    padding: 70px;
+    border-radius: 36px;
+    background: var(--color-text);
+    color: var(--color-surface);
+  }
+
+  .showcase::before {
+    position: absolute;
+    top: -180px;
+    right: -120px;
+    width: 480px;
+    height: 480px;
+    border-radius: 50%;
+    background: rgba(91, 92, 226, 0.3);
+    filter: blur(10px);
+    content: "";
+    pointer-events: none;
+  }
+
+  .showcase-copy {
+    position: relative;
+    z-index: 1;
+  }
+
+  .showcase-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    opacity: 0.65;
+  }
+
+  .showcase-copy h3 {
+    margin-top: 18px;
+    font-size: clamp(3rem, 6vw, 6rem);
+    letter-spacing: -0.05em;
+  }
+
+  .showcase-copy > p {
+    margin-top: 8px;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 16px;
+  }
+
+  .showcase-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 36px;
+    margin-top: 54px;
+  }
+
+  .showcase-details div {
+    display: grid;
+    gap: 5px;
+  }
+
+  .showcase-details span {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 11px;
+  }
+
+  .showcase-details strong {
+    font-size: 22px;
+  }
+
+  .showcase-phone {
+    position: relative;
+    z-index: 1;
+    width: 290px;
+    margin-inline: auto;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 38px;
+    background: #111111;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+    transform: rotate(4deg);
+  }
+
+  .showcase-phone-screen {
+    min-height: 560px;
+    overflow: hidden;
+    border-radius: 30px;
+    padding: 26px 16px 16px;
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .showcase-phone-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .showcase-trip-heading {
+    display: grid;
+    gap: 5px;
+    margin-top: 48px;
+  }
+
+  .showcase-trip-heading span {
+    color: var(--color-text-muted);
+    font-size: 11px;
+  }
+
+  .showcase-trip-heading strong {
+    font-size: 23px;
+  }
+
+  .showcase-map {
+    position: relative;
+    height: 220px;
+    margin-top: 22px;
+    overflow: hidden;
+    border-radius: 20px;
+    background:
+      linear-gradient(135deg, #d9dfd9, #b7c5b7 50%, #899b8b);
+  }
+
+  .showcase-map::before,
+  .showcase-map::after {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.4);
+    content: "";
+  }
+
+  .showcase-map::before {
+    top: 25%;
+    right: -10%;
+    width: 120%;
+    height: 2px;
+    transform: rotate(-25deg);
+  }
+
+  .showcase-map::after {
+    top: 60%;
+    left: -15%;
+    width: 130%;
+    height: 2px;
+    transform: rotate(18deg);
+  }
+
+  .map-route {
+    position: absolute;
+    top: 35%;
+    left: 22%;
+    width: 55%;
+    height: 28%;
+    border-right: 2px dashed rgba(91, 92, 226, 0.9);
+    border-bottom: 2px dashed rgba(91, 92, 226, 0.9);
+    border-radius: 0 0 60px 0;
+    transform: rotate(-12deg);
+  }
+
+  .map-point {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--color-surface);
+    border-radius: 50%;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-accent);
+  }
+
+  .map-point-one {
+    top: 26%;
+    left: 20%;
+  }
+
+  .map-point-two {
+    top: 48%;
+    left: 50%;
+  }
+
+  .map-point-three {
+    right: 18%;
+    bottom: 22%;
+  }
+
+  .showcase-place-list {
+    display: grid;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .showcase-place-list div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--color-surface);
+  }
+
+  .showcase-place-list span {
+    color: var(--color-text-muted);
+    font-size: 9px;
+  }
+
+  .showcase-place-list strong {
+    font-size: 11px;
+  }
+
+  @media (max-width: 900px) {
+    .workflow-intro {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .steps {
+      grid-template-columns: 1fr;
+    }
+
+    .step {
+      min-height: auto;
+    }
+
+    .benefits {
+      grid-template-columns: 1fr;
+      gap: 60px;
+      padding-block: 100px;
+    }
+
+    .benefits-content {
+      position: static;
+    }
+
+    .showcase {
+      grid-template-columns: 1fr;
+      gap: 60px;
+      padding: 50px 30px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .workflow-intro h2,
+    .showcase-heading h2 {
+        font-size: clamp(2.7rem, 13vw, 4rem);
+    }
+
+    .workflow-description,
+    .benefits-description {
+        font-size: 16px;
+    }
+
+    .steps {
+        margin-top: 60px;
+    }
+
+    .step {
+        padding: 24px;
+    }
+
+    .step-icon {
+        margin-top: 36px;
+    }
+
+    .benefits {
+        padding-block: 90px;
+    }
+
+    .benefit {
+        grid-template-columns: 32px 1fr;
+        gap: 12px;
+    }
+
+    .benefit h3 {
+        font-size: 17px;
+    }
+
+    .showcase {
+        min-height: auto;
+        margin-top: 50px;
+        padding: 40px 20px;
+        border-radius: 28px;
+    }
+
+    .showcase-copy h3 {
+        font-size: clamp(3rem, 15vw, 4.5rem);
+    }
+
+    .showcase-details {
+        gap: 24px;
+        margin-top: 36px;
+    }
+
+    .showcase-phone {
+        width: min(270px, 82vw);
+        transform: rotate(3deg);
+    }
+
+    .showcase-phone-screen {
+        min-height: 520px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .showcase-phone {
+      transform: none;
+    }
+  }
+</style>
