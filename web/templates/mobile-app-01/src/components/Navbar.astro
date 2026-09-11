@@ -1,0 +1,105 @@
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a class="brand" href="/" aria-label="Mobile App home">
+      <span class="brand-mark">M</span>
+      <span>Mobile App</span>
+    </a>
+
+    <div class="nav-links" aria-label="Primary navigation">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#benefits">Benefits</a>
+    </div>
+
+    <a class="nav-cta" href="#download">Get the app</a>
+  </div>
+</nav>
+
+<style>
+  .navbar {
+    padding-block: 20px;
+  }
+
+  .navbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .brand-mark {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--color-text);
+    color: var(--color-surface);
+    font-size: 14px;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-left: auto;
+    margin-right: 8px;
+  }
+
+  .nav-links a {
+    color: var(--color-text-muted);
+    font-size: 14px;
+    transition: color 180ms ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--color-text);
+  }
+
+  .nav-cta {
+    padding: 11px 18px;
+    border: 1px solid var(--color-text);
+    border-radius: 999px;
+    background: var(--color-text);
+    color: var(--color-surface);
+    font-size: 14px;
+    font-weight: 600;
+    transition:
+      background 180ms ease,
+      transform 180ms ease;
+  }
+
+  .nav-cta:hover {
+    background: var(--color-accent);
+    transform: translateY(-1px);
+  }
+
+  .nav-links a:focus-visible,
+  .nav-cta:focus-visible,
+  .brand:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .nav-links {
+      display: none;
+    }
+
+    .navbar {
+      padding-block: 16px;
+    }
+
+    .nav-cta {
+      padding: 10px 15px;
+    }
+  }
+</style>

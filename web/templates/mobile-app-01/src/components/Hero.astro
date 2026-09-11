@@ -1,0 +1,375 @@
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-content">
+      <p class="eyebrow">YOUR NEXT ADVENTURE STARTS HERE</p>
+
+      <h1>Discover more.<br />Wander better.</h1>
+
+      <p class="hero-description">
+        Find inspiring places, plan memorable journeys, and keep every adventure
+        beautifully organized in one simple mobile experience.
+      </p>
+
+      <div class="hero-actions">
+        <a class="button button-primary" href="#download">Get the app</a>
+        <a class="button button-secondary" href="#features">
+          Explore features
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual" aria-label="Mobile app preview">
+      <div class="phone">
+        <div class="phone-notch"></div>
+
+        <div class="phone-screen">
+          <div class="screen-top">
+            <span>9:41</span>
+            <span>•••</span>
+          </div>
+
+          <div class="screen-heading">
+            <span>Good morning</span>
+            <strong>Where to next?</strong>
+          </div>
+
+          <div class="destination-card">
+            <div class="destination-image"></div>
+
+            <div class="destination-info">
+              <strong>Amalfi Coast</strong>
+              <span>Italy · 5 days</span>
+            </div>
+          </div>
+
+          <div class="screen-row">
+            <div class="mini-card">
+              <span>Trips</span>
+              <strong>08</strong>
+            </div>
+
+            <div class="mini-card">
+              <span>Saved</span>
+              <strong>24</strong>
+            </div>
+          </div>
+
+          <div class="screen-nav">
+            <span>Home</span>
+            <span>Explore</span>
+            <span>Trips</span>
+            <span>Profile</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: 72px var(--section-space);
+  }
+
+  .hero::before {
+    position: absolute;
+    top: 80px;
+    right: -180px;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: rgba(91, 92, 226, 0.08);
+    filter: blur(10px);
+    content: "";
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+    align-items: center;
+    gap: 80px;
+    min-height: 650px;
+  }
+
+  .hero-content {
+    max-width: 620px;
+  }
+
+  .eyebrow {
+    margin-bottom: 22px;
+    color: var(--color-accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  h1 {
+    max-width: 650px;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-weight: 700;
+  }
+
+  .hero-description {
+    max-width: 540px;
+    margin-top: 28px;
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 36px;
+  }
+
+  .button {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    transition:
+      transform 180ms ease,
+      background 180ms ease,
+      border-color 180ms ease;
+  }
+
+  .button:hover {
+    transform: translateY(-2px);
+  }
+
+  .button-primary {
+    background: var(--color-text);
+    color: var(--color-surface);
+  }
+
+  .button-primary:hover {
+    background: var(--color-accent);
+  }
+
+  .button-secondary {
+    border-color: var(--color-border);
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .button-secondary:hover {
+    border-color: var(--color-text);
+    background: var(--color-surface);
+  }
+
+  .button:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  .hero-visual {
+    display: grid;
+    place-items: center;
+  }
+
+  .phone {
+    position: relative;
+    width: min(310px, 80vw);
+    padding: 12px;
+    border: 1px solid #d7d7d2;
+    border-radius: 42px;
+    background: #202020;
+    box-shadow: var(--shadow-soft);
+    transform: rotate(3deg);
+  }
+
+  .phone-notch {
+    position: absolute;
+    top: 22px;
+    left: 50%;
+    z-index: 2;
+    width: 88px;
+    height: 22px;
+    border-radius: 999px;
+    background: #202020;
+    transform: translateX(-50%);
+  }
+
+  .phone-screen {
+    position: relative;
+    min-height: 600px;
+    overflow: hidden;
+    border-radius: 32px;
+    padding: 28px 18px 18px;
+    background: var(--color-bg);
+  }
+
+  .screen-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .screen-heading {
+    display: grid;
+    gap: 5px;
+    margin-top: 54px;
+  }
+
+  .screen-heading span {
+    color: var(--color-text-muted);
+    font-size: 12px;
+  }
+
+  .screen-heading strong {
+    font-size: 25px;
+    letter-spacing: -0.04em;
+  }
+
+  .destination-card {
+    margin-top: 26px;
+    overflow: hidden;
+    border-radius: 22px;
+    background: var(--color-surface);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  .destination-image {
+    min-height: 230px;
+    background:
+      linear-gradient(140deg, #c8d5d0, #8ba99b 45%, #4f6f63);
+  }
+
+  .destination-info {
+    display: grid;
+    gap: 5px;
+    padding: 16px;
+  }
+
+  .destination-info strong {
+    font-size: 16px;
+  }
+
+  .destination-info span {
+    color: var(--color-text-muted);
+    font-size: 12px;
+  }
+
+  .screen-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .mini-card {
+    display: grid;
+    gap: 5px;
+    padding: 14px;
+    border-radius: 18px;
+    background: var(--color-surface);
+  }
+
+  .mini-card span {
+    color: var(--color-text-muted);
+    font-size: 11px;
+  }
+
+  .mini-card strong {
+    font-size: 20px;
+  }
+
+  .screen-nav {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    left: 18px;
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.92);
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 60px;
+      text-align: center;
+    }
+
+    .hero-content {
+      margin-inline: auto;
+    }
+
+    .hero-description {
+      margin-inline: auto;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .hero {
+      padding-top: 48px;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 15vw, 4.5rem);
+    }
+
+    .hero-description {
+      font-size: 16px;
+    }
+
+    .phone {
+      width: min(280px, 82vw);
+    }
+
+    .phone-screen {
+      min-height: 540px;
+    }
+
+    .destination-image {
+      min-height: 190px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .phone {
+      transform: none;
+    }
+
+    .button {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .hero-actions {
+      flex-direction: column;
+    }
+
+    .button {
+      width: 100%;
+    }
+
+    .phone {
+      width: min(260px, 84vw);
+    }
+
+    .phone-screen {
+      min-height: 500px;
+    }
+  }
+</style>
