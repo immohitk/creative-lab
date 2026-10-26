@@ -102,9 +102,15 @@ Technologies are selected according to the requirements of each project.
 
 **Mobile App Landing Page**
 
-    web/templates/mobile-app-01/
+`web/templates/mobile-app-01/`
 
 A premium, responsive mobile app landing page built with Astro.
+
+**Beyond — Mobile App Landing Page 02**
+
+`web/templates/mobile-app-02/`
+
+A dark editorial-style mobile app landing page built with Astro, featuring responsive layouts, accessibility improvements, SEO metadata, and a polished user experience.
 
 More templates and components will be added progressively.
 
