@@ -1,0 +1,178 @@
+
+<section class="workflow section" id="how-it-works">
+  <div class="container">
+    <div class="workflow-heading">
+      <div>
+        <p class="eyebrow">02 / YOUR NEXT CHAPTER</p>
+        <h2>Three steps.<br /><span>A whole new rhythm.</span></h2>
+      </div>
+      <p>
+        No complicated plans. Just a simpler way to make space for the
+        things that make your day feel like yours.
+      </p>
+    </div>
+
+    <div class="steps-grid">
+      <article class="step-card">
+        <span class="step-number">01</span>
+        <div class="step-icon discover-icon" aria-hidden="true">
+          <span>⌕</span>
+        </div>
+        <h3>Find your spark.</h3>
+        <p>Explore ideas, places and possibilities that match your curiosity.</p>
+        <span class="step-tag">START EXPLORING ↗</span>
+      </article>
+
+      <article class="step-card step-featured">
+        <span class="step-number">02</span>
+        <div class="step-icon plan-icon" aria-hidden="true">
+          <span>✳</span>
+        </div>
+        <h3>Make it yours.</h3>
+        <p>Choose what matters to you and shape it around your own routine.</p>
+        <span class="step-tag">BUILD YOUR FLOW ↗</span>
+      </article>
+
+      <article class="step-card">
+        <span class="step-number">03</span>
+        <div class="step-icon move-icon" aria-hidden="true">
+          <span>↗</span>
+        </div>
+        <h3>Keep moving.</h3>
+        <p>Take small steps, celebrate progress and leave room for the unexpected.</p>
+        <span class="step-tag">MAKE IT HAPPEN ↗</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .workflow {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .workflow-heading {
+    display: grid;
+    grid-template-columns: 1.1fr 0.7fr;
+    align-items: end;
+    gap: 36px;
+    margin-bottom: 48px;
+  }
+
+  .workflow-heading h2 {
+    margin-bottom: 0;
+    font-size: clamp(2.6rem, 5vw, 4.6rem);
+    line-height: 1.04;
+    letter-spacing: -0.075em;
+  }
+
+  .workflow-heading h2 span {
+    color: var(--color-accent);
+  }
+
+  .workflow-heading > p {
+    max-width: 400px;
+    margin-bottom: 5px;
+    line-height: 1.8;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .step-card {
+    display: flex;
+    min-height: 320px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: clamp(22px, 3vw, 32px);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-elevated);
+  }
+
+  .step-number {
+    color: var(--color-text-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .step-icon {
+    display: grid;
+    width: 62px;
+    height: 62px;
+    margin-block: 30px 25px;
+    place-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    font-size: 2rem;
+  }
+
+  .discover-icon {
+    color: var(--color-accent);
+    background: #222b27;
+  }
+
+  .plan-icon {
+    color: var(--color-accent-text);
+    background: var(--color-accent);
+  }
+
+  .move-icon {
+    color: var(--color-accent);
+    background: #222b27;
+  }
+
+  .step-card h3 {
+    margin-bottom: 10px;
+    font-size: 1.45rem;
+    letter-spacing: -0.045em;
+  }
+
+  .step-card > p {
+    margin-bottom: 25px;
+    font-size: 0.9rem;
+    line-height: 1.75;
+  }
+
+  .step-tag {
+    margin-top: auto;
+    color: var(--color-text-muted);
+    font-size: 0.61rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+  }
+
+  .step-featured {
+    border-color: rgba(213, 255, 95, 0.42);
+    background:
+      radial-gradient(ellipse at top right, rgba(213, 255, 95, 0.08), transparent 60%),
+      var(--color-bg-elevated);
+  }
+
+  .step-featured .step-tag {
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 800px) {
+    .workflow-heading {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .steps-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .step-card {
+      min-height: 0;
+    }
+
+    .step-icon {
+      margin-block: 22px 18px;
+    }
+  }
+</style>

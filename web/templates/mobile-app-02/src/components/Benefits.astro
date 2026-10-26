@@ -1,0 +1,171 @@
+
+<section class="benefits section" id="features">
+  <div class="container benefits-layout">
+    <div class="benefits-copy">
+      <p class="eyebrow">03 / BUILT AROUND YOU</p>
+      <h2>Less pressure.<br /><span>More possibility.</span></h2>
+      <p class="benefits-intro">
+        Your life doesn't need another set of rules. It needs tools that
+        give you more freedom to make each day your own.
+      </p>
+
+      <a class="benefits-link" href="#showcase">
+        See it in action <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <div class="benefit-list">
+      <article class="benefit-item">
+        <span class="benefit-index">01</span>
+        <div>
+          <h3>Made for real life</h3>
+          <p>Flexible ideas that fit around your day, not the other way around.</p>
+        </div>
+        <span class="benefit-arrow" aria-hidden="true">↗</span>
+      </article>
+
+      <article class="benefit-item">
+        <span class="benefit-index">02</span>
+        <div>
+          <h3>Your pace, your progress</h3>
+          <p>Focus on small, meaningful steps instead of chasing perfection.</p>
+        </div>
+        <span class="benefit-arrow" aria-hidden="true">↗</span>
+      </article>
+
+      <article class="benefit-item">
+        <span class="benefit-index">03</span>
+        <div>
+          <h3>Room to be curious</h3>
+          <p>Keep discovering fresh ideas and new ways to enjoy the everyday.</p>
+        </div>
+        <span class="benefit-arrow" aria-hidden="true">↗</span>
+      </article>
+
+      <article class="benefit-item">
+        <span class="benefit-index">04</span>
+        <div>
+          <h3>Simple by design</h3>
+          <p>A clear, thoughtful experience that keeps the noise to a minimum.</p>
+        </div>
+        <span class="benefit-arrow" aria-hidden="true">↗</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .benefits {
+    border-top: 1px solid var(--color-border);
+    background: #14191e;
+  }
+
+  .benefits-layout {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(40px, 8vw, 110px);
+  }
+
+  .benefits-copy {
+    align-self: start;
+    position: sticky;
+    top: 40px;
+  }
+
+  .benefits-copy h2 {
+    margin-bottom: 22px;
+    font-size: clamp(2.8rem, 5vw, 4.8rem);
+    line-height: 1.02;
+    letter-spacing: -0.075em;
+  }
+
+  .benefits-copy h2 span {
+    color: var(--color-accent);
+  }
+
+  .benefits-intro {
+    max-width: 420px;
+    margin-bottom: 28px;
+    line-height: 1.8;
+  }
+
+  .benefits-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .benefits-link span {
+    color: var(--color-accent);
+    transition: transform var(--duration-fast) var(--ease-standard);
+  }
+
+  .benefits-link:hover span {
+    transform: translate(3px, -3px);
+  }
+
+  .benefit-list {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .benefit-item {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) 24px;
+    align-items: start;
+    gap: 16px;
+    padding-block: 28px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .benefit-index {
+    padding-top: 5px;
+    color: var(--color-accent);
+    font-size: 0.68rem;
+    font-weight: 700;
+  }
+
+  .benefit-item h3 {
+    margin-bottom: 8px;
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    letter-spacing: -0.04em;
+  }
+
+  .benefit-item p {
+    max-width: 410px;
+    margin-bottom: 0;
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
+  .benefit-arrow {
+    color: var(--color-text-muted);
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
+  }
+
+  .benefit-item:hover .benefit-arrow {
+    color: var(--color-accent);
+    transform: translate(3px, -3px);
+  }
+
+  @media (max-width: 760px) {
+    .benefits-layout {
+      grid-template-columns: 1fr;
+      gap: 42px;
+    }
+
+    .benefits-copy {
+      position: static;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .benefits-link span,
+    .benefit-arrow {
+      transition: none;
+    }
+  }
+</style>

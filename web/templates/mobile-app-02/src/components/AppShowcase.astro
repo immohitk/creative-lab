@@ -1,0 +1,444 @@
+
+<section class="showcase section" id="showcase">
+  <div class="container">
+    <div class="showcase-heading">
+      <p class="eyebrow">04 / A CLOSER LOOK</p>
+      <h2>A little more <span>you.</span></h2>
+      <p>
+        A considered space for fresh ideas, daily intentions and the
+        moments you want to make time for.
+      </p>
+    </div>
+
+    <div class="showcase-grid">
+      <article class="showcase-panel panel-discover">
+        <div class="panel-label">
+          <span>01 / DISCOVER</span>
+          <span aria-hidden="true">↗</span>
+        </div>
+
+        <div class="mini-phone">
+          <div class="mini-screen">
+            <div class="mini-top">
+              <strong>b.</strong>
+              <span class="mini-avatar">M</span>
+            </div>
+            <p class="mini-kicker">A LITTLE INSPIRATION</p>
+            <h3>What's calling<br />you today?</h3>
+            <div class="mini-landscape">
+              <span class="mini-sun"></span>
+              <span class="mini-mountain mountain-a"></span>
+              <span class="mini-mountain mountain-b"></span>
+              <span class="mini-landscape-tag">GO SOMEWHERE NEW</span>
+            </div>
+            <div class="mini-caption">
+              <span>Find a new perspective</span>
+              <span>↗</span>
+            </div>
+            <div class="mini-nav">
+              <span class="mini-nav-active">●</span>
+              <span>◷</span>
+              <span>◇</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="panel-caption">Fresh inspiration, whenever you need it.</p>
+      </article>
+
+      <article class="showcase-panel panel-routine">
+        <div class="panel-label">
+          <span>02 / YOUR DAY</span>
+          <span aria-hidden="true">↗</span>
+        </div>
+
+        <div class="routine-preview">
+          <div class="preview-heading">
+            <div>
+              <p>MONDAY / YOUR PLAN</p>
+              <h3>Make today<br />count.</h3>
+            </div>
+            <span class="preview-spark">✳</span>
+          </div>
+
+          <div class="preview-task">
+            <span class="task-check">✓</span>
+            <span>
+              <strong>Start with intention</strong>
+              <small>A moment for yourself</small>
+            </span>
+            <span class="task-time">09:00</span>
+          </div>
+
+          <div class="preview-task">
+            <span class="task-check">✓</span>
+            <span>
+              <strong>Take a new route</strong>
+              <small>Find something unexpected</small>
+            </span>
+            <span class="task-time">13:30</span>
+          </div>
+
+          <div class="preview-task task-pending">
+            <span class="task-unchecked"></span>
+            <span>
+              <strong>Leave room to unwind</strong>
+              <small>Finish on your own terms</small>
+            </span>
+            <span class="task-time">18:00</span>
+          </div>
+
+          <div class="preview-footer">
+            <span>YOUR DAILY FLOW</span>
+            <strong>2 OF 3</strong>
+          </div>
+          <div class="preview-progress"><span></span></div>
+        </div>
+
+        <p class="panel-caption">A daily rhythm that leaves room to breathe.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .showcase {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .showcase-heading {
+    max-width: 720px;
+    margin-bottom: 48px;
+  }
+
+  .showcase-heading h2 {
+    margin-bottom: 18px;
+    font-size: clamp(2.8rem, 5.5vw, 5rem);
+    line-height: 1;
+    letter-spacing: -0.075em;
+  }
+
+  .showcase-heading h2 span {
+    color: var(--color-accent);
+  }
+
+  .showcase-heading > p:last-child {
+    max-width: 490px;
+    margin-bottom: 0;
+    line-height: 1.8;
+  }
+
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .showcase-panel {
+    min-width: 0;
+    padding: clamp(20px, 3vw, 32px);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-elevated);
+  }
+
+  .panel-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--color-text-muted);
+    font-size: 0.67rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .panel-label span:last-child {
+    color: var(--color-accent);
+    font-size: 1rem;
+  }
+
+  .mini-phone {
+    width: min(100%, 290px);
+    margin: 28px auto 24px;
+    padding: 7px;
+    border: 1px solid #555d5e;
+    border-radius: 32px;
+    background: #252b2e;
+    box-shadow: 0 24px 55px rgba(0, 0, 0, 0.28);
+    transform: rotate(-2deg);
+  }
+
+  .mini-screen {
+    overflow: hidden;
+    padding: 17px 15px;
+    border-radius: 25px;
+    background: #f3f1e9;
+    color: #171b18;
+  }
+
+  .mini-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mini-top > strong {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    letter-spacing: -0.08em;
+  }
+
+  .mini-avatar {
+    display: grid;
+    width: 27px;
+    height: 27px;
+    place-items: center;
+    border-radius: 50%;
+    background: #d5ff5f;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  .mini-kicker {
+    margin-top: 22px;
+    margin-bottom: 8px;
+    color: #747a6b;
+    font-size: 0.53rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .mini-screen h3 {
+    margin-bottom: 16px;
+    font-size: 1.8rem;
+    line-height: 1.02;
+    letter-spacing: -0.07em;
+  }
+
+  .mini-landscape {
+    position: relative;
+    height: 170px;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #c8d5b7;
+  }
+
+  .mini-sun {
+    position: absolute;
+    top: 22px;
+    right: 26px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #f5f0c5;
+  }
+
+  .mini-mountain {
+    position: absolute;
+    right: -20px;
+    bottom: -48px;
+    width: 120%;
+    height: 120px;
+    border-radius: 50% 50% 0 0;
+    background: #687a57;
+    transform: rotate(-9deg);
+  }
+
+  .mountain-b {
+    right: 25%;
+    bottom: -63px;
+    background: #394b39;
+    transform: rotate(14deg);
+  }
+
+  .mini-landscape-tag {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    color: white;
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+  }
+
+  .mini-caption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-block: 14px;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .mini-caption span:last-child {
+    color: #657449;
+  }
+
+  .mini-nav {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 13px;
+    border-top: 1px solid #deded4;
+    color: #898d82;
+    font-size: 0.85rem;
+  }
+
+  .mini-nav-active {
+    color: #4d622f;
+  }
+
+  .routine-preview {
+    margin-block: 28px 24px;
+    padding: clamp(18px, 2.5vw, 26px);
+    border: 1px solid rgba(213, 255, 95, 0.17);
+    border-radius: var(--radius-md);
+    background: #171d22;
+  }
+
+  .preview-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .preview-heading p {
+    margin-bottom: 10px;
+    color: var(--color-text-muted);
+    font-size: 0.57rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .preview-heading h3 {
+    margin-bottom: 0;
+    font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+    line-height: 1;
+    letter-spacing: -0.07em;
+  }
+
+  .preview-spark {
+    color: var(--color-accent);
+    font-size: 2rem;
+  }
+
+  .preview-task {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding-block: 15px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .task-check,
+  .task-unchecked {
+    display: grid;
+    width: 21px;
+    height: 21px;
+    place-items: center;
+    border-radius: 50%;
+  }
+
+  .task-check {
+    background: var(--color-accent);
+    color: var(--color-accent-text);
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .task-unchecked {
+    border: 1px solid #667078;
+  }
+
+  .preview-task > span:nth-child(2) {
+    display: grid;
+    gap: 5px;
+  }
+
+  .preview-task strong {
+    font-size: 0.73rem;
+  }
+
+  .preview-task small {
+    color: var(--color-text-muted);
+    font-size: 0.61rem;
+  }
+
+  .task-time {
+    color: var(--color-text-muted);
+    font-size: 0.58rem;
+  }
+
+  .task-pending strong {
+    color: var(--color-text-muted);
+  }
+
+  .preview-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 25px;
+    color: var(--color-text-muted);
+    font-size: 0.57rem;
+    letter-spacing: 0.08em;
+  }
+
+  .preview-footer strong {
+    color: var(--color-accent);
+  }
+
+  .preview-progress {
+    height: 4px;
+    margin-top: 10px;
+    overflow: hidden;
+    border-radius: var(--radius-pill);
+    background: #343d42;
+  }
+
+  .preview-progress span {
+    display: block;
+    width: 67%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--color-accent);
+  }
+
+  .panel-caption {
+    margin-bottom: 0;
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 760px) {
+    .showcase-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .showcase-panel {
+      padding: 22px;
+    }
+
+    .mini-phone {
+      width: min(100%, 310px);
+    }
+
+    .routine-preview {
+      padding: 22px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .preview-task {
+      grid-template-columns: 21px minmax(0, 1fr);
+    }
+
+    .task-time {
+      display: none;
+    }
+  }
+</style>
