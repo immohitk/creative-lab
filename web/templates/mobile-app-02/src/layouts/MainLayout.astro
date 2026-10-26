@@ -5,12 +5,18 @@ import "../styles/global.css";
 interface Props {
   title?: string;
   description?: string;
+  canonicalURL?: string;
+  ogImage?: string;
 }
 
 const {
-  title = "Mobile App — Go Beyond",
-  description = "Discover a bold new mobile app experience."
+  title = "Beyond — Make Every Day Count",
+  description = "Discover new places, build better routines, and make everyday moments memorable with Beyond.",
+  canonicalURL,
+  ogImage
 } = Astro.props;
+
+const pageURL = canonicalURL ?? Astro.url.href;
 ---
 
 <!doctype html>
@@ -18,10 +24,28 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <meta name="description" content={description} />
     <meta name="theme-color" content="#101318" />
+    <meta name="robots" content="index, follow" />
+
+    <link rel="canonical" href={pageURL} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageURL} />
+
+    <meta name="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+
     <title>{title}</title>
   </head>
+
   <body>
     <slot />
   </body>
