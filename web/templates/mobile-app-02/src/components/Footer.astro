@@ -1,0 +1,201 @@
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <a class="brand" href="#top" aria-label="Beyond home">
+          <span class="brand-mark" aria-hidden="true">B.</span>
+          <span class="brand-name">beyond<span>.</span></span>
+        </a>
+
+        <p>
+          Make room for what moves you.<br />
+          Your world, your pace.
+        </p>
+      </div>
+
+      <div class="footer-nav-group">
+        <p class="footer-label">EXPLORE</p>
+        <a href="#experience">Experience</a>
+        <a href="#highlights">Highlights</a>
+        <a href="#features">Features</a>
+      </div>
+
+      <div class="footer-nav-group">
+        <p class="footer-label">YOUR JOURNEY</p>
+        <a href="#how-it-works">How it works</a>
+        <a href="#showcase">App showcase</a>
+        <a href="#download">Get started</a>
+      </div>
+
+      <a class="back-to-top" href="#top">
+        Back to top <span aria-hidden="true">↑</span>
+      </a>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© {new Date().getFullYear()} Beyond. Creative Lab template.</p>
+      <p>DESIGNED FOR EVERYDAY POSSIBILITY <span>✳</span></p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-top: 65px;
+    background: var(--color-bg);
+  }
+
+  .footer-main {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr auto;
+    gap: 35px;
+    padding-bottom: 55px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand-mark {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: var(--color-accent-text);
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .brand-name {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.07em;
+  }
+
+  .brand-name span {
+    color: var(--color-accent);
+  }
+
+  .footer-brand > p {
+    margin-top: 20px;
+    margin-bottom: 0;
+    color: var(--color-text-muted);
+    font-size: 0.86rem;
+    line-height: 1.8;
+  }
+
+  .footer-nav-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 13px;
+  }
+
+  .footer-label {
+    margin-bottom: 6px;
+    color: var(--color-text-muted);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+
+  .footer-nav-group a {
+    color: var(--color-text);
+    font-size: 0.85rem;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .footer-nav-group a:hover {
+    color: var(--color-accent);
+  }
+
+  .back-to-top {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    align-self: start;
+    padding: 12px 15px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: 0.78rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
+  }
+
+  .back-to-top span {
+    color: var(--color-accent);
+  }
+
+  .back-to-top:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-block: 22px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .footer-bottom p {
+    margin-bottom: 0;
+    color: var(--color-text-muted);
+    font-size: 0.68rem;
+    line-height: 1.7;
+  }
+
+  .footer-bottom p:last-child {
+    font-size: 0.59rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+
+  .footer-bottom p span {
+    margin-left: 6px;
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 850px) {
+    .footer-main {
+      grid-template-columns: 1fr 1fr;
+      gap: 35px;
+    }
+
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+
+    .back-to-top {
+      justify-self: start;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .site-footer {
+      padding-top: 48px;
+    }
+
+    .footer-main {
+      gap: 30px 20px;
+    }
+
+    .footer-bottom {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+</style>

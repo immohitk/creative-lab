@@ -1,0 +1,168 @@
+
+<section class="final-cta" id="download">
+  <div class="container cta-inner">
+    <p class="eyebrow">YOUR NEXT CHAPTER STARTS HERE</p>
+
+    <h2>
+      Make room for<br />
+      <span>more life.</span>
+    </h2>
+
+    <p class="cta-description">
+      New ideas. Better rhythms. More moments that feel like you.
+      It all starts with one small step.
+    </p>
+
+    <a class="button button-primary cta-button" href="#top">
+      Start exploring <span aria-hidden="true">↗</span>
+    </a>
+
+    <span class="cta-note">
+      <span aria-hidden="true">✳</span>
+      YOUR DAY. YOUR RULES.
+    </span>
+
+    <div class="cta-decoration" aria-hidden="true">
+      <span class="deco-ring ring-one"></span>
+      <span class="deco-ring ring-two"></span>
+      <span class="deco-ring ring-three"></span>
+      <span class="deco-star">✳</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .final-cta {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: clamp(90px, 13vw, 160px);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-accent);
+    color: var(--color-accent-text);
+  }
+
+  .cta-inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .final-cta .eyebrow {
+    color: #424d2d;
+  }
+
+  .cta-inner h2 {
+    max-width: 800px;
+    margin-bottom: 24px;
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    line-height: 0.92;
+    letter-spacing: -0.09em;
+  }
+
+  .cta-inner h2 span {
+    color: #657746;
+  }
+
+  .cta-description {
+    max-width: 460px;
+    margin-bottom: 30px;
+    color: #424b35;
+    line-height: 1.8;
+  }
+
+  .cta-button {
+    background: var(--color-accent-text);
+    color: var(--color-text);
+  }
+
+  .cta-button:hover {
+    background: #2a3424;
+    color: white;
+  }
+
+  .cta-button span {
+    margin-left: 10px;
+  }
+
+  .cta-note {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 34px;
+    color: #424b35;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .cta-note span {
+    font-size: 1rem;
+  }
+
+  .cta-decoration {
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    right: -4%;
+    display: grid;
+    width: min(46vw, 520px);
+    aspect-ratio: 1;
+    place-items: center;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .deco-ring {
+    position: absolute;
+    aspect-ratio: 1;
+    border: 1px solid rgba(16, 19, 24, 0.18);
+    border-radius: 50%;
+  }
+
+  .ring-one {
+    width: 48%;
+  }
+
+  .ring-two {
+    width: 72%;
+  }
+
+  .ring-three {
+    width: 96%;
+    border-style: dashed;
+  }
+
+  .deco-star {
+    color: rgba(16, 19, 24, 0.8);
+    font-size: clamp(4rem, 10vw, 8rem);
+  }
+
+  @media (max-width: 760px) {
+    .cta-decoration {
+      top: auto;
+      right: -15%;
+      bottom: -28%;
+      width: 75vw;
+      transform: none;
+      opacity: 0.55;
+    }
+
+    .cta-inner h2 {
+      font-size: clamp(3.5rem, 12vw, 6rem);
+    }
+
+    .cta-description {
+      max-width: 400px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .final-cta {
+      padding-block: 80px;
+    }
+
+    .cta-inner h2 {
+      font-size: clamp(3.1rem, 13vw, 4.3rem);
+    }
+  }
+</style>
