@@ -1,16 +1,55 @@
+
 ---
+import MainLayout from "../layouts/MainLayout.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout
+  title="Mobile App — Dark Editorial"
+  description="A bold, dark editorial mobile app landing page template."
+>
+  <main class="container" style="padding-block: 100px;">
+    <p class="eyebrow">CREATIVE LAB / W02</p>
+
+    <h1>
+      GO BEYOND.<br />
+      <span style="color: var(--color-accent);">THE ORDINARY.</span>
+    </h1>
+
+    <p style="max-width: 520px; font-size: 1.1rem;">
+      A bold new visual direction for a modern mobile experience.
+      Dark surfaces, expressive typography and purposeful design.
+    </p>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px;">
+      <a class="button button-primary" href="#design-system">
+        Explore the design
+      </a>
+
+      <a class="button button-secondary" href="#design-system">
+        Discover more
+      </a>
+    </div>
+
+    <section id="design-system" style="margin-top: 100px;">
+      <p class="eyebrow">DESIGN FOUNDATION</p>
+      <h2>Less noise.<br />More impact.</h2>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px;">
+        <div class="card" style="padding: 20px; min-width: 150px;">
+          <p style="margin-bottom: 8px;">Background</p>
+          <strong>#101318</strong>
+        </div>
+
+        <div class="card" style="padding: 20px; min-width: 150px;">
+          <p style="margin-bottom: 8px;">Accent</p>
+          <strong style="color: var(--color-accent);">#D5FF5F</strong>
+        </div>
+
+        <div class="card" style="padding: 20px; min-width: 150px;">
+          <p style="margin-bottom: 8px;">Typography</p>
+          <strong>DM Sans + Space Grotesk</strong>
+        </div>
+      </div>
+    </section>
+  </main>
+</MainLayout>
