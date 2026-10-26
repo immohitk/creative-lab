@@ -1,0 +1,450 @@
+
+<section class="highlights section" id="highlights">
+  <div class="container">
+    <div class="section-intro">
+      <p class="eyebrow">01 / A DIFFERENT KIND OF EVERYDAY</p>
+
+      <h2>
+        Small shifts.<br />
+        <span>Big difference.</span>
+      </h2>
+
+      <p class="intro-copy">
+        Your day is made of little moments. Make more of them count with
+        experiences designed around the way you actually live.
+      </p>
+    </div>
+
+    <div class="highlight-grid">
+      <article class="highlight-card highlight-main">
+        <div class="card-topline">
+          <span>01 — DISCOVER</span>
+          <span class="card-symbol" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="discover-art" aria-hidden="true">
+          <span class="art-circle circle-one"></span>
+          <span class="art-circle circle-two"></span>
+          <span class="art-cross">✳</span>
+          <span class="art-coordinate">12° 34' / NEW PERSPECTIVE</span>
+        </div>
+
+        <div class="highlight-copy">
+          <h3>Find your<br />next favourite.</h3>
+          <p>
+            Discover places, ideas and experiences that make the familiar
+            feel new again.
+          </p>
+        </div>
+      </article>
+
+      <article class="highlight-card highlight-secondary">
+        <div class="card-topline">
+          <span>02 — BUILD</span>
+          <span class="card-symbol" aria-hidden="true">↗</span>
+        </div>
+
+        <div class="routine-art" aria-hidden="true">
+          <div class="routine-line">
+            <span class="routine-check">✓</span>
+            <span>Make time for you</span>
+            <span class="routine-time">08:30</span>
+          </div>
+          <div class="routine-line">
+            <span class="routine-check">✓</span>
+            <span>Try something different</span>
+            <span class="routine-time">12:15</span>
+          </div>
+          <div class="routine-line routine-muted">
+            <span class="routine-empty"></span>
+            <span>Leave room to wander</span>
+            <span class="routine-time">18:00</span>
+          </div>
+          <div class="routine-progress">
+            <span></span>
+          </div>
+          <p>YOUR DAY, IN MOTION</p>
+        </div>
+
+        <div class="highlight-copy">
+          <h3>Make habits<br />feel effortless.</h3>
+          <p>
+            Build a rhythm that works for you, without making life feel
+            like another checklist.
+          </p>
+        </div>
+      </article>
+
+      <article class="highlight-card highlight-wide">
+        <div class="wide-copy">
+          <div class="card-topline">
+            <span>03 — MAKE IT YOURS</span>
+            <span class="card-symbol" aria-hidden="true">↗</span>
+          </div>
+
+          <h3>Your life.<br /><span>Your kind of progress.</span></h3>
+
+          <p>
+            Save what inspires you, follow your curiosity and create a
+            personal experience that grows with you.
+          </p>
+        </div>
+
+        <div class="wide-art" aria-hidden="true">
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="orbit orbit-three"></div>
+          <div class="orbit-core">b.</div>
+          <span class="orbit-tag tag-one">EXPLORE</span>
+          <span class="orbit-tag tag-two">GROW</span>
+          <span class="orbit-tag tag-three">REPEAT</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .highlights {
+    padding-block: var(--section-space);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .section-intro {
+    display: grid;
+    grid-template-columns: 1fr 0.8fr;
+    align-items: end;
+    column-gap: 40px;
+    margin-bottom: 54px;
+  }
+
+  .section-intro .eyebrow {
+    grid-column: 1 / -1;
+    margin-bottom: 20px;
+  }
+
+  .section-intro h2 {
+    margin-bottom: 0;
+    font-size: clamp(2.8rem, 5.5vw, 5rem);
+    line-height: 1.02;
+    letter-spacing: -0.075em;
+  }
+
+  .section-intro h2 span,
+  .wide-copy h3 span {
+    color: var(--color-accent);
+  }
+
+  .intro-copy {
+    max-width: 410px;
+    margin: 0 0 6px;
+    line-height: 1.8;
+  }
+
+  .highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .highlight-card {
+    min-width: 0;
+    padding: clamp(22px, 3vw, 34px);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg-elevated);
+  }
+
+  .card-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--color-text-muted);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .card-symbol {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    color: var(--color-accent);
+    font-size: 1rem;
+  }
+
+  .discover-art {
+    position: relative;
+    display: grid;
+    min-height: 230px;
+    margin-block: 24px;
+    overflow: hidden;
+    place-items: center;
+    border-radius: var(--radius-md);
+    background: #222b27;
+  }
+
+  .art-circle {
+    position: absolute;
+    aspect-ratio: 1;
+    border: 1px solid rgba(213, 255, 95, 0.45);
+    border-radius: 50%;
+  }
+
+  .circle-one {
+    width: 170px;
+  }
+
+  .circle-two {
+    width: 115px;
+    background: rgba(213, 255, 95, 0.08);
+    box-shadow: 0 0 65px rgba(213, 255, 95, 0.12);
+  }
+
+  .art-cross {
+    position: relative;
+    color: var(--color-accent);
+    font-size: 4rem;
+  }
+
+  .art-coordinate {
+    position: absolute;
+    bottom: 16px;
+    left: 17px;
+    color: #c1ccb3;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+  }
+
+  .highlight-copy h3,
+  .wide-copy h3 {
+    margin-bottom: 12px;
+    font-size: clamp(1.8rem, 3vw, 2.7rem);
+    line-height: 1.06;
+    letter-spacing: -0.065em;
+  }
+
+  .highlight-copy p,
+  .wide-copy > p {
+    max-width: 390px;
+    margin-bottom: 0;
+    font-size: 0.94rem;
+    line-height: 1.8;
+  }
+
+  .routine-art {
+    display: flex;
+    min-height: 230px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    margin-block: 24px;
+    padding: 22px;
+    border: 1px solid rgba(213, 255, 95, 0.14);
+    border-radius: var(--radius-md);
+    background: #171d22;
+  }
+
+  .routine-line {
+    display: grid;
+    grid-template-columns: 23px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 9px;
+    font-size: 0.72rem;
+  }
+
+  .routine-check {
+    display: grid;
+    width: 21px;
+    height: 21px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: var(--color-accent-text);
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .routine-empty {
+    width: 21px;
+    height: 21px;
+    border: 1px solid #606970;
+    border-radius: 50%;
+  }
+
+  .routine-time {
+    color: var(--color-text-muted);
+    font-size: 0.62rem;
+  }
+
+  .routine-muted {
+    color: var(--color-text-muted);
+  }
+
+  .routine-progress {
+    height: 4px;
+    margin-top: 8px;
+    overflow: hidden;
+    border-radius: var(--radius-pill);
+    background: #343d42;
+  }
+
+  .routine-progress span {
+    display: block;
+    width: 67%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--color-accent);
+  }
+
+  .routine-art > p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+  }
+
+  .highlight-wide {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 0.9fr;
+    align-items: center;
+    gap: 30px;
+    overflow: hidden;
+  }
+
+  .wide-copy h3 {
+    margin-top: 40px;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .wide-art {
+    position: relative;
+    display: grid;
+    min-height: 280px;
+    place-items: center;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: #222b27;
+  }
+
+  .orbit {
+    position: absolute;
+    aspect-ratio: 1;
+    border: 1px solid rgba(213, 255, 95, 0.35);
+    border-radius: 50%;
+  }
+
+  .orbit-one {
+    width: 150px;
+  }
+
+  .orbit-two {
+    width: 220px;
+    border-style: dashed;
+  }
+
+  .orbit-three {
+    width: 290px;
+    opacity: 0.5;
+  }
+
+  .orbit-core {
+    z-index: 1;
+    display: grid;
+    width: 64px;
+    height: 64px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: var(--color-accent-text);
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+
+  .orbit-tag {
+    position: absolute;
+    padding: 8px 11px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background: var(--color-bg-elevated);
+    color: var(--color-text);
+    font-size: 0.56rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .tag-one {
+    top: 20%;
+    left: 13%;
+  }
+
+  .tag-two {
+    top: 28%;
+    right: 10%;
+  }
+
+  .tag-three {
+    bottom: 17%;
+    left: 38%;
+  }
+
+  @media (max-width: 760px) {
+    .section-intro {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .section-intro .eyebrow {
+      margin-bottom: 0;
+    }
+
+    .intro-copy {
+      max-width: 540px;
+    }
+
+    .highlight-wide {
+      grid-template-columns: 1fr;
+    }
+
+    .wide-copy h3 {
+      margin-top: 28px;
+    }
+
+    .wide-art {
+      min-height: 250px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .highlight-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .highlight-card {
+      padding: 22px;
+    }
+
+    .highlight-wide {
+      grid-column: auto;
+    }
+
+    .discover-art,
+    .routine-art {
+      min-height: 210px;
+    }
+
+    .wide-art {
+      min-height: 230px;
+    }
+
+    .orbit-three {
+      width: 260px;
+    }
+  }
+</style>
