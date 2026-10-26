@@ -1,0 +1,165 @@
+
+---
+const links = [
+  { label: "Experience", href: "#experience" },
+  { label: "Features", href: "#features" },
+  { label: "How it works", href: "#how-it-works" },
+];
+---
+
+<header class="site-header">
+  <nav class="container navbar" aria-label="Main navigation">
+    <a class="brand" href="#top" aria-label="Beyond home">
+      <span class="brand-mark" aria-hidden="true">B.</span>
+      <span class="brand-name">beyond<span class="brand-period">.</span></span>
+    </a>
+
+    <div class="nav-links">
+      {links.map((link) => (
+        <a href={link.href}>{link.label}</a>
+      ))}
+    </div>
+
+    <a class="nav-cta" href="#download">
+      Get the app <span aria-hidden="true">↗</span>
+    </a>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 10;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .navbar {
+    min-height: 86px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .brand-mark {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: var(--color-accent-text);
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  .brand-name {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.07em;
+  }
+
+  .brand-period {
+    color: var(--color-accent);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(18px, 3vw, 38px);
+  }
+
+  .nav-links a {
+    color: var(--color-text-muted);
+    font-size: 0.87rem;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+
+  .nav-links a:hover {
+    color: var(--color-accent);
+  }
+
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 17px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      background var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard);
+  }
+
+  .nav-cta span {
+    color: var(--color-accent);
+  }
+
+  .nav-cta:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: var(--color-accent-text);
+  }
+
+  .nav-cta:hover span {
+    color: inherit;
+  }
+
+  @media (max-width: 760px) {
+    .navbar {
+      min-height: 76px;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding-block: 14px;
+    }
+
+    .nav-links {
+      order: 3;
+      width: 100%;
+      justify-content: flex-start;
+      gap: clamp(16px, 5vw, 30px);
+      overflow-x: auto;
+      padding-block: 5px;
+    }
+
+    .nav-links a {
+      flex-shrink: 0;
+      font-size: 0.82rem;
+    }
+
+    .nav-cta {
+      margin-left: auto;
+      padding: 11px 14px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .brand {
+      gap: 7px;
+    }
+
+    .brand-name {
+      font-size: 1.2rem;
+    }
+
+    .nav-cta {
+      gap: 7px;
+      padding-inline: 11px;
+      font-size: 0.8rem;
+    }
+  }
+</style>
