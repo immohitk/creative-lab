@@ -20,11 +20,7 @@ function updateFormatButtons() {
   );
 }
 
-function updateClock() {
-  currentTime = new Date();
-  const now = currentTime;
-  
-
+function renderClock(now) {
   if (window.ClockEngine) {
     clock.textContent = window.ClockEngine.formatTime(now, use24Hour);
     date.textContent = window.ClockEngine.formatDate(now);
@@ -35,6 +31,7 @@ function updateClock() {
       second: "2-digit",
       hour12: !use24Hour,
     });
+
     date.textContent = now.toLocaleDateString(undefined, {
       weekday: "long",
       year: "numeric",
@@ -44,9 +41,17 @@ function updateClock() {
   }
 }
 
+function updateClock() {
+  currentTime = new Date();
+  renderClock(currentTime);
+}
+
 function setFormat(value) {
+  if (use24Hour === value) return;
+
   use24Hour = value;
   localStorage.setItem("clock-format", use24Hour ? "24" : "12");
+
   updateFormatButtons();
   renderClock(currentTime);
 }
