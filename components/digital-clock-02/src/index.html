@@ -1,0 +1,69 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#10131c" />
+    <meta
+      name="description"
+      content="A clean, minimal digital clock by Creative Lab."
+    />
+    <title>Creative Lab Clock</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="app">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">C</span>
+          <span class="brand-name">CREATIVE LAB</span>
+        </div>
+        <span class="live-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          LOCAL TIME
+        </span>
+      </header>
+
+      <section class="clock-panel" aria-label="Digital clock">
+        <p class="eyebrow">YOUR TIME, AT A GLANCE</p>
+
+        <h1 id="clock" aria-live="off">11:27:56 PM</h1>
+        <p id="date"></p>
+
+        <div class="clock-controls">
+          <span class="control-label">TIME FORMAT</span>
+          <div
+            class="format-switch"
+            role="group"
+            aria-label="Choose time format"
+          >
+            <button
+              id="format12"
+              class="format-button active"
+              type="button"
+              aria-pressed="true"
+            >
+              12-hour
+            </button>
+            <button
+              id="format24"
+              class="format-button"
+              type="button"
+              aria-pressed="false"
+            >
+              24-hour
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>CRAFTED BY CREATIVE LAB | DESIGNED BY MOHIT KUMAR</span>
+        <span>DESIGNED FOR FOCUS</span>
+      </footer>
+    </main>
+
+    <script src="./clock-engine.js"></script>
+    <script src="./clock.js"></script>
+  </body>
+</html>

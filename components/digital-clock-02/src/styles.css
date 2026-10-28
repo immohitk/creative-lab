@@ -1,0 +1,284 @@
+﻿
+:root {
+  color-scheme: dark;
+  font-family: Inter, "Segoe UI", sans-serif;
+  background: #0b0d12;
+  color: #f4f5fb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --muted: #9299ad;
+  --accent: #a9b8ff;
+  --panel: rgba(255, 255, 255, 0.035);
+  --line: rgba(255, 255, 255, 0.09);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% 42%, rgba(91, 103, 190, 0.12), transparent 48%),
+    #0b0d12;
+}
+
+button {
+  font: inherit;
+}
+
+#app {
+  width: min(1100px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 32px clamp(20px, 5vw, 64px) 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar,
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(169, 184, 255, 0.45);
+  border-radius: 11px;
+  color: var(--accent);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.brand-name,
+.live-status,
+.eyebrow,
+.control-label,
+.footer {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+}
+
+.live-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #82dfb0;
+  box-shadow: 0 0 12px rgba(130, 223, 176, 0.55);
+}
+
+.clock-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 0 76px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 30px;
+  color: var(--muted);
+}
+
+#clock {
+  max-width: 100%;
+  margin: 0;
+  color: #f5f6ff;
+  font-size: clamp(58px, 10.8vw, 132px);
+  font-weight: 600;
+  letter-spacing: -0.075em;
+  line-height: 1.12;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 180ms ease, text-shadow 180ms ease;
+}
+
+#clock:hover {
+  color: #ffffff;
+  text-shadow: 0 0 36px rgba(169, 184, 255, 0.14);
+}
+
+#clock:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+
+#date {
+  margin: 22px 0 0;
+  color: #aeb5c9;
+  font-size: clamp(14px, 2vw, 18px);
+  letter-spacing: 0.015em;
+}
+
+.clock-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 42px;
+  padding: 9px 10px 9px 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel);
+  backdrop-filter: blur(16px);
+}
+
+.control-label {
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+.format-switch {
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.format-button {
+  min-width: 58px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #aeb5c9;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.format-button:hover {
+  color: #ffffff;
+}
+
+.format-button.active {
+  background: #dfe4ff;
+  color: #171a2b;
+  font-weight: 700;
+}
+
+.format-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.footer {
+  color: #626a7d;
+  font-size: 9px;
+  letter-spacing: 0.13em;
+}
+
+@media (max-width: 560px) {
+  #app {
+    padding: 22px 18px;
+  }
+
+  .brand-name {
+    font-size: 9px;
+  }
+
+  .clock-panel {
+    padding: 54px 0;
+  }
+
+  #clock {
+    font-size: clamp(48px, 12.5vw, 70px);
+    letter-spacing: -0.065em;
+  }
+
+  .clock-controls {
+    gap: 10px;
+    margin-top: 34px;
+    padding-left: 12px;
+  }
+
+  .format-button {
+    min-width: 52px;
+    padding: 8px;
+  }
+
+  .footer {
+    font-size: 8px;
+    letter-spacing: 0.07em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+/* Final visual polish */
+.clock-panel {
+  position: relative;
+}
+
+#clock {
+  letter-spacing: 0.015em;
+  text-shadow: 0 0 42px rgba(169, 184, 255, 0.08);
+  font-weight: 500;
+}
+
+#date {
+  margin-top: 28px;
+  letter-spacing: 0.025em;
+}
+
+.clock-controls {
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.format-button.active {
+  box-shadow: 0 2px 12px rgba(169, 184, 255, 0.12);
+}
+
+.footer {
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.055);
+}
+
+@media (max-width: 560px) {
+  #clock {
+    letter-spacing: -0.025em;
+  }
+
+  .footer {
+    gap: 12px;
+    line-height: 1.6;
+  }
+}
