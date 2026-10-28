@@ -30,3 +30,28 @@ test("invalid and incomplete expressions are rejected", () => {
   assert.throws(() => evaluateExpression("2+"));
   assert.throws(() => evaluateExpression("2+a"));
 });
+
+test("parentheses are evaluated correctly", () => {
+  assert.equal(evaluateExpression("(2+3)*4"), 20);
+  assert.equal(evaluateExpression("2*(3+4)"), 14);
+});
+
+test("powers are evaluated correctly", () => {
+  assert.equal(evaluateExpression("2^3"), 8);
+  assert.equal(evaluateExpression("5^2"), 25);
+});
+
+test("invalid powers are rejected", () => {
+  assert.throws(() => evaluateExpression("2^"));
+  assert.throws(() => evaluateExpression("2^0"));
+  assert.throws(() => evaluateExpression("2^100"));
+});
+
+test("unmatched parentheses are rejected", () => {
+  assert.throws(() => evaluateExpression("(2+3"));
+  assert.throws(() => evaluateExpression("2+3)"));
+});
+
+test("calculator result limit is enforced", () => {
+  assert.throws(() => evaluateExpression("9999999999999"));
+});

@@ -83,66 +83,12 @@ function isCompleteExpression(raw) {
 }
 function evaluate(raw) {
   const source = normalizedExpression(raw).replace(/\s+/g, "");
-  if (!isCompleteExpression(source)) throw new Error("Incomplete expression.");
-  let index = 0;
 
-  function parseExpression() {
-    let value = parseTerm();
-    while (source[index] === "+" || source[index] === "-") {
-      const op = source[index++];
-      const right = parseTerm();
-      value = op === "+" ? value + right : value - right;
-    }
-    return value;
+  if (!isCompleteExpression(source)) {
+    throw new Error("Incomplete expression.");
   }
-  function parseTerm() {
-    let value = parseUnary();
-    while (source[index] === "*" || source[index] === "/") {
-      const op = source[index++];
-      const right = parseUnary();
-      if (op === "/" && right === 0) throw new Error("Cannot divide by zero.");
-      value = op === "*" ? value * right : value / right;
-    }
-    return value;
-  }
-  function parseUnary() {
-    if (source[index] === "+") { index++; return parseUnary(); }
-    if (source[index] === "-") { index++; return -parseUnary(); }
-    return parsePower();
-  }
-  function parsePower() {
-    const base = parsePrimary();
-    if (source[index] === "^") {
-      index++;
-      const exponentText = source.slice(index).match(/^\d+/)?.[0];
-      if (!exponentText) throw new Error("Enter an exponent from 1 to 99.");
-      const exponent = Number(exponentText);
-      if (exponent < 1 || exponent > 99) throw new Error("Too large");
-      if (!Number.isInteger(base) || base < 0) throw new Error("Power base must be a non-negative whole number.");
-      index += exponentText.length;
-      const powered = Math.pow(base, exponent);
-      if (!Number.isFinite(powered) || powered > 999999999999) throw new Error("Too large");
-      return powered;
-    }
-    return base;
-  }
-  function parsePrimary() {
-    if (source[index] === "(") {
-      index++;
-      const value = parseExpression();
-      if (source[index] !== ")") throw new Error("Missing closing bracket.");
-      index++;
-      return value;
-    }
-    const match = source.slice(index).match(/^(?:\d+\.?\d*|\.\d+)/);
-    if (!match) throw new Error("Invalid expression.");
-    index += match[0].length;
-    return Number(match[0]);
-  }
-  const result = parseExpression();
-  if (index !== source.length) throw new Error("Invalid expression.");
-  if (!Number.isFinite(result) || Math.abs(result) > 999999999999) throw new Error("Too large");
-  return Number.isInteger(result) ? result : Number(result.toPrecision(12));
+
+  return window.CalculatorEngine.evaluateExpression(source);
 }
 function updatePreview() {
   const raw = expressionInput.value;
@@ -317,25 +263,36 @@ function calculateResult() {
     showError();
   } catch (error) {
     showError(error.message || "Unable to calculate.");
+    justCalculated = true;
+    expressionInput.focus();
+    expressionInput.setSelectionRange(
+      expressionInput.value.length,
+      expressionInput.value.length
+    );
   }
 }
 
 expressionInput.addEventListener("input", () => {
   const input = expressionInput;
+  showError();
+
   const caret = input.selectionStart ?? input.value.length;
   const allowed = input.value
     .replace(/\s+/g, "")
-    .replace(/[^0-9+*/×÷^ .−-]/g, "")
-    .replace(/[()]/g, "");
+    .replace(/[^0-9+*/×÷^().−-]/g, "");
+
   const cleaned = normalizeOperatorRuns(allowed);
+
   if (cleaned !== input.value) {
     const prefix = normalizeOperatorRuns(allowed.slice(0, caret));
     input.value = cleaned;
     const safeCaret = Math.min(prefix.length, input.value.length);
     input.setSelectionRange(safeCaret, safeCaret);
   }
+
   justCalculated = false;
   if (input.value.trim()) display.textContent = "0";
+
   updatePreview();
 });
 expressionInput.addEventListener("keydown", (event) => {
