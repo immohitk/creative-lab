@@ -15,3 +15,6 @@ release/
 .DS_Store
 Thumbs.db
 node_modules/
+
+# Temporary local backups
+*.backup
