@@ -11,6 +11,7 @@
     <title>Creative Lab Clock</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
+
   <body>
     <main id="app">
       <header class="topbar">
@@ -18,6 +19,7 @@
           <span class="brand-mark" aria-hidden="true">C</span>
           <span class="brand-name">CREATIVE LAB</span>
         </div>
+
         <span class="live-status">
           <span class="status-dot" aria-hidden="true"></span>
           LOCAL TIME
@@ -27,32 +29,47 @@
       <section class="clock-panel" aria-label="Digital clock">
         <p class="eyebrow">YOUR TIME, AT A GLANCE</p>
 
-        <h1 id="clock" aria-live="off">11:27:56 PM</h1>
+        <h1 id="clock" aria-live="off" tabindex="0">11:27:56 PM</h1>
+
         <p id="date"></p>
 
         <div class="clock-controls">
-          <span class="control-label">TIME FORMAT</span>
-          <div
-            class="format-switch"
-            role="group"
-            aria-label="Choose time format"
-          >
-            <button
-              id="format12"
-              class="format-button active"
-              type="button"
-              aria-pressed="true"
+          <div class="control-group">
+            <label class="control-label" for="themeSelect"> THEME </label>
+
+            <select id="themeSelect" class="theme-select">
+              <option value="midnight">Midnight</option>
+              <option value="light">Light</option>
+              <option value="forest">Forest</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <span class="control-label">TIME FORMAT</span>
+
+            <div
+              class="format-switch"
+              role="group"
+              aria-label="Choose time format"
             >
-              12-hour
-            </button>
-            <button
-              id="format24"
-              class="format-button"
-              type="button"
-              aria-pressed="false"
-            >
-              24-hour
-            </button>
+              <button
+                id="format12"
+                class="format-button active"
+                type="button"
+                aria-pressed="true"
+              >
+                12-hour
+              </button>
+
+              <button
+                id="format24"
+                class="format-button"
+                type="button"
+                aria-pressed="false"
+              >
+                24-hour
+              </button>
+            </div>
           </div>
         </div>
       </section>

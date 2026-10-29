@@ -282,3 +282,203 @@ button {
     line-height: 1.6;
   }
 }
+
+
+/* Theme selector and grouped controls */
+.clock-controls {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.theme-select {
+  min-width: 132px;
+  padding: 8px 30px 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #151925;
+  color: #f4f5fb;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.theme-select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.theme-select option {
+  background: #151925;
+  color: #f4f5fb;
+}
+
+@media (max-width: 560px) {
+  .clock-controls {
+    width: 100%;
+    max-width: 340px;
+    align-items: stretch;
+  }
+
+  .control-group {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .theme-select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+
+/* Theme palettes */
+:root,
+:root[data-theme="midnight"] {
+  color-scheme: dark;
+  --page-bg: #0b0d12;
+  --text-main: #f4f5fb;
+  --clock-color: #f5f6ff;
+  --date-color: #aeb5c9;
+  --muted: #9299ad;
+  --accent: #a9b8ff;
+  --panel: rgba(255, 255, 255, 0.035);
+  --line: rgba(255, 255, 255, 0.09);
+  --control-bg: #151925;
+  --control-text: #f4f5fb;
+  --active-bg: #dfe4ff;
+  --active-text: #171a2b;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page-bg: #f4f5f8;
+  --text-main: #202434;
+  --clock-color: #202434;
+  --date-color: #555e70;
+  --muted: #697185;
+  --accent: #5969b8;
+  --panel: rgba(255, 255, 255, 0.78);
+  --line: rgba(32, 36, 52, 0.16);
+  --control-bg: #ffffff;
+  --control-text: #202434;
+  --active-bg: #dfe4ff;
+  --active-text: #202434;
+}
+
+:root[data-theme="forest"] {
+  color-scheme: dark;
+  --page-bg: #0b1511;
+  --text-main: #e8f5ec;
+  --clock-color: #e8f5ec;
+  --date-color: #b1cbbb;
+  --muted: #94b1a0;
+  --accent: #83d6a4;
+  --panel: rgba(131, 214, 164, 0.055);
+  --line: rgba(131, 214, 164, 0.17);
+  --control-bg: #14231b;
+  --control-text: #e8f5ec;
+  --active-bg: #b9efca;
+  --active-text: #12311e;
+}
+
+/* Apply theme colors */
+:root {
+  background: var(--page-bg);
+  color: var(--text-main);
+}
+
+body {
+  background:
+    radial-gradient(
+      ellipse at 50% 42%,
+      color-mix(in srgb, var(--accent) 12%, transparent),
+      transparent 48%
+    ),
+    var(--page-bg);
+}
+
+#clock {
+  color: var(--clock-color);
+}
+
+#date {
+  color: var(--date-color);
+}
+
+.theme-select {
+  background: var(--control-bg);
+  color: var(--control-text);
+  border-color: var(--line);
+}
+
+.theme-select option {
+  background: var(--control-bg);
+  color: var(--control-text);
+}
+
+.format-switch {
+  background: var(--control-bg);
+  border-color: var(--line);
+}
+
+.format-button {
+  color: var(--date-color);
+}
+
+.format-button.active {
+  background: var(--active-bg);
+  color: var(--active-text);
+}
+
+.format-button:focus-visible,
+.theme-select:focus-visible {
+  outline-color: var(--accent);
+}
+
+.brand-mark {
+  border-color: var(--line);
+  color: var(--accent);
+}
+
+.clock-controls {
+  border-color: var(--line);
+  background: var(--panel);
+}
+
+.footer {
+  border-color: var(--line);
+}
+
+.status-dot {
+  background: var(--accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+#clock:hover {
+  text-shadow: 0 0 36px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.format-button.active {
+  box-shadow: 0 2px 12px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body,
+  #app,
+  .clock-controls,
+  .theme-select,
+  #clock,
+  #date {
+    transition:
+      background-color 180ms ease,
+      color 180ms ease,
+      border-color 180ms ease;
+  }
+}
