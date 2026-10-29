@@ -18,3 +18,8 @@ node_modules/
 
 # Temporary local backups
 *.backup
+
+# Internal project planning files
+**/SCOPE.md
+**/ACCEPTANCE-CRITERIA.md
+**/IMPLEMENTATION-PLAN.md
