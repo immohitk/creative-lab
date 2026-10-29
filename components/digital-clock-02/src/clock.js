@@ -70,6 +70,12 @@ function setFormat(value) {
 button12.addEventListener("click", () => setFormat(false));
 button24.addEventListener("click", () => setFormat(true));
 clock.addEventListener("click", () => setFormat(!use24Hour));
+clock.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    setFormat(!use24Hour);
+  }
+});
 
 themeSelect.addEventListener("change", () => {
   applyTheme(themeSelect.value);
