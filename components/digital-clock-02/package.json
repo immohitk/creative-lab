@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Creative Lab Clock - responsive web app and Windows desktop clock",
+  "author": "Creative Lab by Mohit Kumar",
   "main": "desktop/main.js",
   "scripts": {
     "start": "electron .",
@@ -23,11 +24,19 @@
     "files": [
       "desktop/**/*",
       "src/**/*",
+      "assets/**/*",
       "package.json"
     ],
     "win": {
+      "icon": "assets/creative-lab-clock.ico",
       "target": "nsis"
     },
+    "extraResources": [
+      {
+        "from": "assets/creative-lab-clock.ico",
+        "to": "creative-lab-clock.ico"
+      }
+    ],
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true

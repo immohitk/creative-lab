@@ -114,6 +114,14 @@ A dark editorial-style mobile app landing page built with Astro, featuring respo
 
 More templates and components will be added progressively.
 
+### Desktop Applications
+
+**Creative Lab Clock (C02)**
+
+`components/digital-clock-02/`
+
+A minimal digital clock with live local time, 12-hour and 24-hour formats, three themes, persistent preferences, and a Windows desktop application powered by Electron.
+
 ## Philosophy
 
 Creative Lab focuses on:

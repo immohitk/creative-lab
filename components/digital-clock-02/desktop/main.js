@@ -8,6 +8,7 @@ function createWindow() {
     minWidth: 320,
     minHeight: 240,
     title: "Creative Lab Clock",
+    icon: path.join(process.resourcesPath, "creative-lab-clock.ico"),
     backgroundColor: "#0b0d12",
     autoHideMenuBar: true,
     webPreferences: {
