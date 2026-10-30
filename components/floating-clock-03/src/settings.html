@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' file: data:;">
+  <title>Creative Lab · Clock Settings</title>
+  <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><img class="brand-mark" src="../assets/creative-lab-clock.ico" alt="Creative Lab Clock"><div><strong>CREATIVE LAB</strong><span>DESKTOP WIDGETS</span></div></div>
+      <div class="side-caption">FLOATING CLOCK</div>
+      <nav class="tabs" aria-label="Settings sections">
+        <button class="tab active" data-tab="appearance"><span class="tab-icon">◈</span> Appearance</button>
+        <button class="tab" data-tab="typography"><span class="tab-icon">Aa</span> Typography</button>
+        <button class="tab" data-tab="layout"><span class="tab-icon">▣</span> Size &amp; layout</button>
+      </nav>
+      <div class="sidebar-bottom"><span class="status-dot"></span> Preferences save automatically</div>
+    </aside>
+
+    <main class="main-panel">
+      <header class="topbar"><div><p class="eyebrow">C03 / PERSONALIZATION</p><h1>Clock settings</h1><p class="subtitle">Fine-tune the look and feel of your desktop clock.</p></div><div class="version">C03 <span>·</span> SETTINGS</div></header>
+
+      <section class="tab-panel active" id="panel-appearance">
+        <div class="section-heading"><div><h2>Appearance</h2><p>Choose a surface, background and overall shape.</p></div></div>
+        <article class="card">
+          <div class="card-heading"><div><h3>Background style</h3><p>Select how the clock sits on your desktop.</p></div></div>
+          <div class="field-grid">
+            <label class="field"><span>Background mode</span><select id="background"><option value="glass">Glass · Frosted</option><option value="wallpaper">Wallpaper</option><option value="wallpaper-glass">Wallpaper · Glass overlay</option><option value="solid">Solid colour</option><option value="gradient">Gradient</option><option value="aurora">Aurora glow</option><option value="carbon">Carbon fibre</option><option value="metal">Brushed metal</option><option value="transparent">Fully transparent</option></select></label>
+            <label class="field"><span>Corner shape</span><select id="shape"><option value="rounded">Rounded</option><option value="pill">Pill</option><option value="square">Square</option></select></label>
+          </div>
+          <div class="wallpaper-row"><div><strong>Desktop wallpaper</strong><p>Choose an image, animated GIF or looping video (MP4 / WebM / MOV).</p></div><button id="chooseWallpaper" class="button secondary">Choose image</button></div>
+          <div class="field-grid extra-fields" id="solidColorField"><label class="field"><span>Solid background colour</span><input id="solidColor" type="color"></label></div>
+          <div class="field-grid extra-fields" id="gradientField"><label class="field"><span>Gradient preset</span><select id="gradientPreset"><option value="aurora">Aurora blue</option><option value="sunset">Sunset</option><option value="ocean">Deep ocean</option><option value="graphite">Graphite</option><option value="nebula">Nebula</option><option value="emerald">Emerald</option></select></label></div>
+          <div class="field-grid">
+            <label class="field"><span>Outer depth</span><select id="panelDepth"><option value="flat">Flat</option><option value="floating">Floating shadow</option><option value="bevel">3D bevel</option><option value="chrome">Chrome edge</option></select></label>
+          </div>
+          <div class="range-block"><div class="range-label"><span>Background opacity</span><output id="opacityValue">100%</output></div><input id="opacity" type="range" min="20" max="100" value="100"></div>
+        </article>
+        <article class="card"><div class="card-heading"><div><h3>Time display</h3><p>Choose the clock format.</p></div></div><label class="field"><span>Time format</span><select id="format"><option value="12">12-hour (AM / PM)</option><option value="24">24-hour</option></select></label></article>
+      </section>
+
+      <section class="tab-panel" id="panel-typography">
+        <div class="section-heading"><div><h2>Typography</h2><p>Control the time and date independently.</p></div></div>
+        <article class="card">
+          <div class="card-heading"><div><h3>Time typography</h3><p>Main clock text appearance.</p></div></div>
+          <div class="field-grid"><label class="field"><span>Font family</span><select id="clockFont" class="font-select"></select></label><label class="field"><span>Text colour</span><input id="clockColor" type="color"></label></div>
+          <div class="field-grid">
+            <label class="field"><span>Time text effect</span><select id="clockTextEffect"><option value="clean">Clean</option><option value="soft">Soft shadow</option><option value="embossed">Embossed 3D</option><option value="extruded">Extruded depth</option><option value="neon">Neon glow</option></select></label>
+            <label class="field"><span>Time backing surface</span><select id="clockSurface"><option value="none">No backing</option><option value="glass">Glass capsule</option><option value="raised">Raised 3D tile</option><option value="neon">Neon frame</option><option value="inset">Inset panel</option></select></label>
+          </div>
+          <div class="field-grid"><label class="field"><span>Time backing colour</span><input id="clockSurfaceColor" type="color"></label></div>
+          <div class="range-block"><div class="range-label"><span>Font size</span><output id="clockSizeValue">46 px</output></div><input id="clockSize" type="range" min="20" max="120"></div>
+          <div class="toggle-row"><div><strong>Text outline</strong><p>Add an outline to improve readability.</p></div><label class="switch"><input id="clockOutlineEnabled" type="checkbox"><span></span></label></div>
+          <div class="field-grid outline-fields" id="clockOutlineFields"><label class="field"><span>Outline colour</span><input id="clockOutlineColor" type="color"></label><div class="range-block compact"><div class="range-label"><span>Thickness</span><output id="clockOutlineWidthValue">1 px</output></div><input id="clockOutlineWidth" type="range" min="0" max="5" step="0.5"></div></div>
+        </article>
+        <article class="card">
+          <div class="card-heading"><div><h3>Date typography</h3><p>Secondary date line appearance.</p></div></div>
+          <div class="field-grid"><label class="field"><span>Font family</span><select id="dateFont" class="font-select"></select></label><label class="field"><span>Text colour</span><input id="dateColor" type="color"></label></div>
+          <div class="field-grid">
+            <label class="field"><span>Date text effect</span><select id="dateTextEffect"><option value="clean">Clean</option><option value="soft">Soft shadow</option><option value="embossed">Embossed 3D</option><option value="extruded">Extruded depth</option><option value="neon">Neon glow</option></select></label>
+            <label class="field"><span>Date backing surface</span><select id="dateSurface"><option value="none">No backing</option><option value="glass">Glass capsule</option><option value="raised">Raised 3D tile</option><option value="neon">Neon frame</option><option value="inset">Inset panel</option></select></label>
+          </div>
+          <div class="field-grid"><label class="field"><span>Date backing colour</span><input id="dateSurfaceColor" type="color"></label></div>
+          <div class="range-block"><div class="range-label"><span>Font size</span><output id="dateSizeValue">14 px</output></div><input id="dateSize" type="range" min="8" max="32"></div>
+          <div class="toggle-row"><div><strong>Text outline</strong><p>Add an outline to improve readability.</p></div><label class="switch"><input id="dateOutlineEnabled" type="checkbox"><span></span></label></div>
+          <div class="field-grid outline-fields" id="dateOutlineFields"><label class="field"><span>Outline colour</span><input id="dateOutlineColor" type="color"></label><div class="range-block compact"><div class="range-label"><span>Thickness</span><output id="dateOutlineWidthValue">1 px</output></div><input id="dateOutlineWidth" type="range" min="0" max="5" step="0.5"></div></div>
+        </article>
+      </section>
+
+      <section class="tab-panel" id="panel-layout">
+        <div class="section-heading"><div><h2>Size &amp; layout</h2><p>Set the exact footprint of the floating clock.</p></div></div>
+        <article class="card">
+          <div class="card-heading"><div><h3>Master clock size</h3><p>One control scales the outer panel, time, date, spacing, padding and text effects together.</p></div></div>
+          <div class="range-block"><div class="range-label"><span>Overall size</span><output id="masterSizeValue">100% · 320 × 112 px</output></div><input id="masterSize" type="range" min="40" max="200" value="100" step="5"></div>
+          <div class="note">The clock keeps its proportions as it grows or shrinks. Your chosen fonts, colours and individual time/date styling are preserved.</div>
+        </article>
+        <article class="card">
+          <div class="card-heading"><div><h3>Time &amp; date spacing</h3><p>Adjust the breathing room between the two text tiles.</p></div></div>
+          <div class="range-block"><div class="range-label"><span>Vertical gap</span><output id="timeDateGapValue">12 px</output></div><input id="timeDateGap" type="range" min="0" max="32" value="12" step="1"></div>
+        </article>
+        <article class="card reset-card"><div><h3>Restore default settings</h3><p>Reset appearance, typography and clock dimensions to their original values.</p></div><button id="resetDefaults" class="button danger">Reset to defaults</button></article>
+      </section>
+
+      <footer class="footer"><span id="status" role="status">All changes are saved automatically.</span><span>Creative Lab · C03</span></footer>
+    </main>
+  </div>
+  <script src="settings.js"></script>
+</body>
+</html>

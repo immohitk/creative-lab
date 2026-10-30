@@ -1,380 +1,259 @@
-const {
-  app,
-  BrowserWindow,
-  ipcMain,
-  screen,
-  Menu,
-  Tray,
-  nativeImage,
-  dialog,
-} = require("electron");
-const path = require("node:path");
-const { pathToFileURL } = require("node:url");
+const { app, BrowserWindow, ipcMain, Menu, Tray, nativeImage, dialog } = require('electron');
+const path = require('node:path');
+const fs = require('node:fs');
+const { pathToFileURL } = require('node:url');
+const { execFile } = require('node:child_process');
+
+const DEFAULT_BOUNDS = { width: 320, height: 112, x: 40, y: 40 };
+const MIN_MASTER_SCALE = 0.40;
+const MAX_MASTER_SCALE = 2;
+const DEFAULTS = {
+  format: '12', background: 'glass', shape: 'rounded', opacity: 1,
+  clockSize: 46, dateSize: 14,
+  clockColor: '#F5FFF9', dateColor: '#C9D4DE',
+  clockFont: 'Segoe UI', dateFont: 'Segoe UI',
+  clockOutlineEnabled: true, clockOutlineColor: '#17212B', clockOutlineWidth: 1,
+  dateOutlineEnabled: true, dateOutlineColor: '#17212B', dateOutlineWidth: 1,
+  solidColor: '#17212B', gradientPreset: 'aurora',
+  clockSurface: 'glass', dateSurface: 'none',
+  clockSurfaceColor: '#142235', dateSurfaceColor: '#142235',
+  clockTextEffect: 'embossed', dateTextEffect: 'soft', panelDepth: 'floating',
+  wallpaperPath: null,
+  masterScale: 1, timeDateGap: 12,
+  windowWidth: DEFAULT_BOUNDS.width, windowHeight: DEFAULT_BOUNDS.height,
+  x: DEFAULT_BOUNDS.x, y: DEFAULT_BOUNDS.y
+};
 
 let clockWindow = null;
+let settingsWindow = null;
 let tray = null;
 let dragState = null;
+let positionSaveTimer = null;
+let expectedClockSize = { width: DEFAULT_BOUNDS.width, height: DEFAULT_BOUNDS.height };
+let applyingMasterSize = false;
 
-const DEFAULT_BOUNDS = { width: 260, height: 90, x: 40, y: 40 };
-
+function preferenceFile() { return path.join(app.getPath('userData'), 'preferences.json'); }
 function getPreferences() {
-  const defaults = {
-    x: DEFAULT_BOUNDS.x,
-    y: DEFAULT_BOUNDS.y,
-  };
-
   try {
-    const fs = require("node:fs");
-    const file = path.join(app.getPath("userData"), "preferences.json");
-
-    if (fs.existsSync(file)) {
-      return { ...defaults, ...JSON.parse(fs.readFileSync(file, "utf8")) };
+    if (fs.existsSync(preferenceFile())) {
+      const stored = JSON.parse(fs.readFileSync(preferenceFile(), 'utf8'));
+      const merged = { ...DEFAULTS, ...stored };
+      // Migrate preferences created before the proportional master-size control existed.
+      if (!Number.isFinite(stored.masterScale)) {
+        const legacyScale = (Number(stored.windowWidth) || DEFAULT_BOUNDS.width) / DEFAULT_BOUNDS.width;
+        merged.masterScale = Math.max(MIN_MASTER_SCALE, Math.min(MAX_MASTER_SCALE, legacyScale));
+      }
+      return merged;
     }
-  } catch {
-    // Use safe defaults if preferences are invalid.
-  }
-
-  return defaults;
+  } catch (error) { console.error('Could not read preferences:', error); }
+  return { ...DEFAULTS };
 }
-
-ipcMain.handle("clock:get-preferences", () => {
-  const prefs = getPreferences();
-
+function savePreferences(patch) {
+  const next = { ...getPreferences(), ...patch };
+  try {
+    fs.mkdirSync(path.dirname(preferenceFile()), { recursive: true });
+    fs.writeFileSync(preferenceFile(), JSON.stringify(next, null, 2));
+  } catch (error) { console.error('Could not save preferences:', error); }
+  return next;
+}
+function withWallpaperUrl(prefs = getPreferences()) {
   return {
     ...prefs,
-    wallpaperUrl: prefs.wallpaperPath
-      ? pathToFileURL(prefs.wallpaperPath).href
-      : null,
+    wallpaperUrl: prefs.wallpaperPath && fs.existsSync(prefs.wallpaperPath)
+      ? pathToFileURL(prefs.wallpaperPath).href : null
   };
-});
+}
+function broadcastPreferences() {
+  const prefs = withWallpaperUrl();
+  if (clockWindow && !clockWindow.isDestroyed()) clockWindow.webContents.send('clock:preferences-updated', prefs);
+  if (settingsWindow && !settingsWindow.isDestroyed()) settingsWindow.webContents.send('settings:preferences-updated', prefs);
+}
+function refreshTrayMenu() {
+  if (tray && !tray.isDestroyed()) tray.setContextMenu(buildTrayMenu());
+}
+function validatePreference(key, value) {
+  const enums = {
+    format: ['12', '24'],
+    background: ['glass', 'wallpaper', 'wallpaper-glass', 'solid', 'gradient', 'aurora', 'carbon', 'metal', 'transparent'],
+    shape: ['rounded', 'pill', 'square'],
+    gradientPreset: ['aurora', 'sunset', 'ocean', 'graphite', 'nebula', 'emerald'],
+    clockSurface: ['none', 'glass', 'raised', 'neon', 'inset'],
+    dateSurface: ['none', 'glass', 'raised', 'neon', 'inset'],
+    clockTextEffect: ['clean', 'soft', 'embossed', 'extruded', 'neon'],
+    dateTextEffect: ['clean', 'soft', 'embossed', 'extruded', 'neon'],
+    panelDepth: ['flat', 'floating', 'bevel', 'chrome'],
+    clockFont: ['Segoe UI Variable', 'Segoe UI', 'Arial', 'Georgia', 'Verdana', 'Trebuchet MS', 'Courier New', 'Tahoma', 'Times New Roman', 'Consolas', 'Cambria', 'Bahnschrift'],
+    dateFont: ['Segoe UI Variable', 'Segoe UI', 'Arial', 'Georgia', 'Verdana', 'Trebuchet MS', 'Courier New', 'Tahoma', 'Times New Roman', 'Consolas', 'Cambria', 'Bahnschrift']
+  };
+  if (enums[key]) return enums[key].includes(value);
+  if (['clockColor', 'dateColor', 'clockOutlineColor', 'dateOutlineColor', 'solidColor', 'clockSurfaceColor', 'dateSurfaceColor'].includes(key)) {
+    return typeof value === 'string' && /^#[0-9a-fA-F]{6}$/.test(value);
+  }
+  if (['clockOutlineEnabled', 'dateOutlineEnabled'].includes(key)) return typeof value === 'boolean';
+  if (key === 'clockSize') return Number.isFinite(value) && value >= 20 && value <= 120;
+  if (key === 'dateSize') return Number.isFinite(value) && value >= 8 && value <= 32;
+  if (['clockOutlineWidth', 'dateOutlineWidth'].includes(key)) return Number.isFinite(value) && value >= 0 && value <= 5;
+  if (key === 'opacity') return Number.isFinite(value) && value >= 0.2 && value <= 1;
+  if (key === 'masterScale') return Number.isFinite(value) && value >= MIN_MASTER_SCALE && value <= MAX_MASTER_SCALE;
+  if (key === 'timeDateGap') return Number.isFinite(value) && value >= 0 && value <= 32;
+  return false;
+}
 
-ipcMain.handle("clock:save-preference", (_event, key, value) => {
-  const allowedKeys = [
-    "format",
-    "theme",
-    "background",
-    "shape",
-    "clockSize",
-    "dateSize",
-    "opacity",
-    "wallpaperPath",
-  ];
-
-  if (!allowedKeys.includes(key)) return false;
-
-  if (key === "format" && !["12", "24"].includes(value)) return false;
-  if (key === "theme" && !["midnight", "light", "forest"].includes(value)) return false;
-  if (key === "background" && !["glass", "wallpaper", "transparent"].includes(value)) return false;
-  if (key === "shape" && !["rounded", "pill", "square"].includes(value)) return false;
-  if (key === "wallpaperPath" && typeof value !== "string") return false;
-
-  if (key === "clockSize" && (!Number.isFinite(value) || value < 20 || value > 120)) return false;
-  if (key === "dateSize" && (!Number.isFinite(value) || value < 8 || value > 32)) return false;
-  if (key === "opacity" && (!Number.isFinite(value) || value < 0.2 || value > 1)) return false;
-
+ipcMain.handle('clock:get-preferences', () => withWallpaperUrl());
+ipcMain.handle('settings:get-preferences', () => withWallpaperUrl());
+ipcMain.handle('preferences:save', (_event, key, value) => {
+  if (!validatePreference(key, value)) return false;
   savePreferences({ [key]: value });
-  clockWindow?.webContents.send("clock:preferences-updated", {
-    ...getPreferences(),
-    wallpaperUrl: getPreferences().wallpaperPath
-      ? pathToFileURL(getPreferences().wallpaperPath).href
-      : null,
-  });
-
+  broadcastPreferences();
   return true;
 });
-
-ipcMain.handle("clock:select-wallpaper", async () => {
-  if (!clockWindow || clockWindow.isDestroyed()) return null;
-
-  const result = await dialog.showOpenDialog(clockWindow, {
-    title: "Choose Clock Wallpaper",
-    properties: ["openFile"],
-    filters: [
-      {
-        name: "Images",
-        extensions: ["png", "jpg", "jpeg", "webp", "bmp"],
-      },
-    ],
-  });
-
-  if (result.canceled || !result.filePaths.length) return null;
-
-  const wallpaperPath = result.filePaths[0];
-  const wallpaperUrl = pathToFileURL(wallpaperPath).href;
-
-  savePreferences({ wallpaperPath });
-
-  const preferences = {
-    ...getPreferences(),
-    wallpaperUrl,
-  };
-
-  clockWindow.webContents.send("clock:preferences-updated", preferences);
-
-  return { wallpaperPath, wallpaperUrl };
-});
-
-function savePreferences(patch) {
-  try {
-    const fs = require("node:fs");
-    const file = path.join(app.getPath("userData"), "preferences.json");
-    const current = getPreferences();
-    fs.writeFileSync(file, JSON.stringify({ ...current, ...patch }, null, 2));
-  } catch (error) {
-    console.error("Could not save preferences:", error);
-  }
-}
-
-function getSafePosition(x, y, width, height) {
-  const displays = screen.getAllDisplays();
-
-  const isVisible = displays.some(({ workArea }) =>
-    x + width > workArea.x &&
-    x < workArea.x + workArea.width &&
-    y + height > workArea.y &&
-    y < workArea.y + workArea.height
-  );
-
-  if (isVisible) return { x, y };
-
-  const { workArea } = screen.getPrimaryDisplay();
-
-  return {
-    x: workArea.x + 20,
-    y: workArea.y + 20,
-  };
-}
-
-function createWindow() {
+ipcMain.handle('preferences:reset', () => {
+  savePreferences({ ...DEFAULTS });
   if (clockWindow && !clockWindow.isDestroyed()) {
-    clockWindow.show();
-    return clockWindow;
+    expectedClockSize = { width: DEFAULT_BOUNDS.width, height: DEFAULT_BOUNDS.height };
+    clockWindow.setPosition(DEFAULT_BOUNDS.x, DEFAULT_BOUNDS.y, false);
+    clockWindow.setSize(expectedClockSize.width, expectedClockSize.height, false);
   }
+  broadcastPreferences();
+  return withWallpaperUrl();
+});
+ipcMain.handle('wallpaper:choose', async () => {
+  const result = await dialog.showOpenDialog(settingsWindow || undefined, {
+    title: 'Choose Clock Wallpaper', properties: ['openFile'],
+    filters: [{ name: 'Wallpaper media', extensions: ['png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif', 'mp4', 'webm', 'mov', 'm4v'] }]
+  });
+  if (result.canceled || !result.filePaths.length) return null;
+  savePreferences({ wallpaperPath: result.filePaths[0], background: 'wallpaper' });
+  broadcastPreferences();
+  return true;
+});
+ipcMain.handle('clock:set-master-size', (_event, requestedScale) => {
+  if (!clockWindow || clockWindow.isDestroyed() || !Number.isFinite(requestedScale)) return false;
+  const scale = Math.max(MIN_MASTER_SCALE, Math.min(MAX_MASTER_SCALE, requestedScale));
+  const width = Math.round(DEFAULT_BOUNDS.width * scale);
+  const height = Math.round(DEFAULT_BOUNDS.height * scale);
+  expectedClockSize = { width, height };
+  // Programmatic resize is allowed even though native user resizing is disabled.
+  clockWindow.setBounds({ ...clockWindow.getBounds(), width, height }, false);
+  savePreferences({ masterScale: scale, windowWidth: width, windowHeight: height });
+  broadcastPreferences();
+  return { masterScale: scale, windowWidth: width, windowHeight: height };
+});
 
-  const prefs = getPreferences();
-  const validThemes = ["midnight", "light", "forest"];
-  const format = prefs.format === "24" ? "24" : "12";
-  const theme = validThemes.includes(prefs.theme) ? prefs.theme : "midnight";
-  const position = getSafePosition(
-    Number.isFinite(prefs.x) ? prefs.x : DEFAULT_BOUNDS.x,
-    Number.isFinite(prefs.y) ? prefs.y : DEFAULT_BOUNDS.y,
-    DEFAULT_BOUNDS.width,
-    DEFAULT_BOUNDS.height
-  );
-
-  clockWindow = new BrowserWindow({
-    ...DEFAULT_BOUNDS,
-    ...position,
-    frame: false,
-    transparent: true,
-    backgroundColor: "#00000000",
-    alwaysOnTop: true,
-    resizable: false,
-    maximizable: false,
-    minimizable: false,
-    fullscreenable: false,
-    skipTaskbar: true,
-    show: false,
-    title: "Creative Lab Floating Clock",
-    icon: path.join(process.resourcesPath, "creative-lab-clock.ico"),
+function createSettingsWindow() {
+  if (settingsWindow && !settingsWindow.isDestroyed()) {
+    if (!settingsWindow.isVisible()) settingsWindow.show();
+    settingsWindow.focus();
+    return;
+  }
+  settingsWindow = new BrowserWindow({
+    width: 820, height: 760, minWidth: 720, minHeight: 640,
+    title: 'Creative Lab · Floating Clock Settings',
+    icon: path.join(__dirname, '../assets/creative-lab-clock.ico'),
+    show: false, resizable: true, autoHideMenuBar: true,
+    backgroundColor: '#0d1420',
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
-      contextIsolation: true,
-      nodeIntegration: false,
-      sandbox: true,
-    },
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true, nodeIntegration: false, sandbox: true
+    }
   });
+  settingsWindow.loadFile(path.join(__dirname, '../src/settings.html'));
+  settingsWindow.once('ready-to-show', () => settingsWindow && !settingsWindow.isDestroyed() && settingsWindow.show());
+  settingsWindow.on('closed', () => { settingsWindow = null; });
+}
+ipcMain.handle('settings:open', () => createSettingsWindow());
 
-  clockWindow.setAlwaysOnTop(true);
-  clockWindow.loadFile(path.join(__dirname, "../src/index.html"));
-
-  clockWindow.once("ready-to-show", () => {
-    if (clockWindow && !clockWindow.isDestroyed()) clockWindow.show();
+function lowerClockBehindWindows() {
+  if (process.platform !== 'win32' || !clockWindow || clockWindow.isDestroyed()) return;
+  const handle = clockWindow.getNativeWindowHandle();
+  const hwnd = handle.length >= 8 ? handle.readBigUInt64LE(0).toString() : String(handle.readUInt32LE(0));
+  const script = `$sig='[DllImport("user32.dll", SetLastError=true)] public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);'; Add-Type -MemberDefinition $sig -Name Native -Namespace Win32; [Win32.Native]::SetWindowPos([IntPtr]::new([Int64]${hwnd}), [IntPtr]::new(1), 0, 0, 0, 0, 0x0001 -bor 0x0002 -bor 0x0010) | Out-Null`;
+  execFile('powershell.exe', ['-NoProfile', '-NonInteractive', '-WindowStyle', 'Hidden', '-Command', script], { windowsHide: true }, (error) => {
+    if (error) console.warn('Could not lower clock behind other windows:', error.message);
   });
-
-  clockWindow.on("moved", () => {
-    if (!clockWindow || clockWindow.isDestroyed()) return;
-    const [x, y] = clockWindow.getPosition();
-    savePreferences({ x, y });
-  });
-
-  clockWindow.on("closed", () => {
-    clockWindow = null;
-    dragState = null;
-  });
-
-  return clockWindow;
 }
 
-ipcMain.on("clock:drag-start", (event, pointer) => {
-  if (!clockWindow || event.sender !== clockWindow.webContents) return;
-  if (!pointer || !Number.isFinite(pointer.screenX) || !Number.isFinite(pointer.screenY)) return;
+function createClockWindow() {
+  const prefs = getPreferences();
+  const savedScale = Number.isFinite(prefs.masterScale)
+    ? Math.max(MIN_MASTER_SCALE, Math.min(MAX_MASTER_SCALE, prefs.masterScale))
+    : Math.max(MIN_MASTER_SCALE, Math.min(MAX_MASTER_SCALE, (Number(prefs.windowWidth) || DEFAULT_BOUNDS.width) / DEFAULT_BOUNDS.width));
+  const startupWidth = Math.round(DEFAULT_BOUNDS.width * savedScale);
+  const startupHeight = Math.round(DEFAULT_BOUNDS.height * savedScale);
+  savePreferences({ masterScale: savedScale, windowWidth: startupWidth, windowHeight: startupHeight });
+  expectedClockSize = { width: startupWidth, height: startupHeight };
+  clockWindow = new BrowserWindow({
+    width: startupWidth,
+    height: startupHeight,
+    x: Number.isFinite(prefs.x) ? prefs.x : DEFAULT_BOUNDS.x,
+    y: Number.isFinite(prefs.y) ? prefs.y : DEFAULT_BOUNDS.y,
+    frame: false, transparent: true, backgroundColor: '#00000000',
+    alwaysOnTop: false, resizable: false, maximizable: false, minimizable: false,
+    fullscreenable: false, skipTaskbar: true, focusable: true, show: false,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true, nodeIntegration: false, sandbox: true
+    }
+  });
+  // Normal desktop z-order: regular application windows appear above the clock.
+  clockWindow.setAlwaysOnTop(false);
+  // Native Electron drag region moves the window without changing its dimensions.
+  // resizable:false blocks edge resizing; programmatic Master Size updates still work.
+  clockWindow.loadFile(path.join(__dirname, '../src/index.html'));
+  clockWindow.once('ready-to-show', () => {
+    if (!clockWindow || clockWindow.isDestroyed()) return;
+    clockWindow.showInactive();
+    lowerClockBehindWindows();
+  });
+  clockWindow.on('moved', () => {
+    if (!clockWindow || clockWindow.isDestroyed()) return;
+    clearTimeout(positionSaveTimer);
+    positionSaveTimer = setTimeout(() => {
+      if (!clockWindow || clockWindow.isDestroyed()) return;
+      const [x, y] = clockWindow.getPosition();
+      savePreferences({ x, y });
+    }, 250);
+  });
+  clockWindow.on('show', refreshTrayMenu);
+  clockWindow.on('hide', refreshTrayMenu);
+  clockWindow.on('closed', () => { clockWindow = null; refreshTrayMenu(); });
+}
 
-  const [x, y] = clockWindow.getPosition();
-
-  dragState = {
-    pointerX: pointer.screenX,
-    pointerY: pointer.screenY,
-    windowX: x,
-    windowY: y,
-  };
-});
-
-ipcMain.on("clock:drag-move", (event, pointer) => {
-  if (!clockWindow || event.sender !== clockWindow.webContents || !dragState) return;
-  if (!pointer || !Number.isFinite(pointer.screenX) || !Number.isFinite(pointer.screenY)) return;
-
-  clockWindow.setPosition(
-    Math.round(dragState.windowX + pointer.screenX - dragState.pointerX),
-    Math.round(dragState.windowY + pointer.screenY - dragState.pointerY)
-  );
-});
-
-ipcMain.on("clock:drag-end", (event) => {
-  if (clockWindow && event.sender === clockWindow.webContents) dragState = null;
-});
-
-ipcMain.handle("clock:show-settings-menu", async () => {
-  if (!clockWindow || clockWindow.isDestroyed()) return;
-
-  const menu = Menu.buildFromTemplate([
-    {
-      label: "Choose Wallpaper",
-      click: () => clockWindow?.webContents.send("clock:open-wallpaper-picker"),
-    },
-    {
-      label: "Glass Background",
-      click: () => {
-        savePreferences({ background: "glass" });
-        clockWindow?.webContents.send("clock:preferences-updated", {
-          ...getPreferences(),
-          wallpaperUrl: getPreferences().wallpaperPath
-            ? pathToFileURL(getPreferences().wallpaperPath).href
-            : null,
-        });
-      },
-    },
-    {
-      label: "Transparent Background",
-      click: () => {
-        savePreferences({ background: "transparent" });
-        clockWindow?.webContents.send("clock:preferences-updated", {
-          ...getPreferences(),
-          wallpaperUrl: getPreferences().wallpaperPath
-            ? pathToFileURL(getPreferences().wallpaperPath).href
-            : null,
-        });
-      },
-    },
-    { type: "separator" },
-    {
-      label: "Toggle 12/24-hour Format",
-      click: () => {
-        const format = getPreferences().format === "24" ? "12" : "24";
-        savePreferences({ format });
-        clockWindow?.webContents.send("clock:preferences-updated", {
-          ...getPreferences(),
-          wallpaperUrl: getPreferences().wallpaperPath
-            ? pathToFileURL(getPreferences().wallpaperPath).href
-            : null,
-        });
-      },
-    },
+function toggleClockVisibility() {
+  if (!clockWindow || clockWindow.isDestroyed()) {
+    createClockWindow();
+    return;
+  }
+  if (clockWindow.isVisible()) clockWindow.hide();
+  else { clockWindow.showInactive(); lowerClockBehindWindows(); }
+  refreshTrayMenu();
+}
+function buildTrayMenu() {
+  const visible = !!(clockWindow && !clockWindow.isDestroyed() && clockWindow.isVisible());
+  return Menu.buildFromTemplate([
+    { label: visible ? 'Hide Clock' : 'Show Clock', click: toggleClockVisibility },
+    { label: 'Settings', click: createSettingsWindow },
+    { type: 'separator' },
+    { label: 'Exit', click: () => app.quit() }
   ]);
-
-  menu.popup({ window: clockWindow });
-});
-
+}
 function createTray() {
-  if (tray) return;
-
-  const iconPath = path.join(__dirname, "../assets/creative-lab-clock.ico");
+  const iconPath = path.join(__dirname, '../assets/creative-lab-clock.ico');
   const icon = nativeImage.createFromPath(iconPath);
-
-  tray = new Tray(icon);
-  tray.setToolTip("Creative Lab Floating Clock");
-
-  const menu = Menu.buildFromTemplate([
-    {
-      label: "Show Clock",
-      click: () => clockWindow?.show(),
-    },
-    {
-        label: "Time Format",
-        submenu: [
-            {
-            label: "12-hour",
-            type: "radio",
-            checked: getPreferences().format !== "24",
-            click: () => {
-                savePreferences({ format: "12" });
-                clockWindow?.webContents.send(
-                "clock:preferences-updated",
-                getPreferences()
-                );
-            },
-            },
-            {
-            label: "24-hour",
-            type: "radio",
-            checked: getPreferences().format === "24",
-            click: () => {
-                savePreferences({ format: "24" });
-                clockWindow?.webContents.send(
-                "clock:preferences-updated",
-                getPreferences()
-                );
-            },
-            },
-        ],
-        },
-        { type: "separator" },
-        {
-        label: "Theme",
-        submenu: ["midnight", "light", "forest"].map((theme) => ({
-            label: theme.charAt(0).toUpperCase() + theme.slice(1),
-            type: "radio",
-            checked: getPreferences().theme === theme,
-            click: () => {
-            savePreferences({ theme });
-            clockWindow?.webContents.send(
-                "clock:preferences-updated",
-                getPreferences()
-            );
-            },
-        })),
-    },
-    {
-      label: "Hide Clock",
-      click: () => clockWindow?.hide(),
-    },
-    { type: "separator" },
-    {
-      label: "Exit",
-      click: () => app.quit(),
-    },
-  ]);
-
-  tray.setContextMenu(menu);
+  tray = new Tray(icon.isEmpty() ? nativeImage.createEmpty() : icon);
+  tray.setToolTip('Creative Lab Floating Clock');
+  refreshTrayMenu();
+  // Deliberately no click handler: clicking the tray icon itself must not toggle the clock.
+  // The user controls visibility only through the tray context-menu command.
 }
 
 app.whenReady().then(() => {
-  createWindow();
+  createClockWindow();
   createTray();
-
-  app.on("activate", () => {
-    if (!clockWindow || clockWindow.isDestroyed()) createWindow();
-    else clockWindow.show();
+  app.on('activate', () => {
+    if (!clockWindow || clockWindow.isDestroyed()) createClockWindow();
+    else { clockWindow.showInactive(); lowerClockBehindWindows(); }
   });
 });
-
-app.on("before-quit", () => {
-  if (tray) {
-    tray.destroy();
-    tray = null;
-  }
-});
-
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
-});
+app.on('before-quit', () => { if (tray) tray.destroy(); });
+app.on('window-all-closed', () => { if (process.platform === 'darwin') app.quit(); });

@@ -1,27 +1,20 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' file: data:;"
-    />
-
-    <title>Creative Lab Floating Clock</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <main id="clockWidget" aria-label="Floating desktop clock">
-      <div id="backgroundLayer" aria-hidden="true"></div>
-
-      <section id="clockContent">
-        <div id="clock" aria-live="off">--:--:--</div>
-        <div id="date">Loading date...</div>
-      </section>
-    </main>
-
-    <script src="clock.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' file: data:; media-src 'self' file: blob:;">
+  <title>Creative Lab Floating Clock</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="clock-page">
+  <main id="clockWidget" aria-label="Floating desktop clock">
+    <div id="backgroundLayer" aria-hidden="true"><video id="wallpaperVideo" muted autoplay loop playsinline></video></div>
+    <section id="clockContent">
+      <div id="clock" aria-live="off">--:--:--</div>
+      <div id="date">Loading date...</div>
+    </section>
+  </main>
+  <script src="clock.js"></script>
+</body>
 </html>
