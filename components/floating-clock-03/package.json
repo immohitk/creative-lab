@@ -1,0 +1,53 @@
+
+{
+  "name": "creative-lab-floating-clock-c03",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Creative Lab Floating Clock - minimal Windows desktop widget",
+  "author": "Creative Lab by Mohit Kumar",
+  "main": "desktop/main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --win nsis",
+    "test": "node --test tests/*.test.js"
+  },
+  "devDependencies": {
+    "electron": "^45.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.creativelab.floatingclock.c03",
+    "productName": "Creative Lab Floating Clock",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "desktop/**/*",
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/creative-lab-clock.ico",
+      "target": "nsis"
+    },
+    "extraResources": [
+      {
+        "from": "assets/creative-lab-clock.ico",
+        "to": "creative-lab-clock.ico"
+      }
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "engines": {
+    "node": ">=24 <25",
+    "npm": ">=11"
+  },
+  "allowScripts": {
+    "electron-winstaller@5.4.0": true
+  }
+}
