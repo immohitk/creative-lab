@@ -1,8 +1,9 @@
-const { app, BrowserWindow, ipcMain, Menu, Tray, nativeImage, dialog } = require('electron');
+﻿const { app, BrowserWindow, ipcMain, Menu, Tray, nativeImage, dialog, screen } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const { pathToFileURL } = require('node:url');
 const { execFile } = require('node:child_process');
+const { mergePreferences, recoverBounds } = require('./state-utils');
 
 const DEFAULT_BOUNDS = { width: 320, height: 112, x: 40, y: 40 };
 const MIN_MASTER_SCALE = 0.40;
@@ -37,13 +38,7 @@ function getPreferences() {
   try {
     if (fs.existsSync(preferenceFile())) {
       const stored = JSON.parse(fs.readFileSync(preferenceFile(), 'utf8'));
-      const merged = { ...DEFAULTS, ...stored };
-      // Migrate preferences created before the proportional master-size control existed.
-      if (!Number.isFinite(stored.masterScale)) {
-        const legacyScale = (Number(stored.windowWidth) || DEFAULT_BOUNDS.width) / DEFAULT_BOUNDS.width;
-        merged.masterScale = Math.max(MIN_MASTER_SCALE, Math.min(MAX_MASTER_SCALE, legacyScale));
-      }
-      return merged;
+      return mergePreferences(DEFAULTS, stored);
     }
   } catch (error) { console.error('Could not read preferences:', error); }
   return { ...DEFAULTS };
@@ -149,7 +144,7 @@ function createSettingsWindow() {
   settingsWindow = new BrowserWindow({
     width: 820, height: 760, minWidth: 720, minHeight: 640,
     title: 'Creative Lab · Floating Clock Settings',
-    icon: path.join(__dirname, '../assets/creative-lab-clock.ico'),
+    icon: path.join(__dirname, '../assets/floating-clock-app.ico'),
     show: false, resizable: true, autoHideMenuBar: true,
     backgroundColor: '#0d1420',
     webPreferences: {
@@ -182,11 +177,20 @@ function createClockWindow() {
   const startupHeight = Math.round(DEFAULT_BOUNDS.height * savedScale);
   savePreferences({ masterScale: savedScale, windowWidth: startupWidth, windowHeight: startupHeight });
   expectedClockSize = { width: startupWidth, height: startupHeight };
+  const initialBounds = recoverBounds({
+    x: Number.isFinite(prefs.x) ? prefs.x : DEFAULT_BOUNDS.x,
+    y: Number.isFinite(prefs.y) ? prefs.y : DEFAULT_BOUNDS.y,
+    width: startupWidth,
+    height: startupHeight
+  }, screen.getAllDisplays());
+  if (initialBounds.x !== prefs.x || initialBounds.y !== prefs.y) {
+    savePreferences({ x: initialBounds.x, y: initialBounds.y });
+  }
   clockWindow = new BrowserWindow({
     width: startupWidth,
     height: startupHeight,
-    x: Number.isFinite(prefs.x) ? prefs.x : DEFAULT_BOUNDS.x,
-    y: Number.isFinite(prefs.y) ? prefs.y : DEFAULT_BOUNDS.y,
+    x: initialBounds.x,
+    y: initialBounds.y,
     frame: false, transparent: true, backgroundColor: '#00000000',
     alwaysOnTop: false, resizable: false, maximizable: false, minimizable: false,
     fullscreenable: false, skipTaskbar: true, focusable: true, show: false,
@@ -238,7 +242,8 @@ function buildTrayMenu() {
   ]);
 }
 function createTray() {
-  const iconPath = path.join(__dirname, '../assets/creative-lab-clock.ico');
+  if (tray && !tray.isDestroyed()) return;
+  const iconPath = path.join(__dirname, '../assets/floating-clock-app.ico');
   const icon = nativeImage.createFromPath(iconPath);
   tray = new Tray(icon.isEmpty() ? nativeImage.createEmpty() : icon);
   tray.setToolTip('Creative Lab Floating Clock');
@@ -247,13 +252,42 @@ function createTray() {
   // The user controls visibility only through the tray context-menu command.
 }
 
-app.whenReady().then(() => {
-  createClockWindow();
-  createTray();
-  app.on('activate', () => {
+// A second launch forwards to the existing process instead of creating another clock/tray.
+const hasSingleInstanceLock = app.requestSingleInstanceLock();
+if (!hasSingleInstanceLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
     if (!clockWindow || clockWindow.isDestroyed()) createClockWindow();
-    else { clockWindow.showInactive(); lowerClockBehindWindows(); }
+    else if (!clockWindow.isVisible()) clockWindow.showInactive();
+    lowerClockBehindWindows();
+    refreshTrayMenu();
   });
+
+  app.whenReady().then(() => {
+    createClockWindow();
+    createTray();
+    // Do not automatically re-show a user-hidden clock on OS/app activation.
+    screen.on('display-removed', recoverClockPosition);
+    screen.on('display-metrics-changed', recoverClockPosition);
+  });
+}
+
+function recoverClockPosition() {
+  if (!clockWindow || clockWindow.isDestroyed()) return;
+  const current = clockWindow.getBounds();
+  const next = recoverBounds(current, screen.getAllDisplays());
+  if (next.x !== current.x || next.y !== current.y) {
+    clockWindow.setPosition(next.x, next.y, false);
+    savePreferences({ x: next.x, y: next.y });
+  }
+}
+
+app.on('before-quit', () => {
+  if (tray && !tray.isDestroyed()) tray.destroy();
+  tray = null;
+  screen.removeListener('display-removed', recoverClockPosition);
+  screen.removeListener('display-metrics-changed', recoverClockPosition);
 });
-app.on('before-quit', () => { if (tray) tray.destroy(); });
 app.on('window-all-closed', () => { if (process.platform === 'darwin') app.quit(); });
+
