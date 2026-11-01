@@ -30,3 +30,7 @@ desktop/system-monitor-01/SCOPE.md
 desktop/system-monitor-01/RESEARCH.md
 desktop/system-monitor-01/ACCEPTANCE_CRITERIA.md
 desktop/system-monitor-01/DECISIONS.md
+
+# D01 internal architecture documents (keep local; do not publish)
+desktop/system-monitor-01/ARCHITECTURE.md
+desktop/system-monitor-01/REPOSITORY_STRUCTURE.md
