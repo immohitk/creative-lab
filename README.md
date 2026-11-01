@@ -1,149 +1,210 @@
 # Creative Lab
 
-A collection of modern web templates, interactive web components, small
-functional desktop applications, and selected UI/UX work.
+A collection of thoughtfully designed web templates, interactive components, and standalone desktop applications.
 
-Creative Lab is a portfolio-focused repository for building small, polished,
-and reusable projects across frontend development, interaction design, and
-Python desktop development.
+Creative Lab is a development portfolio focused on building practical, polished, and reusable software projects. Each project has its own scope, technology choices, documentation, and quality requirements.
 
-## Categories
+## Project Categories
 
-### Web Templates
+### 1. Web Templates
 
-Responsive websites and landing pages for different use cases.
+Responsive website templates and landing pages built for different products, services, and use cases.
 
-Examples:
+### 2. Interactive Components
 
-- Mobile apps
-- Developer portfolios
-- Personal portfolios
-- Restaurants and cafés
-- Small businesses
-- Events and hackathons
-- Open-source projects
-- Education
-- Fitness
-- Blogs
-- Ecommerce
+Standalone interactive utilities and components designed around focused functionality and usability.
 
-### Interactive Web Components
+### 3. Desktop Applications
 
-Small browser-based components and utilities.
+Independent desktop software built with technologies selected according to each project's requirements.
 
-Examples:
+### 4. Design
 
-- Calculators
-- Digital clocks
-- Stopwatches
-- Timers
-- Unit converters
-- Password tools
-- Color tools
-- JSON tools
-- QR generators
-- Forms
-- Navigation components
-- UI components
-
-### Desktop Applications
-
-Small functional Python desktop applications.
-
-Examples:
-
-- System monitors
-- Network monitors
-- Password vaults
-- Download managers
-- Clipboard managers
-- Notes
-- Backup utilities
-- Log viewers
-- Markdown editors
-
-### Design
-
-Supporting UI/UX work created with Figma where useful.
-
-This includes wireframes, responsive layouts, design systems, prototypes, and
-desktop application interfaces.
-
-## Repository Structure
-
-    creative-lab/
-    ├── web/
-    │   └── templates/
-    ├── components/
-    ├── desktop/
-    ├── design/
-    ├── assets/
-    ├── README.md
-    ├── LICENSE
-    └── .gitignore
-
-## Technology
-
-- HTML5
-- CSS3
-- JavaScript
-- Bootstrap
-- Astro
-- Python
-- PySide6
-- Figma
-- Git & GitHub
-
-Technologies are selected according to the requirements of each project.
+Supporting UI/UX work, including wireframes, interface concepts, design systems, prototypes, and application layouts.
 
 ## Current Projects
 
 ### Web Templates
 
-**Mobile App Landing Page**
+#### W01 — Mobile App Landing Page
 
 `web/templates/mobile-app-01/`
 
-A premium, responsive mobile app landing page built with Astro.
+A premium, light-themed mobile application landing page built with Astro.
 
-**Beyond — Mobile App Landing Page 02**
+**Highlights**
+
+- Minimal, typography-led visual design.
+- Hero section and mobile app preview.
+- Product highlights and feature storytelling.
+- Three-step workflow section.
+- Responsive desktop, tablet, and mobile layouts.
+- Semantic HTML, visible keyboard focus, and reduced-motion support.
+
+**Technology:** Astro, HTML5, CSS3, minimal JavaScript.
+
+#### W02 — Beyond: Mobile App Landing Page 02
 
 `web/templates/mobile-app-02/`
 
-A dark editorial-style mobile app landing page built with Astro, featuring responsive layouts, accessibility improvements, SEO metadata, and a polished user experience.
+A dark editorial-style mobile app landing page featuring bold typography, near-black surfaces, and electric lime accents.
 
-More templates and components will be added progressively.
+**Highlights**
 
-### Desktop Applications
+- Responsive navigation and hero section.
+- Product highlights and benefits.
+- Feature storytelling and app showcase.
+- Three-step workflow.
+- SEO metadata and social-sharing tags.
+- Responsive layouts and reduced-motion support.
+- Desktop and mobile screenshots.
 
-**Creative Lab Clock (C02)**
+**Technology:** Astro, HTML, CSS, JavaScript.
+
+**Documented status:** Completed template; final repository QA in progress.
+
+### Interactive Components
+
+#### C01 — Calculator
+
+`components/calculator-01/`
+
+A responsive calculator with a standalone Windows desktop application powered by Electron.
+
+**Highlights**
+
+- Basic arithmetic with operator precedence.
+- Decimal and negative-number input.
+- Live calculation preview.
+- Keyboard and on-screen keypad input.
+- Locally stored calculation history.
+- Clear, backspace, and error recovery.
+- Windows NSIS installer.
+
+**Technology:** HTML, CSS, JavaScript, Electron, Node.js.
+
+#### C02 — Creative Lab Clock
 
 `components/digital-clock-02/`
 
-A minimal digital clock with live local time, 12-hour and 24-hour formats, three themes, persistent preferences, and a Windows desktop application powered by Electron.
+A minimal digital clock available as a browser interface and a Windows desktop application.
 
-## Philosophy
+**Highlights**
 
-Creative Lab focuses on:
+- Live local time with seconds.
+- 12-hour and 24-hour formats.
+- Current date and weekday.
+- Midnight, Light, and Forest themes.
+- Persistent theme and time-format preferences.
+- Keyboard and mouse interaction.
+- Windows desktop application with a custom icon.
 
-- Small scope
-- High quality
-- Clean implementation
-- Responsive design
-- Accessibility
-- Practical functionality
-- Reusability
-- Original design and development
+**Technology:** HTML5, CSS3, JavaScript, Node.js, Electron, Electron Builder.
 
-The goal is not to build unnecessary complexity, but to create useful projects
-that demonstrate real development skills.
+#### C03 — Creative Lab Floating Clock
 
-## Status
+`components/floating-clock-03/`
 
-🚧 **Active development**
+A customizable floating Windows desktop clock with a transparent, frameless interface.
 
-New templates, components, desktop applications, and design work are added
-progressively.
+**Highlights**
+
+- Live time and date display.
+- Draggable, non-resizable clock window.
+- System-tray Show, Hide, Settings, and Exit controls.
+- Multiple background and gradient styles.
+- Customizable time and date typography.
+- Appearance, size, and depth customization.
+- Persistent preferences and window position.
+- Single-instance behaviour and off-screen position recovery.
+
+**Technology:** HTML, CSS, JavaScript, Node.js, Electron.
+
+## Repository Structure
+
+```text
+creative-lab/
+├── web/
+│   └── templates/
+│       ├── mobile-app-01/
+│       └── mobile-app-02/
+│
+├── components/
+│   ├── calculator-01/
+│   ├── digital-clock-02/
+│   └── floating-clock-03/
+│
+├── desktop/
+├── design/
+├── assets/
+├── tests/
+├── README.md
+├── LICENSE
+└── .gitignore
+```
+
+Each project maintains its own implementation files and relevant documentation. Project-specific scope, acceptance criteria, tests, screenshots, and release assets are kept with the respective project where applicable.
+
+## Technology Stack
+
+Technologies are selected according to individual project requirements.
+
+**Web Development**
+
+- HTML5
+- CSS3
+- JavaScript
+- Astro
+- Bootstrap, where applicable
+
+**Desktop Development**
+
+- Python
+- PySide6
+- Node.js
+- Electron
+- Electron Builder
+
+**Design and Development Tools**
+
+- Figma
+- Git
+- GitHub
+
+## Project Documentation
+
+Individual project directories may contain:
+
+- `README.md` — project overview, setup, usage, and technical details.
+- `SCOPE.md` — project vision, features, technology, and boundaries.
+- `ACCEPTANCE-CRITERIA.md` — verifiable requirements and release checks.
+- `tests/` — automated tests where applicable.
+- `screenshots/` — project visuals and interface previews.
+- `release/` — local build and installer output where applicable.
+
+Refer to each project's documentation for its specific setup, testing, and release instructions.
+
+## Development Philosophy
+
+Creative Lab follows these principles:
+
+- Quality over quantity.
+- Clearly defined project scope.
+- Practical functionality.
+- Clean and maintainable implementation.
+- Consistent user experience.
+- Accessibility and responsive design where relevant.
+- Appropriate testing and verification.
+- Honest project documentation.
+- Independent project identity and organization.
+
+The objective is to create useful, polished projects rather than unnecessary complexity or duplicate implementations.
+
+## Repository Status
+
+Creative Lab is an actively maintained development portfolio. Existing projects are documented individually, and new projects are introduced progressively.
+
+Project completion and release status are determined by their actual implementation, testing, documentation, and release evidence.
 
 ## License
 
