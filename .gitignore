@@ -24,3 +24,9 @@ node_modules/
 **/ACCEPTANCE-CRITERIA.md
 **/IMPLEMENTATION-PLAN.md
 release-new/
+
+# D01 internal planning documents (keep local; do not publish)
+desktop/system-monitor-01/SCOPE.md
+desktop/system-monitor-01/RESEARCH.md
+desktop/system-monitor-01/ACCEPTANCE_CRITERIA.md
+desktop/system-monitor-01/DECISIONS.md
