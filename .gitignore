@@ -34,3 +34,9 @@ desktop/system-monitor-01/DECISIONS.md
 # D01 internal architecture documents (keep local; do not publish)
 desktop/system-monitor-01/ARCHITECTURE.md
 desktop/system-monitor-01/REPOSITORY_STRUCTURE.md
+
+# D01 Python environment and generated files
+desktop/system-monitor-01/.venv/
+desktop/system-monitor-01/__pycache__/
+desktop/system-monitor-01/.pytest_cache/
+desktop/system-monitor-01/*.py[cod]

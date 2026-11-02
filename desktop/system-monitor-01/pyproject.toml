@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "creative-lab-system-monitor"
+version = "0.1.0"
+description = "A local-first Windows desktop system monitor."
+requires-python = ">=3.14"
+dependencies = [
+    "PySide6==6.12.0",
+    "psutil==7.2.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.2.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-ra"
