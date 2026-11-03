@@ -40,3 +40,8 @@ desktop/system-monitor-01/.venv/
 desktop/system-monitor-01/__pycache__/
 desktop/system-monitor-01/.pytest_cache/
 desktop/system-monitor-01/*.py[cod]
+
+# D01 Topic 04 internal documents (keep local; do not publish)
+desktop/system-monitor-01/SYSTEM_INFORMATION_REQUIREMENTS.md
+desktop/system-monitor-01/SYSTEM_INFORMATION_DESIGN.md
+desktop/system-monitor-01/SYSTEM_INFORMATION_ACCEPTANCE_CRITERIA.md
