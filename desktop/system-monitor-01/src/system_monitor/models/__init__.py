@@ -30,6 +30,21 @@ from system_monitor.models.memory_operation_result import (
 )
 from system_monitor.models.memory_state import MemoryStateSnapshot
 
+from system_monitor.models.disk_volume_measurement import DiskVolumeMeasurement
+from system_monitor.models.disk_measurement import DiskMeasurement
+from system_monitor.models.disk_status import (
+    DiskMeasurementFreshness,
+    DiskMeasurementStatus,
+    DiskWorkerState,
+)
+from system_monitor.models.disk_error import DiskError
+from system_monitor.models.disk_operation_result import (
+    DiskConfigurationResult,
+    DiskStartResult,
+    DiskStopResult,
+)
+from system_monitor.models.disk_state import DiskStateSnapshot
+
 
 __all__ = [
     "Availability",
@@ -53,4 +68,14 @@ __all__ = [
     "MemoryStartResult",
     "MemoryStopResult",
     "MemoryStateSnapshot",
+    "DiskVolumeMeasurement",
+    "DiskMeasurement",
+    "DiskMeasurementFreshness",
+    "DiskMeasurementStatus",
+    "DiskWorkerState",
+    "DiskError",
+    "DiskConfigurationResult",
+    "DiskStartResult",
+    "DiskStopResult",
+    "DiskStateSnapshot",
 ]
