@@ -891,3 +891,376 @@ def test_service_ignores_stale_callbacks_after_shutdown(
         lambda: instance.get_worker_state() == DiskWorkerState.STOPPED,
     )
     assert instance._worker_thread is None
+
+
+def test_service_reconfigures_running_worker_sampling_interval(
+    monkeypatch,
+    qt_app,
+):
+    monkeypatch.setattr(
+        service_module,
+        "DiskMonitoringWorker",
+        FakeWorker,
+    )
+
+    instance = DiskMonitoringService()
+
+    result = instance.start()
+    assert result.accepted is True
+
+    worker = FakeWorker.instances[0]
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: instance.get_worker_state() == DiskWorkerState.RUNNING,
+    )
+
+    configuration = instance.set_sampling_interval(2.5)
+
+    assert configuration.accepted is True
+    assert configuration.sampling_interval == 2.5
+    assert configuration.worker_state == DiskWorkerState.RUNNING
+
+    assert worker.sampling_interval == 2.5
+    assert instance.get_sampling_interval() == 2.5
+
+    instance.stop()
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: instance.get_worker_state() == DiskWorkerState.STOPPED,
+    )
+
+    assert instance._worker_thread is None
+
+def test_service_preserves_configuration_when_worker_reconfiguration_fails(
+    monkeypatch,
+    qt_app,
+):
+    monkeypatch.setattr(
+        service_module,
+        "DiskMonitoringWorker",
+        FakeWorker,
+    )
+
+    instance = DiskMonitoringService()
+
+    result = instance.start()
+    assert result.accepted is True
+
+    worker = FakeWorker.instances[0]
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: instance.get_worker_state() == DiskWorkerState.RUNNING,
+    )
+
+    previous_interval = instance.get_sampling_interval()
+    worker.raise_on_reconfigure = True
+
+    configuration = instance.set_sampling_interval(3.0)
+
+    assert configuration.accepted is False
+    assert configuration.sampling_interval == previous_interval
+    assert configuration.worker_state == DiskWorkerState.RUNNING
+
+    assert configuration.error is not None
+    assert configuration.error.error_code == "DISK_CONFIGURATION_FAILED"
+
+    assert instance.get_sampling_interval() == previous_interval
+    assert worker.sampling_interval == previous_interval
+
+    instance.stop()
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: instance.get_worker_state() == DiskWorkerState.STOPPED,
+    )
+
+    assert instance._worker_thread is None
+
+def test_service_rejects_configuration_change_while_stopping(
+    monkeypatch,
+    qt_app,
+):
+    monkeypatch.setattr(
+        service_module,
+        "DiskMonitoringWorker",
+        BlockingFakeWorker,
+    )
+
+    instance = DiskMonitoringService()
+    result = instance.start()
+
+    assert result.accepted is True
+
+    worker = BlockingFakeWorker.instances[0]
+    assert worker.entered.wait(timeout=1)
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: instance.get_worker_state() == DiskWorkerState.RUNNING,
+    )
+
+    stop_result = instance.stop()
+
+    assert stop_result.success is False
+    assert stop_result.worker_state == DiskWorkerState.STOPPING
+
+    previous_interval = instance.get_sampling_interval()
+    configuration = instance.set_sampling_interval(3.0)
+
+    assert configuration.accepted is False
+    assert configuration.sampling_interval == previous_interval
+    assert configuration.worker_state == DiskWorkerState.STOPPING
+
+    assert configuration.error is not None
+    assert configuration.error.error_code == "DISK_CONFIGURATION_REJECTED"
+
+    assert instance.get_sampling_interval() == previous_interval
+    assert worker.sampling_interval == previous_interval
+
+    worker.release.set()
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: instance.get_worker_state() == DiskWorkerState.STOPPED,
+    )
+
+    assert instance._worker_thread is None
+
+def test_service_rejects_configuration_during_startup_cleanup(
+    monkeypatch,
+    qt_app,
+):
+    monkeypatch.setattr(
+        service_module,
+        "DiskMonitoringWorker",
+        StartupStallingFakeWorker,
+    )
+    monkeypatch.setattr(
+        DiskMonitoringService,
+        "STARTUP_TIMEOUT_SECONDS",
+        0.1,
+    )
+    monkeypatch.setattr(
+        DiskMonitoringService,
+        "SHUTDOWN_TIMEOUT_SECONDS",
+        0.2,
+    )
+
+    instance = DiskMonitoringService()
+    result = instance.start()
+
+    assert result.accepted is True
+
+    worker = StartupStallingFakeWorker.instances[0]
+    assert worker.entered.wait(timeout=1)
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: (
+            instance.get_worker_state() == DiskWorkerState.FAILED
+            and instance._startup_cleanup_pending
+        ),
+    )
+
+    previous_interval = instance.get_sampling_interval()
+    configuration = instance.set_sampling_interval(3.0)
+
+    assert configuration.accepted is False
+    assert configuration.sampling_interval == previous_interval
+    assert configuration.worker_state == DiskWorkerState.FAILED
+
+    assert configuration.error is not None
+    assert configuration.error.error_code == "DISK_CONFIGURATION_REJECTED"
+
+    assert instance.get_sampling_interval() == previous_interval
+
+    worker.release.set()
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: (
+            instance._worker_thread is None
+            and not instance._startup_cleanup_pending
+        ),
+    )
+
+    assert instance.get_worker_state() == DiskWorkerState.FAILED
+    assert instance.get_sampling_interval() == previous_interval
+
+def test_service_rejects_configuration_while_failed_worker_is_alive(
+    monkeypatch,
+    qt_app,
+):
+    monkeypatch.setattr(
+        service_module,
+        "DiskMonitoringWorker",
+        UncooperativeFakeWorker,
+    )
+    monkeypatch.setattr(
+        DiskMonitoringService,
+        "SHUTDOWN_TIMEOUT_SECONDS",
+        0.1,
+    )
+
+    instance = DiskMonitoringService()
+    result = instance.start()
+
+    assert result.accepted is True
+
+    worker = UncooperativeFakeWorker.instances[0]
+    assert worker.entered.wait(timeout=1)
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: instance.get_worker_state() == DiskWorkerState.RUNNING,
+    )
+
+    instance._handle_worker_failure(instance._session_id)
+
+    assert instance.get_worker_state() == DiskWorkerState.FAILED
+    assert instance.get_worker_error().error_code == "DISK_WORKER_FAILED"
+
+    previous_interval = instance.get_sampling_interval()
+    configuration = instance.set_sampling_interval(3.0)
+
+    assert configuration.accepted is False
+    assert configuration.sampling_interval == previous_interval
+    assert configuration.worker_state == DiskWorkerState.FAILED
+
+    assert configuration.error is not None
+    assert configuration.error.error_code == "DISK_CONFIGURATION_REJECTED"
+
+    assert instance.get_sampling_interval() == previous_interval
+
+    worker.release.set()
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: (
+            instance._worker_thread is not None
+            and not instance._worker_thread.is_alive()
+        ),
+    )
+
+    stop_result = instance.stop()
+
+    assert stop_result.success is True
+    assert stop_result.worker_state == DiskWorkerState.STOPPED
+
+    assert instance._worker_thread is None
+    assert instance.get_worker_state() == DiskWorkerState.STOPPED
+
+def test_service_stops_worker_thread_cleanly(monkeypatch, qt_app):
+    monkeypatch.setattr(
+        service_module,
+        "DiskMonitoringWorker",
+        BlockingFakeWorker,
+    )
+
+    instance = DiskMonitoringService()
+    result = instance.start()
+
+    assert result.accepted is True
+
+    worker = BlockingFakeWorker.instances[0]
+    assert worker.entered.wait(timeout=1)
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: instance.get_worker_state() == DiskWorkerState.RUNNING,
+    )
+
+    stop_result = instance.stop()
+
+    assert stop_result.success is False
+    assert stop_result.worker_state == DiskWorkerState.STOPPING
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: instance.get_worker_state() == DiskWorkerState.STOPPED,
+    )
+
+    assert instance._worker_thread is None
+    assert instance._worker is None
+    assert instance._session_id is None
+
+def test_service_integrates_with_real_disk_worker(monkeypatch, qt_app):
+    from types import SimpleNamespace
+    from system_monitor.workers import disk_monitoring_worker as worker_module
+
+    partition = SimpleNamespace(
+        device=r"\\?\Volume{TEST-VOLUME}",
+        mountpoint="C:\\",
+        fstype="NTFS",
+    )
+
+    usage = SimpleNamespace(
+        total=1000,
+        used=600,
+        free=400,
+        percent=60.0,
+    )
+
+    monkeypatch.setattr(
+        worker_module.psutil,
+        "disk_partitions",
+        lambda all=False: [partition],
+    )
+    monkeypatch.setattr(
+        worker_module.psutil,
+        "disk_usage",
+        lambda mount_point: usage,
+    )
+
+    instance = DiskMonitoringService(sampling_interval=0.5)
+
+    result = instance.start()
+    assert result.accepted is True
+
+    try:
+        assert wait_for_condition(
+            qt_app,
+            lambda: (
+                instance.get_last_successful_measurement() is not None
+            ),
+            timeout=3.0,
+        )
+
+        measurement = instance.get_last_successful_measurement()
+
+        assert len(measurement.volumes) == 1
+        assert measurement.volume_errors == ()
+
+        volume = measurement.volumes[0]
+
+        assert volume.device == partition.device
+        assert volume.mount_point == partition.mountpoint
+        assert volume.filesystem == "NTFS"
+        assert volume.total_bytes == 1000
+        assert volume.used_bytes == 600
+        assert volume.free_bytes == 400
+        assert volume.percent == 60.0
+
+        assert volume.volume_id == (
+            f"{partition.device}::{partition.mountpoint}"
+        )
+
+        assert instance.get_measurement_status() == (
+            DiskMeasurementStatus.AVAILABLE
+        )
+
+    finally:
+        instance.stop()
+
+        assert wait_for_condition(
+            qt_app,
+            lambda: (
+                instance.get_worker_state() == DiskWorkerState.STOPPED
+            ),
+            timeout=3.0,
+        )
+
+        assert instance._worker_thread is None
