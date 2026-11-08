@@ -36,6 +36,8 @@ def test_collect_returns_mounted_volumes(monkeypatch):
     assert len(result.data["volumes"]) == 1
     assert result.data["volumes"][0]["mount_point"] == "C:\\"
     assert result.data["volumes"][0]["filesystem"] == "NTFS"
+    assert result.data["volumes"][0]["device"] == partition.device
+    assert result.data["volumes"][0]["available_bytes"] == usage.free
     assert result.data["volumes"][0]["total_bytes"] == 249160740864
     assert result.data["volumes"][0]["available_bytes"] == 146768707584
     assert result.collected_at.tzinfo is not None
@@ -110,3 +112,39 @@ def test_collect_handles_collection_error(monkeypatch):
     assert result.status == Availability.UNAVAILABLE
     assert result.data is None
     assert "Storage information unavailable" in result.error
+
+
+def test_collect_normalizes_empty_filesystem_to_none(monkeypatch):
+    partition = type(
+        "Partition",
+        (),
+        {
+            "device": "E:\\",
+            "mountpoint": "E:\\",
+            "fstype": "",
+        },
+    )()
+
+    usage = type(
+        "Usage",
+        (),
+        {"total": 2000, "free": 800},
+    )()
+
+    monkeypatch.setattr(
+        psutil, "disk_partitions", lambda all=False: [partition]
+    )
+    monkeypatch.setattr(psutil, "disk_usage", lambda path: usage)
+
+    result = storage.collect()
+
+    assert result.status == Availability.AVAILABLE
+    assert len(result.data["volumes"]) == 1
+
+    volume = result.data["volumes"][0]
+
+    assert volume["device"] == "E:\\"
+    assert volume["mount_point"] == "E:\\"
+    assert volume["filesystem"] is None
+    assert volume["total_bytes"] == 2000
+    assert volume["available_bytes"] == 800
