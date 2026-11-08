@@ -591,7 +591,21 @@ class DiskMonitoringService(QObject):
             return
 
         snapshot = self._read_snapshot()
-        failure_counts = dict(self._volume_failure_counts)
+        observed_ids = {
+            volume.volume_id for volume in measurement.volumes
+        }
+
+        observed_ids.update(
+            error.volume_id
+            for error in measurement.volume_errors
+            if error.volume_id is not None
+        )
+
+        failure_counts = {
+            volume_id: count
+            for volume_id, count in self._volume_failure_counts.items()
+            if volume_id in observed_ids
+        }
 
         successful_ids = {volume.volume_id for volume in measurement.volumes}
         for volume_id in successful_ids:

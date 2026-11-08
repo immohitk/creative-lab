@@ -476,6 +476,43 @@ def test_service_resets_volume_failure_count_after_success(service, qt_app):
     assert service._volume_failure_counts == {}
 
 
+def test_service_clears_failure_counts_for_disappeared_volumes(
+    service,
+    qt_app,
+):
+    service.start()
+    process_events(qt_app, 100)
+
+    worker = FakeWorker.instances[0]
+    error = make_error()
+
+    worker.on_measurement(make_measurement(errors=[error]))
+    process_events(qt_app, 100)
+
+    worker.on_measurement(make_measurement(errors=[error]))
+    process_events(qt_app, 100)
+
+    volume_id = error.volume_id
+    assert service._volume_failure_counts[volume_id] == 2
+
+    # The volume disappears from the inventory.
+    worker.on_measurement(make_measurement())
+    process_events(qt_app, 100)
+
+    assert volume_id not in service._volume_failure_counts
+
+    # If the volume returns and fails again, its count starts at one.
+    worker.on_measurement(make_measurement(errors=[error]))
+    process_events(qt_app, 100)
+
+    assert (
+        service.get_latest_measurement()
+        .volume_errors[0]
+        .consecutive_failures
+        == 1
+    )
+
+
 def test_service_recovers_after_all_volume_failure(service, qt_app):
     service.start()
     process_events(qt_app, 100)
