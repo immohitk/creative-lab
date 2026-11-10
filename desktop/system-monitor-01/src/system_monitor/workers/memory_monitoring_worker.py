@@ -176,7 +176,7 @@ class MemoryMonitoringWorker:
 
             self._deliver_measurement(measurement)
 
-    def _wait_for_next_window(self, interval):
+    def _wait_for_next_window(self, interval: float) -> _WaitResult:
         """Wait a full interval; stop takes priority over reconfiguration."""
         deadline = time.monotonic() + interval
 
