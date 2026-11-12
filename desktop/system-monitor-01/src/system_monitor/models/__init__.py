@@ -63,6 +63,20 @@ from system_monitor.models.network_operation_result import (
 )
 from system_monitor.models.network_state import NetworkStateSnapshot
 
+from system_monitor.models.process_measurement import ProcessMeasurement
+from system_monitor.models.process_error import ProcessError
+from system_monitor.models.process_snapshot import ProcessSnapshot
+from system_monitor.models.process_status import (
+    ProcessWorkerState,
+    ProcessMeasurementStatus,
+    ProcessMeasurementFreshness,
+)
+from system_monitor.models.process_state import ProcessStateSnapshot
+from system_monitor.models.process_operation_result import (
+    ProcessStartResult,
+    ProcessStopResult,
+    ProcessConfigurationResult,
+)
 
 __all__ = [
     "Availability",
@@ -107,4 +121,14 @@ __all__ = [
     "NetworkStartResult",
     "NetworkStopResult",
     "NetworkStateSnapshot",
+    "ProcessMeasurement",
+    "ProcessError",
+    "ProcessSnapshot",
+    "ProcessWorkerState",
+    "ProcessMeasurementStatus",
+    "ProcessMeasurementFreshness",
+    "ProcessStateSnapshot",
+    "ProcessStartResult",
+    "ProcessStopResult",
+    "ProcessConfigurationResult",
 ]
