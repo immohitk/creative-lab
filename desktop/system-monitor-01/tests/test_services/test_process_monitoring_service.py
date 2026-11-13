@@ -861,3 +861,223 @@ def test_service_preserves_interval_when_worker_reconfiguration_fails(
     assert service.get_sampling_interval() == 2.0
     assert service._read_snapshot().sampling_interval == 2.0
     assert service.get_worker_state() == ProcessWorkerState.RUNNING
+
+
+def test_service_rejects_reconfiguration_while_stopping(
+    service, qt_app
+):
+    start_running_service(service, qt_app)
+
+    service.stop()
+    assert service.get_worker_state() == ProcessWorkerState.STOPPING
+
+    result = service.set_sampling_interval(3.5)
+
+    assert result.accepted is False
+    assert result.sampling_interval == 2.0
+    assert result.error.error_code == "PROCESS_CONFIGURATION_REJECTED"
+    assert service.get_sampling_interval() == 2.0
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: service.get_worker_state() == ProcessWorkerState.STOPPED,
+    )
+
+
+def test_service_rejects_reconfiguration_during_startup_cleanup(
+    service, qt_app, monkeypatch
+):
+    monkeypatch.setattr(
+        service_module,
+        "ProcessMonitoringWorker",
+        UncooperativeFakeWorker,
+    )
+
+    worker_class = service_module.ProcessMonitoringWorker
+    original_init = worker_class.__init__
+
+    def delayed_start_init(self, **kwargs):
+        original_init(self, announce_started=False, **kwargs)
+
+    monkeypatch.setattr(worker_class, "__init__", delayed_start_init)
+
+    service.start()
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: service._worker_thread is not None
+        and service._worker_thread.is_alive(),
+    )
+
+    worker = service._worker
+    service._startup_deadline = time.monotonic() - 1
+    service._check_startup_timeout()
+
+    assert service._startup_cleanup_pending is True
+
+    result = service.set_sampling_interval(3.5)
+
+    assert result.accepted is False
+    assert result.sampling_interval == 2.0
+    assert result.error.error_code == "PROCESS_CONFIGURATION_REJECTED"
+    assert service.get_sampling_interval() == 2.0
+    assert service._worker is worker
+
+    worker.release_event.set()
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: service._worker_thread is None,
+    )
+
+
+def test_service_rejects_reconfiguration_when_failed_worker_is_alive(
+    service, qt_app, monkeypatch
+):
+    monkeypatch.setattr(
+        service_module,
+        "ProcessMonitoringWorker",
+        UncooperativeFakeWorker,
+    )
+
+    session_id = start_running_service(service, qt_app)
+    worker = service._worker
+    worker_thread = service._worker_thread
+
+    service._handle_worker_failure(session_id)
+
+    assert service.get_worker_state() == ProcessWorkerState.FAILED
+    assert worker_thread.is_alive()
+
+    result = service.set_sampling_interval(3.5)
+
+    assert result.accepted is False
+    assert result.sampling_interval == 2.0
+    assert result.error.error_code == "PROCESS_CONFIGURATION_REJECTED"
+    assert service.get_sampling_interval() == 2.0
+    assert service._worker is worker
+    assert service._worker_thread is worker_thread
+
+    worker.release_event.set()
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: service._worker_thread is None,
+    )
+
+    assert service.get_worker_state() == ProcessWorkerState.FAILED
+
+
+def test_dispatch_request_executes_directly_on_owner_thread(service):
+    owner_thread_id = threading.get_ident()
+    execution_thread_ids = []
+
+    result = service._dispatch_request(
+        "test",
+        lambda: execution_thread_ids.append(threading.get_ident()) or "direct",
+    )
+
+    assert result == "direct"
+    assert execution_thread_ids == [owner_thread_id]
+
+
+def test_dispatch_request_executes_on_owner_thread_and_returns_result(
+    service, qt_app
+):
+    owner_thread_id = threading.get_ident()
+    execution_thread_ids = []
+    results = {}
+    execution_count = []
+
+    def callback():
+        execution_count.append(1)
+        execution_thread_ids.append(threading.get_ident())
+        return "dispatched-result"
+
+    def request_from_background_thread():
+        results["result"] = service._dispatch_request(
+            "test",
+            callback,
+        )
+
+    caller = threading.Thread(target=request_from_background_thread)
+    caller.start()
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: "result" in results,
+    )
+
+    caller.join(timeout=1.0)
+
+    assert not caller.is_alive()
+    assert results["result"] == "dispatched-result"
+    assert execution_thread_ids == [owner_thread_id]
+    assert len(execution_count) == 1
+
+
+def test_dispatch_request_propagates_callback_exception(service, qt_app):
+    results = {}
+
+    def callback():
+        raise ValueError("Simulated dispatched callback failure.")
+
+    def request_from_background_thread():
+        try:
+            service._dispatch_request("test", callback)
+        except Exception as exc:
+            results["error"] = exc
+
+    caller = threading.Thread(target=request_from_background_thread)
+    caller.start()
+
+    assert wait_for_condition(
+        qt_app,
+        lambda: "error" in results,
+    )
+
+    caller.join(timeout=1.0)
+
+    assert not caller.is_alive()
+    assert isinstance(results["error"], ValueError)
+    assert str(results["error"]) == (
+        "Simulated dispatched callback failure."
+    )
+
+
+def test_expired_dispatched_request_is_not_executed(
+    service, qt_app, monkeypatch
+):
+    monkeypatch.setattr(
+        service,
+        "REQUEST_DISPATCH_TIMEOUT_SECONDS",
+        0.05,
+    )
+
+    callback_calls = []
+    results = {}
+
+    def callback():
+        callback_calls.append(1)
+        return "should-not-run"
+
+    def request_from_background_thread():
+        results["result"] = service._dispatch_request(
+            "start",
+            callback,
+        )
+
+    caller = threading.Thread(target=request_from_background_thread)
+    caller.start()
+    caller.join(timeout=1.0)
+
+    assert not caller.is_alive()
+    assert "result" in results
+    assert results["result"].accepted is False
+    assert results["result"].error.error_code == (
+        "PROCESS_REQUEST_DISPATCH_TIMEOUT"
+    )
+
+    process_events(qt_app)
+
+    assert callback_calls == []

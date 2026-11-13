@@ -15,6 +15,8 @@ from system_monitor.models.process_snapshot import ProcessSnapshot
 
 logger = logging.getLogger(__name__)
 
+_ACCESS_DENIED = object()
+
 
 class ProcessWorkerError(Exception):
     """Represents a collection-level process monitoring failure."""
@@ -192,7 +194,7 @@ class ProcessMonitoringWorker:
                     "create_time",
                     "cpu_times",
                 ],
-                ad_value=None,
+                ad_value=_ACCESS_DENIED,
             )
         except Exception as exc:
             raise ProcessWorkerError(
@@ -219,6 +221,9 @@ class ProcessMonitoringWorker:
 
                     if not isinstance(info, dict):
                         raise ValueError("Invalid process information.")
+
+                    if any(value is _ACCESS_DENIED for value in info.values()):
+                        raise psutil.AccessDenied(pid=pid)
 
                     process_pid = info.get("pid", pid)
 

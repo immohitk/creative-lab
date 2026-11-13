@@ -341,3 +341,37 @@ def test_worker_constructor_rejects_non_callable_callbacks():
             on_measurement_failure=lambda code, message: None,
             on_worker_failure=lambda: None,
         )
+
+
+def test_access_denied_sentinel_does_not_abort_scan(monkeypatch):
+    worker, _, _, _ = make_worker()
+
+    class FakeProcess:
+        def __init__(self, pid, info):
+            self.pid = pid
+            self.info = info
+
+    def fake_process_iter(**kwargs):
+        assert kwargs["ad_value"] is not None
+
+        inaccessible_info = make_process(pid=200).info.copy()
+        inaccessible_info["memory_info"] = kwargs["ad_value"]
+
+        return iter([
+            FakeProcess(200, inaccessible_info),
+            make_process(pid=300),
+        ])
+
+    monkeypatch.setattr(
+        "system_monitor.workers.process_monitoring_worker.psutil.process_iter",
+        fake_process_iter,
+    )
+    patch_clock(monkeypatch, [10.0])
+
+    snapshot = worker._collect_measurement(2.0)
+
+    assert [process.pid for process in snapshot.processes] == [300]
+    assert len(snapshot.process_errors) == 1
+    assert snapshot.process_errors[0].pid == 200
+    assert snapshot.process_errors[0].error_code == "PROCESS_ACCESS_DENIED"
+    assert snapshot.is_partial
