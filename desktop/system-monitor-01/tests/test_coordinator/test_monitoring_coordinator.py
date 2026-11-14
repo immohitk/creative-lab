@@ -544,7 +544,7 @@ def test_stop_handles_worker_state_read_failure(
     result = coordinator.stop()
 
     assert result.success is True
-    assert result.status == CoordinatorStatus.STOPPING
+    assert result.status == CoordinatorStatus.DEGRADED
 
     assert all(
         services[name].state == "STOPPING"
@@ -552,3 +552,18 @@ def test_stop_handles_worker_state_read_failure(
     )
 
     assert "cpu" in coordinator.get_snapshot().last_error
+
+
+def test_signal_handler_handles_worker_state_read_failure(
+    coordinator,
+    services,
+):
+    services["cpu"].state_read_error = True
+
+    services["memory"].set_state("RUNNING")
+
+    snapshot = coordinator.get_snapshot()
+
+    assert snapshot.service_states["cpu"] == "STOPPED"
+    assert snapshot.service_states["memory"] == "RUNNING"
+    assert "cpu" in snapshot.last_error
