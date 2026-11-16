@@ -230,6 +230,13 @@ class ProcessMonitoringService(QObject):
     def get_worker_state(self):
         return self._read_snapshot().worker_state
 
+    def is_worker_thread_alive(self) -> bool:
+        """Return whether the monitoring worker thread is alive."""
+        return (
+            self._worker_thread is not None
+            and self._worker_thread.is_alive()
+        )
+
     def get_measurement_status(self):
         return self._read_snapshot().measurement_status
 

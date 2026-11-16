@@ -745,6 +745,7 @@ def test_service_retains_worker_after_shutdown_timeout(
         UncooperativeFakeWorker,
     )
 
+    assert service.is_worker_thread_alive() is False
     service.start()
 
     assert wait_for_condition(
@@ -767,6 +768,7 @@ def test_service_retains_worker_after_shutdown_timeout(
     assert service._worker is worker
     assert service._worker_thread is worker_thread
     assert worker_thread.is_alive()
+    assert service.is_worker_thread_alive() is True
 
     worker.release_event.set()
 
@@ -774,6 +776,7 @@ def test_service_retains_worker_after_shutdown_timeout(
         qt_app,
         lambda: service._worker_thread is None,
     )
+    assert service.is_worker_thread_alive() is False
 
     assert service.get_worker_state() == ProcessWorkerState.FAILED
     assert service._worker is None

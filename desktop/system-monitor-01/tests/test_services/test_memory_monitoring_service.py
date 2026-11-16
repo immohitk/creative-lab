@@ -547,6 +547,7 @@ def test_service_retains_worker_after_shutdown_timeout(
     )
 
     instance = MemoryMonitoringService()
+    assert instance.is_worker_thread_alive() is False
     instance.start()
 
     worker = UncooperativeFakeWorker.instances[0]
@@ -572,6 +573,7 @@ def test_service_retains_worker_after_shutdown_timeout(
     # The still-running thread must remain tracked.
     assert instance._worker_thread is not None
     assert instance._worker_thread.is_alive()
+    assert instance.is_worker_thread_alive() is True
 
     # Release the worker to prevent a non-daemon thread leak.
     worker.release.set()
@@ -580,6 +582,7 @@ def test_service_retains_worker_after_shutdown_timeout(
         qt_app,
         lambda: not instance._worker_thread.is_alive(),
     )
+    assert instance.is_worker_thread_alive() is False
 
     # Retry cleanup after thread termination.
     retry_result = instance.stop()

@@ -1008,6 +1008,7 @@ def test_service_retains_worker_after_shutdown_timeout(
     UncooperativeFakeWorker.instances.clear()
 
     instance = NetworkMonitoringService()
+    assert instance.is_worker_thread_alive() is False
     worker = None
     worker_thread = None
 
@@ -1033,6 +1034,7 @@ def test_service_retains_worker_after_shutdown_timeout(
         assert instance._worker is worker
         assert instance._worker_thread is not None
         assert instance._worker_thread.is_alive()
+        assert instance.is_worker_thread_alive() is True
 
         worker_thread = instance._worker_thread
         worker.release.set()
@@ -1041,6 +1043,7 @@ def test_service_retains_worker_after_shutdown_timeout(
             qt_app,
             lambda: not worker_thread.is_alive(),
         )
+        assert instance.is_worker_thread_alive() is False
 
         retry_result = instance.stop()
 

@@ -1,4 +1,4 @@
-import time
+﻿import time
 import threading
 from datetime import datetime, timezone
 from uuid import UUID
@@ -494,6 +494,7 @@ def test_service_retains_worker_after_shutdown_timeout(
     )
 
     service = CpuMonitoringService()
+    assert service.is_worker_thread_alive() is False
     service.start()
 
     worker = UncooperativeFakeWorker.instances[0]
@@ -517,6 +518,7 @@ def test_service_retains_worker_after_shutdown_timeout(
     # The still-running thread must remain tracked.
     assert service._worker_thread is not None
     assert service._worker_thread.is_alive()
+    assert service.is_worker_thread_alive() is True
 
     # Release the worker so the test does not leak a non-daemon thread.
     worker.release.set()
@@ -525,6 +527,7 @@ def test_service_retains_worker_after_shutdown_timeout(
         qt_app,
         lambda: not service._worker_thread.is_alive(),
     )
+    assert service.is_worker_thread_alive() is False
 
     # Retry cleanup after termination is confirmed.
     retry_result = service.stop()
@@ -587,6 +590,7 @@ def test_service_startup_timeout_preserves_error_and_cleans_worker(
     assert service._startup_cleanup_pending is True
     assert service._worker_thread is not None
     assert service._worker_thread.is_alive()
+    assert service.is_worker_thread_alive() is True
 
     # A late failure callback must not replace the startup-timeout error.
     worker.on_worker_failure()
@@ -982,6 +986,7 @@ def test_service_rejects_configuration_when_failed_worker_is_alive(
     assert result.worker_state == CpuWorkerState.FAILED
     assert result.error is not None
     assert service._worker_thread.is_alive()
+    assert service.is_worker_thread_alive() is True
 
     worker.release.set()
 
@@ -989,6 +994,7 @@ def test_service_rejects_configuration_when_failed_worker_is_alive(
         qt_app,
         lambda: not service._worker_thread.is_alive(),
     )
+    assert service.is_worker_thread_alive() is False
 
     cleanup = service.stop()
 
