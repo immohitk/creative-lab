@@ -1009,6 +1009,7 @@ def test_service_retains_worker_after_shutdown_timeout(
 
     instance = NetworkMonitoringService()
     assert instance.is_worker_thread_alive() is False
+    assert instance.is_cleanup_complete() is True
     worker = None
     worker_thread = None
 
@@ -1035,6 +1036,7 @@ def test_service_retains_worker_after_shutdown_timeout(
         assert instance._worker_thread is not None
         assert instance._worker_thread.is_alive()
         assert instance.is_worker_thread_alive() is True
+        assert instance.is_cleanup_complete() is False
 
         worker_thread = instance._worker_thread
         worker.release.set()
@@ -1051,6 +1053,7 @@ def test_service_retains_worker_after_shutdown_timeout(
         assert instance.get_worker_state() == NetworkWorkerState.STOPPED
         assert instance._worker is None
         assert instance._worker_thread is None
+        assert instance.is_cleanup_complete() is True
 
     finally:
         if worker is not None:

@@ -237,6 +237,15 @@ class NetworkMonitoringService(QObject):
             and self._worker_thread.is_alive()
         )
 
+    def is_cleanup_complete(self) -> bool:
+        return (
+            self._worker_thread is None
+            and self._worker is None
+            and not self._pending_start
+            and not self._pending_stop
+            and not self._startup_cleanup_pending
+        )
+
     def get_measurement_status(self):
         return self._read_snapshot().measurement_status
 

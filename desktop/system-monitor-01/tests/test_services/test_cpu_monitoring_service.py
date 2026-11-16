@@ -495,6 +495,7 @@ def test_service_retains_worker_after_shutdown_timeout(
 
     service = CpuMonitoringService()
     assert service.is_worker_thread_alive() is False
+    assert service.is_cleanup_complete() is True
     service.start()
 
     worker = UncooperativeFakeWorker.instances[0]
@@ -519,6 +520,7 @@ def test_service_retains_worker_after_shutdown_timeout(
     assert service._worker_thread is not None
     assert service._worker_thread.is_alive()
     assert service.is_worker_thread_alive() is True
+    assert service.is_cleanup_complete() is False
 
     # Release the worker so the test does not leak a non-daemon thread.
     worker.release.set()
@@ -535,6 +537,7 @@ def test_service_retains_worker_after_shutdown_timeout(
     assert retry_result.success is True
     assert service.get_worker_state() == CpuWorkerState.STOPPED
     assert service._worker_thread is None
+    assert service.is_cleanup_complete() is True
 
 
 class StartupStallingFakeWorker(FakeWorker):

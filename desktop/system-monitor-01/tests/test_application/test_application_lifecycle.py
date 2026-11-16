@@ -4,11 +4,23 @@ from system_monitor.application.application import SystemMonitorApplication
 
 
 class FakeService:
-    def __init__(self, alive=False):
+    def __init__(self, alive=False, auto_cleanup=True):
         self.alive = alive
+        self.cleanup_complete = not alive
+        self.auto_cleanup = auto_cleanup
+        self.stop_calls = 0
 
     def is_worker_thread_alive(self):
         return self.alive
+
+    def is_cleanup_complete(self):
+        return self.cleanup_complete
+
+    def stop(self):
+        self.stop_calls += 1
+        if not self.alive and self.auto_cleanup:
+            self.cleanup_complete = True
+
 
 class FakeCoordinator:
     def __init__(self):
@@ -86,6 +98,32 @@ class FakeInformationWorker:
 
     def deleteLater(self):
         self.delete_called = True
+
+
+def test_shutdown_waits_until_service_cleanup_completes(qt_application):
+    application = SystemMonitorApplication(argv=[])
+    service = FakeService(alive=False, auto_cleanup=False)
+    service.cleanup_complete = False
+    application._coordinator = FakeCoordinator()
+    application._services = dict(cpu=service)
+    application._main_window = FakeLifecycleTarget()
+    application._application = FakeLifecycleTarget()
+
+    application._request_shutdown()
+
+    assert service.stop_calls == 1
+    assert application._shutdown_complete is False
+    assert application._shutdown_timer.isActive() is True
+    assert application._main_window.calls == []
+    assert application._application.calls == []
+
+    service.cleanup_complete = True
+    application._check_shutdown_completion()
+
+    assert application._shutdown_complete is True
+    assert application._shutdown_timer.isActive() is False
+    assert application._main_window.calls == [1, 2]
+    assert application._application.calls == [3]
 
 
 def test_shutdown_waits_for_system_information_worker(qt_application):

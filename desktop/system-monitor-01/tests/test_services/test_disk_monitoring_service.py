@@ -732,6 +732,7 @@ def test_service_retains_worker_after_shutdown_timeout(monkeypatch, qt_app):
 
     instance = DiskMonitoringService()
     assert instance.is_worker_thread_alive() is False
+    assert instance.is_cleanup_complete() is True
     instance.start()
 
     worker = UncooperativeFakeWorker.instances[0]
@@ -753,6 +754,7 @@ def test_service_retains_worker_after_shutdown_timeout(monkeypatch, qt_app):
     assert instance._worker_thread is not None
     assert instance._worker_thread.is_alive()
     assert instance.is_worker_thread_alive() is True
+    assert instance.is_cleanup_complete() is False
 
     worker.release.set()
 
@@ -767,6 +769,7 @@ def test_service_retains_worker_after_shutdown_timeout(monkeypatch, qt_app):
     assert retry_result.success is True
     assert instance.get_worker_state() == DiskWorkerState.STOPPED
     assert instance._worker_thread is None
+    assert instance.is_cleanup_complete() is True
 
 
 def test_service_startup_timeout_preserves_error_and_cleans_worker(

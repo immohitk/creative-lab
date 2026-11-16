@@ -746,6 +746,7 @@ def test_service_retains_worker_after_shutdown_timeout(
     )
 
     assert service.is_worker_thread_alive() is False
+    assert service.is_cleanup_complete() is True
     service.start()
 
     assert wait_for_condition(
@@ -769,6 +770,7 @@ def test_service_retains_worker_after_shutdown_timeout(
     assert service._worker_thread is worker_thread
     assert worker_thread.is_alive()
     assert service.is_worker_thread_alive() is True
+    assert service.is_cleanup_complete() is False
 
     worker.release_event.set()
 
@@ -780,6 +782,7 @@ def test_service_retains_worker_after_shutdown_timeout(
 
     assert service.get_worker_state() == ProcessWorkerState.FAILED
     assert service._worker is None
+    assert service.is_cleanup_complete() is True
 
 
 def test_service_cleans_up_after_startup_timeout(

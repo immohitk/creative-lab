@@ -185,8 +185,14 @@ class SystemMonitorApplication(QObject):
         if not self._shutdown_requested or self._shutdown_complete:
             return
 
-        if any(service.is_worker_thread_alive() for service in self._services.values()):
-            return
+        for service in self._services.values():
+            if service.is_worker_thread_alive():
+                return
+
+            if not service.is_cleanup_complete():
+                service.stop()
+                if not service.is_cleanup_complete():
+                    return
 
         worker = self._system_information_worker
         if worker is not None:
