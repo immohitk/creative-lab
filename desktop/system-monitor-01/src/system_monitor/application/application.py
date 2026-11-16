@@ -181,6 +181,8 @@ class SystemMonitorApplication(QObject):
 
         self._shutdown_timer.start()
         self._check_shutdown_completion()
+
+
     def _check_shutdown_completion(self):
         if not self._shutdown_requested or self._shutdown_complete:
             return
@@ -211,6 +213,8 @@ class SystemMonitorApplication(QObject):
 
         if self._application is not None:
             self._application.quit()
+
+
     def run(self):
         self._initialize()
         self._main_window.show()
