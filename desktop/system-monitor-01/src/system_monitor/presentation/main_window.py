@@ -12,6 +12,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from system_monitor.presentation.theme import build_stylesheet
+
 
 class MainWindow(QMainWindow):
     close_requested = Signal()
@@ -160,96 +162,8 @@ class MainWindow(QMainWindow):
             button.setChecked(name == page_name)
 
     def _apply_styles(self):
-        """Apply the approved dark theme and blue accent styling."""
-        self.setStyleSheet(
-            """
-            QMainWindow {
-                background-color: #0B1220;
-            }
-
-            #sidebar {
-                background-color: #111B2B;
-                border-right: 1px solid #243247;
-            }
-
-            #brand_label {
-                color: #F1F5F9;
-                font-size: 16px;
-                font-weight: 700;
-                letter-spacing: 1px;
-            }
-
-            #brand_subtitle {
-                color: #64748B;
-                font-size: 10px;
-                font-weight: 600;
-                letter-spacing: 2px;
-            }
-
-            #navigation_button {
-                color: #A8B5C7;
-                background-color: transparent;
-                border: none;
-                border-radius: 6px;
-                text-align: left;
-                padding: 11px 12px;
-                font-size: 13px;
-            }
-
-            #navigation_button:hover {
-                color: #FFFFFF;
-                background-color: #1D2B40;
-            }
-
-            #navigation_button:checked {
-                color: #FFFFFF;
-                background-color: #1D4ED8;
-                font-weight: 600;
-            }
-
-            #version_label {
-                color: #64748B;
-                font-size: 10px;
-                padding-top: 12px;
-            }
-
-            #content_area {
-                background-color: #0B1220;
-            }
-
-            #page_title {
-                color: #F1F5F9;
-                font-size: 24px;
-                font-weight: 700;
-            }
-
-            #application_status {
-                color: #93C5FD;
-                background-color: #172B46;
-                border-radius: 12px;
-                padding: 6px 12px;
-                font-size: 10px;
-                font-weight: 700;
-            }
-
-            #page_stack {
-                background-color: #0F1929;
-                border: 1px solid #243247;
-                border-radius: 10px;
-            }
-
-            #section_heading {
-                color: #E2E8F0;
-                font-size: 20px;
-                font-weight: 600;
-            }
-
-            #placeholder_description {
-                color: #94A3B8;
-                font-size: 13px;
-            }
-            """
-        )
+        """Apply the centralized application theme."""
+        self.setStyleSheet(build_stylesheet())
 
 
     def allow_close(self):

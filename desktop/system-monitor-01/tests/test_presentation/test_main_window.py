@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtTest import QSignalSpy
 
 from system_monitor.presentation.main_window import MainWindow
+from system_monitor.presentation.theme import build_stylesheet
 
 
 @pytest.fixture(scope="session")
@@ -26,6 +27,11 @@ def main_window(qapp):
 
 def test_main_window_initializes_with_expected_title(main_window):
     assert main_window.windowTitle() == "Creative Lab System Monitor"
+
+
+def test_main_window_applies_centralized_theme(main_window):
+    """The main window must use the centralized application stylesheet."""
+    assert main_window.styleSheet() == build_stylesheet()
 
 
 def test_main_window_creates_all_navigation_items(main_window):
