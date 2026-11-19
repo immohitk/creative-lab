@@ -94,4 +94,101 @@ def build_stylesheet() -> str:
         color: {colors.TEXT_MUTED};
         font-size: {typography.FONT_SIZE_BODY}px;
     }}
+
+    QFrame#metric_card {{
+        background-color: {colors.SURFACE};
+        border: 1px solid {colors.BORDER};
+        border-radius: {spacing.RADIUS_PAGE_CONTAINER}px;
+    }}
+
+    QLabel#metric_card_title {{
+        color: {colors.TEXT_MUTED};
+        font-size: {typography.FONT_SIZE_BODY}px;
+        font-weight: {typography.FONT_WEIGHT_SEMIBOLD};
+    }}
+
+    QLabel#metric_card_value {{
+        color: {colors.TEXT_PRIMARY};
+        font-size: {typography.FONT_SIZE_METRIC_VALUE}px;
+        font-weight: {typography.FONT_WEIGHT_BOLD};
+    }}
+
+    QLabel#metric_card_unit {{
+        color: {colors.TEXT_SECONDARY};
+        font-size: {typography.FONT_SIZE_BODY}px;
+    }}
+
+    QLabel#metric_card_description {{
+        color: {colors.TEXT_MUTED};
+        font-size: {typography.FONT_SIZE_SMALL}px;
+    }}
+
+    QWidget#section_header {{
+        background-color: transparent;
+    }}
+
+    QLabel#section_header_title {{
+        color: {colors.TEXT_SECONDARY};
+        font-size: {typography.FONT_SIZE_SECTION}px;
+        font-weight: {typography.FONT_WEIGHT_SEMIBOLD};
+    }}
+
+    QLabel#section_header_description {{
+        color: {colors.TEXT_MUTED};
+        font-size: {typography.FONT_SIZE_BODY}px;
+    }}
+
+    QFrame#status_indicator {{
+        background-color: transparent;
+        border: none;
+    }}
+
+    QLabel#status_indicator_marker {{
+        border-radius: 4px;
+    }}
+
+    QFrame#status_indicator[status="success"] QLabel#status_indicator_marker {{
+        background-color: {colors.STATUS_SUCCESS};
+    }}
+
+    QFrame#status_indicator[status="warning"] QLabel#status_indicator_marker {{
+        background-color: {colors.STATUS_WARNING};
+    }}
+
+    QFrame#status_indicator[status="error"] QLabel#status_indicator_marker {{
+        background-color: {colors.STATUS_ERROR};
+    }}
+
+    QFrame#status_indicator[status="info"] QLabel#status_indicator_marker {{
+        background-color: {colors.STATUS_INFO};
+    }}
+
+    QFrame#status_indicator[status="neutral"] QLabel#status_indicator_marker {{
+        background-color: {colors.STATUS_NEUTRAL};
+    }}
+
+    QLabel#status_indicator_text {{
+        color: {colors.TEXT_SECONDARY};
+        font-size: {typography.FONT_SIZE_BODY}px;
+    }}
+
+    QFrame#loading_state,
+    QFrame#empty_state,
+    QFrame#error_state {{
+        background-color: transparent;
+        border: none;
+    }}
+
+    QLabel#loading_state_title,
+    QLabel#empty_state_title,
+    QLabel#error_state_title {{
+        color: {colors.TEXT_PRIMARY};
+        font-weight: {typography.FONT_WEIGHT_SEMIBOLD};
+    }}
+
+    QLabel#loading_state_description,
+    QLabel#empty_state_description,
+    QLabel#error_state_description {{
+        color: {colors.TEXT_SECONDARY};
+    }}
     """

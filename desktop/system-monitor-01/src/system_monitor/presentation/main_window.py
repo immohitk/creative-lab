@@ -1,36 +1,56 @@
-﻿"""Main application window for the system monitor presentation layer."""
+﻿
+"""Main application window for the system monitor presentation layer."""
 
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QFrame,
+    QHBoxLayout,
     QLabel,
     QMainWindow,
     QPushButton,
     QStackedWidget,
     QVBoxLayout,
-    QHBoxLayout,
     QWidget,
 )
 
 from system_monitor.presentation.theme import build_stylesheet
 
 
+PRIMARY_NAVIGATION = (
+    "Overview",
+    "CPU",
+    "Memory",
+    "Disk",
+    "Network",
+    "Processes",
+)
+
+SECONDARY_NAVIGATION = (
+    "Diagnostics",
+)
+
+ALL_PAGES = PRIMARY_NAVIGATION + SECONDARY_NAVIGATION
+
+
 class MainWindow(QMainWindow):
-    close_requested = Signal()
     """Provide the primary application window and navigation shell."""
+
+    close_requested = Signal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
+
         self._allow_close = False
+        self._navigation_buttons = {}
+        self._page_indices = {}
 
         self.setWindowTitle("Creative Lab System Monitor")
         self.setMinimumSize(1000, 650)
         self.resize(1280, 800)
 
-        self._navigation_buttons = {}
         self._build_ui()
         self._apply_styles()
-        self._navigate_to("Dashboard")
+        self._navigate_to("Overview")
 
     def _build_ui(self):
         """Construct the main window layout."""
@@ -67,33 +87,44 @@ class MainWindow(QMainWindow):
 
         layout.addSpacing(28)
 
-        navigation_items = [
-            "Dashboard",
-            "Processes",
-            "Performance",
-            "Storage",
-            "Network",
-            "Diagnostics",
-        ]
-
-        for item in navigation_items:
-            button = QPushButton(item)
-            button.setObjectName("navigation_button")
-            button.setCursor(Qt.CursorShape.PointingHandCursor)
-            button.setCheckable(True)
-            button.clicked.connect(
-                lambda checked=False, page=item: self._navigate_to(page)
-            )
-            self._navigation_buttons[item] = button
-            layout.addWidget(button)
+        for page_name in PRIMARY_NAVIGATION:
+            self._add_navigation_button(layout, page_name)
 
         layout.addStretch()
+
+        separator = QFrame()
+        separator.setObjectName("navigation_separator")
+        separator.setFrameShape(QFrame.Shape.HLine)
+        separator.setFrameShadow(QFrame.Shadow.Plain)
+        layout.addWidget(separator)
+
+        for page_name in SECONDARY_NAVIGATION:
+            self._add_navigation_button(layout, page_name)
 
         version_label = QLabel("VERSION 0.1.0")
         version_label.setObjectName("version_label")
         layout.addWidget(version_label)
 
         return sidebar
+
+    def _add_navigation_button(self, layout, page_name):
+        """Create and register an accessible navigation button."""
+        button = QPushButton(page_name)
+        button.setObjectName("navigation_button")
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        button.setCheckable(True)
+        button.setAccessibleName(page_name)
+        button.setAccessibleDescription(
+            f"Navigate to the {page_name} page"
+        )
+
+        button.clicked.connect(
+            lambda checked=False, page=page_name: self._navigate_to(page)
+        )
+
+        self._navigation_buttons[page_name] = button
+        layout.addWidget(button)
 
     def _build_content_area(self):
         """Create the header and page content container."""
@@ -106,14 +137,18 @@ class MainWindow(QMainWindow):
 
         header = QHBoxLayout()
 
-        self.page_title = QLabel("Dashboard")
+        self.page_title = QLabel("Overview")
         self.page_title.setObjectName("page_title")
+        self.page_title.setAccessibleName("Current page")
         header.addWidget(self.page_title)
 
         header.addStretch()
 
         self.application_status = QLabel("INITIALIZING")
         self.application_status.setObjectName("application_status")
+        self.application_status.setAccessibleName(
+            "Application status: initializing"
+        )
         header.addWidget(self.application_status)
 
         layout.addLayout(header)
@@ -121,8 +156,10 @@ class MainWindow(QMainWindow):
         self.pages = QStackedWidget()
         self.pages.setObjectName("page_stack")
 
-        for page_name in self._navigation_buttons:
-            self.pages.addWidget(self._build_placeholder_page(page_name))
+        for page_name in ALL_PAGES:
+            page = self._build_placeholder_page(page_name)
+            page_index = self.pages.addWidget(page)
+            self._page_indices[page_name] = page_index
 
         layout.addWidget(self.pages, 1)
 
@@ -131,6 +168,8 @@ class MainWindow(QMainWindow):
     def _build_placeholder_page(self, page_name):
         """Create a temporary page for the navigation shell."""
         page = QWidget()
+        page.setObjectName(f"{page_name.lower()}_page")
+
         page_layout = QVBoxLayout(page)
         page_layout.setContentsMargins(0, 0, 0, 0)
 
@@ -139,7 +178,7 @@ class MainWindow(QMainWindow):
         page_layout.addWidget(heading)
 
         description = QLabel(
-            "The " + page_name.lower() + " workspace is being prepared."
+            f"The {page_name.lower()} workspace is being prepared."
         )
         description.setObjectName("placeholder_description")
         description.setWordWrap(True)
@@ -151,11 +190,10 @@ class MainWindow(QMainWindow):
 
     def _navigate_to(self, page_name):
         """Switch the visible page and update navigation selection."""
-        if page_name not in self._navigation_buttons:
+        if page_name not in self._page_indices:
             return
 
-        page_index = list(self._navigation_buttons).index(page_name)
-        self.pages.setCurrentIndex(page_index)
+        self.pages.setCurrentIndex(self._page_indices[page_name])
         self.page_title.setText(page_name)
 
         for name, button in self._navigation_buttons.items():
@@ -165,11 +203,12 @@ class MainWindow(QMainWindow):
         """Apply the centralized application theme."""
         self.setStyleSheet(build_stylesheet())
 
-
     def allow_close(self):
+        """Allow the application window to close during shutdown."""
         self._allow_close = True
 
     def closeEvent(self, event):
+        """Protect the application from closing before shutdown approval."""
         if self._allow_close:
             event.accept()
             return
