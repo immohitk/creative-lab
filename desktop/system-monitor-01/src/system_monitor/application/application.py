@@ -13,6 +13,9 @@ from system_monitor.coordinator.monitoring_coordinator import (
     MonitoringCoordinator,
 )
 from system_monitor.presentation.main_window import MainWindow
+from system_monitor.presentation.monitoring_data_controller import (
+    MonitoringDataController,
+)
 from system_monitor.services.cpu_monitoring_service import (
     CpuMonitoringService,
 )
@@ -44,6 +47,7 @@ class SystemMonitorApplication(QObject):
         self._application = None
         self._services = {}
         self._coordinator = None
+        self._monitoring_data_controller = None
         self._system_information_worker = None
         self._system_profile = None
         self._system_information_error = None
@@ -105,7 +109,13 @@ class SystemMonitorApplication(QObject):
         self._application.setQuitOnLastWindowClosed(False)
 
         self._create_dependencies()
-        self._main_window = MainWindow()
+        self._monitoring_data_controller = MonitoringDataController(
+            self._services,
+            parent=self,
+        )
+        self._main_window = MainWindow(
+            controller=self._monitoring_data_controller,
+        )
         self._main_window.close_requested.connect(
             self._request_shutdown
         )

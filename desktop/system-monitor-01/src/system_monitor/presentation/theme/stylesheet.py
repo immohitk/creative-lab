@@ -62,6 +62,96 @@ def build_stylesheet() -> str:
         background-color: {colors.BACKGROUND};
     }}
 
+    QStackedWidget#page_stack,
+    QWidget#overview_page,
+    QWidget#cpu_page,
+    QWidget#memory_page,
+    QWidget#disk_page,
+    QWidget#network_page,
+    QWidget#processes_page,
+    QScrollArea#page_scroll_area,
+    QWidget#page_content {{
+        background-color: {colors.SURFACE};
+        color: {colors.TEXT_PRIMARY};
+    }}
+
+    QScrollArea#page_scroll_area {{
+        border: none;
+    }}
+
+    QScrollArea#page_scroll_area QWidget#qt_scrollarea_viewport {{
+        background-color: {colors.SURFACE};
+    }}
+
+    QLabel#page_description {{
+        color: {colors.TEXT_MUTED};
+        font-size: {typography.FONT_SIZE_BODY}px;
+    }}
+
+    QLabel#page_data_status {{
+        color: {colors.STATUS_TEXT};
+        font-size: {typography.FONT_SIZE_SMALL}px;
+        padding-bottom: 4px;
+    }}
+
+    QLabel {{
+        color: {colors.TEXT_SECONDARY};
+    }}
+
+    QTableWidget#monitoring_table {{
+        background-color: {colors.SURFACE};
+        alternate-background-color: {colors.SIDEBAR_BACKGROUND};
+        color: {colors.TEXT_PRIMARY};
+        gridline-color: {colors.BORDER};
+        border: 1px solid {colors.BORDER};
+        border-radius: 8px;
+        selection-background-color: {colors.ACCENT_PRIMARY};
+        selection-color: {colors.TEXT_INVERSE};
+        outline: none;
+    }}
+
+    QTableWidget#monitoring_table::item {{
+        padding: 5px 8px;
+        border-bottom: 1px solid {colors.BORDER};
+    }}
+
+    QTableWidget#monitoring_table::item:selected {{
+        background-color: {colors.ACCENT_PRIMARY};
+    }}
+
+    QHeaderView::section {{
+        background-color: {colors.SIDEBAR_BACKGROUND};
+        color: {colors.TEXT_SECONDARY};
+        border: none;
+        border-bottom: 1px solid {colors.BORDER};
+        padding: 9px 8px;
+        font-weight: {typography.FONT_WEIGHT_SEMIBOLD};
+    }}
+
+    QScrollBar:vertical {{
+        background-color: {colors.BACKGROUND};
+        width: 11px;
+        margin: 0;
+    }}
+
+    QScrollBar::handle:vertical {{
+        background-color: {colors.BORDER};
+        min-height: 24px;
+        border-radius: 5px;
+    }}
+
+    QScrollBar:horizontal {{
+        background-color: {colors.BACKGROUND};
+        height: 11px;
+        margin: 0;
+    }}
+
+    QScrollBar::handle:horizontal {{
+        background-color: {colors.BORDER};
+        min-width: 24px;
+        border-radius: 5px;
+    }}
+
     QLabel#page_title {{
         color: {colors.TEXT_PRIMARY};
         font-size: {typography.FONT_SIZE_TITLE}px;

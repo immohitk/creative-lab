@@ -16,4 +16,7 @@ __all__ = [
     "LoadingState",
     "EmptyState",
     "ErrorState",
+    "HistoryChart",
 ]
+
+from system_monitor.presentation.widgets.history_chart import HistoryChart
