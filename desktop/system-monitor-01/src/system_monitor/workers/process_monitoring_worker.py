@@ -193,6 +193,7 @@ class ProcessMonitoringWorker:
                     "status",
                     "create_time",
                     "cpu_times",
+                    "exe",
                 ],
                 ad_value=_ACCESS_DENIED,
             )
@@ -201,6 +202,8 @@ class ProcessMonitoringWorker:
                 "PROCESS_PROVIDER_FAILED",
                 "Running processes could not be enumerated.",
             ) from exc
+
+        service_map, service_metadata_available = self._collect_service_map()
 
         sampled_at = datetime.now(timezone.utc)
         sampled_monotonic = time.monotonic()
@@ -222,7 +225,16 @@ class ProcessMonitoringWorker:
                     if not isinstance(info, dict):
                         raise ValueError("Invalid process information.")
 
-                    if any(value is _ACCESS_DENIED for value in info.values()):
+                    required_attributes = (
+                        "pid",
+                        "name",
+                        "memory_info",
+                        "status",
+                        "create_time",
+                        "cpu_times",
+                    )
+
+                    if any(info.get(key) is _ACCESS_DENIED for key in required_attributes):
                         raise psutil.AccessDenied(pid=pid)
 
                     process_pid = info.get("pid", pid)
@@ -295,6 +307,28 @@ class ProcessMonitoringWorker:
                                 sampled_monotonic,
                             )
 
+                    executable_path = info.get("exe")
+
+                    if (
+                        not isinstance(executable_path, str)
+                        or not executable_path.strip()
+                        or executable_path is _ACCESS_DENIED
+                    ):
+                        executable_path = None
+
+                    service_names = service_map.get(process_pid, ())
+
+                    if executable_path is not None and service_metadata_available:
+                        metadata_state = "verified"
+                    elif (
+                        executable_path is not None
+                        or service_names
+                        or service_metadata_available
+                    ):
+                        metadata_state = "partial"
+                    else:
+                        metadata_state = "unavailable"
+
                     measurements.append(
                         ProcessMeasurement(
                             pid=process_pid,
@@ -303,6 +337,9 @@ class ProcessMonitoringWorker:
                             memory_bytes=memory_bytes,
                             status=status,
                             sampled_at=sampled_at,
+                            executable_path=executable_path,
+                            service_names=service_names,
+                            metadata_state=metadata_state,
                         )
                     )
 
@@ -376,6 +413,63 @@ class ProcessMonitoringWorker:
             sampling_interval=interval,
             started_at=started_at,
             completed_at=completed_at,
+        )
+
+    def _collect_service_map(self) -> tuple[dict[int, tuple[str, ...]], bool]:
+        """Collect Windows service names grouped by their owning PID."""
+        service_iterator = getattr(psutil, "win_service_iter", None)
+
+        if not callable(service_iterator):
+            return {}, False
+
+        services_by_pid: dict[int, set[str]] = {}
+        complete = True
+
+        if self._stop_event.is_set():
+            return {}, False
+
+        try:
+            for service in service_iterator():
+                if self._stop_event.is_set():
+                    complete = False
+                    break
+
+                try:
+                    info = service.as_dict()
+                    pid = info.get("pid")
+                    name = info.get("name")
+
+                    if (
+                        isinstance(pid, bool)
+                        or not isinstance(pid, int)
+                        or pid <= 0
+                        or not isinstance(name, str)
+                        or not name.strip()
+                    ):
+                        continue
+
+                    services_by_pid.setdefault(pid, set()).add(name)
+
+                except Exception:
+                    complete = False
+                    logger.debug(
+                        "Unable to read an individual Windows service.",
+                        exc_info=True,
+                    )
+
+        except Exception:
+            complete = False
+            logger.warning(
+                "Windows service metadata could not be fully collected.",
+                exc_info=True,
+            )
+
+        return (
+            {
+                pid: tuple(sorted(names, key=str.casefold))
+                for pid, names in services_by_pid.items()
+            },
+            complete,
         )
 
     @staticmethod

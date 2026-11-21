@@ -281,4 +281,46 @@ def build_stylesheet() -> str:
     QLabel#error_state_description {{
         color: {colors.TEXT_SECONDARY};
     }}
+
+    /* Process Intelligence category cards */
+    QFrame#process_category_card {{
+        background-color: {colors.SIDEBAR_BACKGROUND};
+        border: 1px solid {colors.BORDER};
+        border-radius: 10px;
+    }}
+
+    QLabel#process_category_title {{
+        color: {colors.TEXT_SECONDARY};
+        font-size: {typography.FONT_SIZE_SMALL}px;
+        font-weight: {typography.FONT_WEIGHT_BOLD};
+        letter-spacing: 1px;
+    }}
+
+    QLabel#process_category_count {{
+        color: {colors.TEXT_PRIMARY};
+        font-size: {typography.FONT_SIZE_METRIC_VALUE}px;
+        font-weight: {typography.FONT_WEIGHT_BOLD};
+    }}
+
+    QLabel#process_category_cpu,
+    QLabel#process_category_memory {{
+        color: {colors.TEXT_MUTED};
+        font-size: {typography.FONT_SIZE_SMALL}px;
+    }}
+
+    /* Process Intelligence resource leader panels */
+    QFrame#process_leader_panel {{
+        background-color: {colors.SIDEBAR_BACKGROUND};
+        border: 1px solid {colors.BORDER};
+        border-radius: 10px;
+    }}
+
+    QLabel#process_leader_row {{
+        color: {colors.TEXT_PRIMARY};
+        background-color: {colors.SURFACE};
+        border: 1px solid {colors.BORDER};
+        border-radius: 5px;
+        padding: 7px 9px;
+        font-size: {typography.FONT_SIZE_SMALL}px;
+    }}
     """

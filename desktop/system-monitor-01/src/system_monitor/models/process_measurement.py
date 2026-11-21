@@ -11,6 +11,9 @@ class ProcessMeasurement:
     memory_bytes: int
     status: str
     sampled_at: datetime
+    executable_path: str | None = None
+    service_names: tuple[str, ...] = ()
+    metadata_state: str = "unavailable"
 
     def __post_init__(self):
         if (
@@ -58,3 +61,42 @@ class ProcessMeasurement:
             or self.sampled_at.utcoffset() != timedelta(0)
         ):
             raise ValueError("Sampling timestamp must be UTC-aware.")
+
+        if self.executable_path is not None:
+            if (
+                not isinstance(self.executable_path, str)
+                or not self.executable_path.strip()
+            ):
+                raise ValueError(
+                    "Executable path must be a non-empty string or None."
+                )
+
+        if not isinstance(self.service_names, (tuple, list)):
+            raise TypeError("Service names must be a tuple or list.")
+
+        normalized_services = tuple(self.service_names)
+
+        if any(
+            not isinstance(name, str) or not name.strip()
+            for name in normalized_services
+        ):
+            raise ValueError("Service names must be non-empty strings.")
+
+        if len(normalized_services) != len(set(normalized_services)):
+            raise ValueError("Service names cannot contain duplicates.")
+
+        object.__setattr__(self, "service_names", normalized_services)
+
+        allowed_metadata_states = {
+            "verified",
+            "partial",
+            "unavailable",
+        }
+
+        if not isinstance(self.metadata_state, str):
+            raise TypeError("Metadata state must be a string.")
+
+        if self.metadata_state not in allowed_metadata_states:
+            raise ValueError(
+                "metadata_state must be verified, partial, or unavailable."
+            )

@@ -9,6 +9,11 @@ from system_monitor.presentation.widgets.state_widgets import (
 )
 from system_monitor.presentation.widgets.status_indicator import StatusIndicator
 
+from system_monitor.presentation.widgets.process_category_card import (
+    ProcessCategoryCard,
+)
+
+
 __all__ = [
     "MetricCard",
     "SectionHeader",
@@ -17,6 +22,7 @@ __all__ = [
     "EmptyState",
     "ErrorState",
     "HistoryChart",
+    "ProcessCategoryCard",
 ]
 
 from system_monitor.presentation.widgets.history_chart import HistoryChart
