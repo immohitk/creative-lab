@@ -62,21 +62,37 @@ class DiagnosticSnapshot:
 
     @property
     def severity(self) -> DiagnosticSeverity:
-        if not self.services:
-            return DiagnosticSeverity.UNKNOWN
-
-        severities = {
+        service_severities = [
             diagnostic.severity
             for diagnostic in self.services.values()
-        }
+        ]
 
-        if DiagnosticSeverity.ERROR in severities:
+        if DiagnosticSeverity.ERROR in service_severities:
             return DiagnosticSeverity.ERROR
 
-        if DiagnosticSeverity.WARNING in severities:
+        if self.coordinator_status == "FAILED":
+            return DiagnosticSeverity.ERROR
+
+        if DiagnosticSeverity.WARNING in service_severities:
             return DiagnosticSeverity.WARNING
 
-        if DiagnosticSeverity.UNKNOWN in severities:
+        if self.coordinator_status == "DEGRADED":
+            return DiagnosticSeverity.WARNING
+
+        if DiagnosticSeverity.UNKNOWN in service_severities:
+            return DiagnosticSeverity.UNKNOWN
+
+        if self.coordinator_status in {
+            "STOPPED",
+            "STARTING",
+            "STOPPING",
+        }:
+            return DiagnosticSeverity.UNKNOWN
+
+        if self.coordinator_status != "RUNNING":
+            return DiagnosticSeverity.UNKNOWN
+
+        if not service_severities:
             return DiagnosticSeverity.UNKNOWN
 
         return DiagnosticSeverity.HEALTHY

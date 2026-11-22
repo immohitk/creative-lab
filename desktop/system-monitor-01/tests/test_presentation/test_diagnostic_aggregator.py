@@ -214,13 +214,53 @@ def test_aggregator_does_not_mutate_source_snapshots(
     coordinator,
     data_controller,
 ):
-    original_states = dict(coordinator.snapshot.service_states)
-    original_revision = data_controller.snapshots["cpu"].revision
+    original_coordinator = (
+        coordinator.snapshot.status,
+        dict(coordinator.snapshot.service_states),
+        coordinator.snapshot.last_error,
+        coordinator.snapshot.revision,
+    )
+
+    original_snapshots = {
+        name: (
+            snapshot.consecutive_failures,
+            snapshot.sampling_interval,
+            snapshot.revision,
+        )
+        for name, snapshot in data_controller.snapshots.items()
+    }
+
+    original_controller_data = (
+        dict(data_controller.statuses),
+        dict(data_controller.freshness_values),
+        dict(data_controller.errors),
+        dict(data_controller.updated),
+    )
 
     aggregator.aggregate()
 
-    assert coordinator.snapshot.service_states == original_states
-    assert data_controller.snapshots["cpu"].revision == original_revision
+    assert (
+        coordinator.snapshot.status,
+        dict(coordinator.snapshot.service_states),
+        coordinator.snapshot.last_error,
+        coordinator.snapshot.revision,
+    ) == original_coordinator
+
+    assert {
+        name: (
+            snapshot.consecutive_failures,
+            snapshot.sampling_interval,
+            snapshot.revision,
+        )
+        for name, snapshot in data_controller.snapshots.items()
+    } == original_snapshots
+
+    assert (
+        dict(data_controller.statuses),
+        dict(data_controller.freshness_values),
+        dict(data_controller.errors),
+        dict(data_controller.updated),
+    ) == original_controller_data
 
 
 def test_aggregator_includes_all_five_services(aggregator):

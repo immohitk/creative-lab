@@ -171,3 +171,87 @@ def test_diagnostic_snapshot_rejects_mismatched_service_names():
             coordinator_error=None,
             coordinator_revision=1,
         )
+
+
+@pytest.mark.parametrize(
+    ("coordinator_status", "expected_severity"),
+    [
+        ("FAILED", DiagnosticSeverity.ERROR),
+        ("DEGRADED", DiagnosticSeverity.WARNING),
+        ("STOPPED", DiagnosticSeverity.UNKNOWN),
+        ("STARTING", DiagnosticSeverity.UNKNOWN),
+        ("STOPPING", DiagnosticSeverity.UNKNOWN),
+        ("RUNNING", DiagnosticSeverity.HEALTHY),
+        ("UNEXPECTED", DiagnosticSeverity.UNKNOWN),
+    ],
+)
+def test_diagnostic_snapshot_includes_coordinator_severity(
+    coordinator_status,
+    expected_severity,
+):
+    snapshot = DiagnosticSnapshot(
+        coordinator_status=coordinator_status,
+        services={
+            "cpu": make_service_diagnostic("cpu"),
+            "memory": make_service_diagnostic("memory"),
+        },
+        coordinator_error=None,
+        coordinator_revision=1,
+    )
+
+    assert snapshot.severity == expected_severity
+
+
+def test_service_error_overrides_degraded_coordinator():
+    snapshot = DiagnosticSnapshot(
+        coordinator_status="DEGRADED",
+        services={
+            "cpu": make_service_diagnostic(
+                "cpu", DiagnosticSeverity.ERROR
+            ),
+        },
+        coordinator_error=None,
+        coordinator_revision=1,
+    )
+
+    assert snapshot.severity == DiagnosticSeverity.ERROR
+
+
+def test_service_warning_overrides_stopped_coordinator():
+    snapshot = DiagnosticSnapshot(
+        coordinator_status="STOPPED",
+        services={
+            "cpu": make_service_diagnostic(
+                "cpu", DiagnosticSeverity.WARNING
+            ),
+        },
+        coordinator_error=None,
+        coordinator_revision=1,
+    )
+
+    assert snapshot.severity == DiagnosticSeverity.WARNING
+
+
+def test_coordinator_error_message_does_not_override_running_health():
+    snapshot = DiagnosticSnapshot(
+        coordinator_status="RUNNING",
+        services={
+            "cpu": make_service_diagnostic("cpu"),
+        },
+        coordinator_error="Sampling interval update failed.",
+        coordinator_revision=2,
+    )
+
+    assert snapshot.coordinator_error == "Sampling interval update failed."
+    assert snapshot.severity == DiagnosticSeverity.HEALTHY
+
+
+def test_running_coordinator_with_no_services_is_unknown():
+    snapshot = DiagnosticSnapshot(
+        coordinator_status="RUNNING",
+        services={},
+        coordinator_error=None,
+        coordinator_revision=1,
+    )
+
+    assert snapshot.severity == DiagnosticSeverity.UNKNOWN
