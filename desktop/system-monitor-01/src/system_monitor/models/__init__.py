@@ -148,3 +148,13 @@ __all__.extend([
     "CoordinatorStopResult",
     "CoordinatorConfigurationResult",
 ])
+
+from system_monitor.models.diagnostic_severity import DiagnosticSeverity
+from system_monitor.models.service_diagnostic import ServiceDiagnostic
+from system_monitor.models.diagnostic_snapshot import DiagnosticSnapshot
+
+__all__.extend([
+    "DiagnosticSeverity",
+    "ServiceDiagnostic",
+    "DiagnosticSnapshot",
+])

@@ -199,3 +199,64 @@ def test_main_window_rejects_close_until_shutdown_is_allowed(
     main_window.allow_close()
 
     assert main_window.close() is True
+
+
+def test_main_window_accepts_optional_diagnostic_aggregator(qapp):
+    aggregator = object()
+
+    window = MainWindow(
+        diagnostic_aggregator=aggregator,
+    )
+
+    try:
+        assert window._diagnostic_aggregator is aggregator
+        assert window._controller is None
+        assert window.pages.count() == 7
+    finally:
+        window.allow_close()
+        window.close()
+        window.deleteLater()
+
+def test_main_window_forwards_coordinator_to_monitoring_pages(
+    qapp,
+    monkeypatch,
+):
+    from system_monitor.presentation import pages
+
+    controller = object()
+    aggregator = object()
+    coordinator = object()
+    captured = {}
+
+    def fake_build_monitoring_pages(
+        received_controller,
+        received_aggregator,
+        received_coordinator,
+    ):
+        captured["controller"] = received_controller
+        captured["aggregator"] = received_aggregator
+        captured["coordinator"] = received_coordinator
+        return {}
+
+    monkeypatch.setattr(
+        pages,
+        "build_monitoring_pages",
+        fake_build_monitoring_pages,
+    )
+
+    window = MainWindow(
+        controller=controller,
+        diagnostic_aggregator=aggregator,
+        coordinator=coordinator,
+    )
+
+    try:
+        assert window._coordinator is coordinator
+        assert captured["controller"] is controller
+        assert captured["aggregator"] is aggregator
+        assert captured["coordinator"] is coordinator
+    finally:
+        window.allow_close()
+        window.close()
+        window.deleteLater()
+        qapp.processEvents()

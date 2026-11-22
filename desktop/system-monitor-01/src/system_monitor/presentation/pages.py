@@ -1,65 +1,39 @@
 """Monitoring dashboard pages backed by MonitoringDataController."""
 
 import heapq
-
 import os
 
 from PySide6.QtCore import Qt
-
 from PySide6.QtWidgets import (
-
     QAbstractItemView,
-
     QFrame,
-
     QGridLayout,
-
     QHeaderView,
-
     QLabel,
-
     QScrollArea,
-
     QTableWidget,
-
     QTableWidgetItem,
-
     QVBoxLayout,
-
     QWidget,
-
     QSizePolicy,
-
     QComboBox,
-
     QHBoxLayout,
-
     QLineEdit,
-
 )
-
 from system_monitor.presentation.widgets.history_chart import HistoryChart
-
 from system_monitor.presentation.widgets.metric_card import MetricCard
-
 from system_monitor.presentation.theme import colors
-
 from system_monitor.presentation.process_classifier import ProcessClassifier
-
 from system_monitor.presentation.process_inventory import (
-
     CATEGORY_FILTERS,
-
     SORT_KEYS,
-
     filter_and_sort_processes,
-
 )
-
 from system_monitor.presentation.widgets.process_category_card import (
-
     ProcessCategoryCard,
-
+)
+from system_monitor.presentation.widgets.service_health_card import (
+    ServiceHealthCard,
 )
 
 def _bytes(value):
@@ -1476,22 +1450,193 @@ class ProcessesPage(MonitoringPage):
 
         self._update_status(details)
 
-def build_monitoring_pages(controller):
+class DiagnosticsPage(MonitoringPage):
+    """Display aggregated application and service health diagnostics."""
 
+    SERVICE_NAMES = ("cpu", "memory", "disk", "network", "process")
+
+    SEVERITY_LABELS = {
+        "HEALTHY": "Healthy",
+        "WARNING": "Warning",
+        "ERROR": "Error",
+        "UNKNOWN": "Unknown",
+    }
+
+    def __init__(
+        self,
+        diagnostic_aggregator=None,
+        data_controller=None,
+        coordinator=None,
+        parent=None,
+    ):
+        super().__init__(
+            controller=None,
+            title="Diagnostics",
+            description=(
+                "Application health, worker states, measurement availability "
+                "and service-level diagnostics."
+            ),
+            parent=parent,
+        )
+
+        self._diagnostic_aggregator = diagnostic_aggregator
+        self._data_controller = data_controller
+        self._coordinator = coordinator
+
+        if self._data_controller is not None:
+            self._data_controller.data_changed.connect(
+                self._on_diagnostic_source_changed
+            )
+
+        if self._coordinator is not None:
+            self._coordinator.snapshot_changed.connect(
+                self._on_diagnostic_source_changed
+            )
+
+        self.overall_label = QLabel("Overall health: Unknown")
+        self.overall_label.setObjectName("diagnostics_overall")
+        self.overall_label.setAccessibleName("Overall diagnostic health")
+        self.layout.addWidget(self.overall_label)
+
+        self.coordinator_label = QLabel("Coordinator: Unavailable")
+        self.coordinator_label.setObjectName("service_health_detail")
+        self.layout.addWidget(self.coordinator_label)
+
+        self.counts_label = QLabel(
+            "Healthy: 0  |  Warning: 0  |  Error: 0  |  Unknown: 0"
+        )
+        self.counts_label.setObjectName("service_health_detail")
+        self.layout.addWidget(self.counts_label)
+
+        self.coordinator_error_label = QLabel()
+        self.coordinator_error_label.setObjectName("service_health_error")
+        self.coordinator_error_label.setWordWrap(True)
+        self.coordinator_error_label.hide()
+        self.layout.addWidget(self.coordinator_error_label)
+
+        self.service_cards = {}
+        self.cards_layout = QGridLayout()
+        self.cards_layout.setContentsMargins(0, 0, 0, 0)
+        self.cards_layout.setHorizontalSpacing(14)
+        self.cards_layout.setVerticalSpacing(14)
+
+        for index, service_name in enumerate(self.SERVICE_NAMES):
+            placeholder = QLabel(
+                f"{service_name.replace('_', ' ').title()}: "
+                "Waiting for diagnostics"
+            )
+            placeholder.setObjectName("service_health_detail")
+            self.service_cards[service_name] = placeholder
+            self.cards_layout.addWidget(
+                placeholder,
+                index // 2,
+                index % 2,
+            )
+
+        self.layout.addLayout(self.cards_layout)
+        self.layout.addStretch()
+
+        if self._diagnostic_aggregator is None:
+            self.overall_label.setText(
+                "Overall health: Diagnostics unavailable"
+            )
+            self.status_label.setText(
+                "No diagnostic aggregator was provided."
+            )
+        else:
+            self.refresh()
+
+    def _on_diagnostic_source_changed(self, *_args):
+        """Refresh diagnostics only while this page is visible."""
+        if self.isVisible():
+            self.refresh()
+
+    def refresh(self):
+        """Refresh the overall summary and individual service cards."""
+        if self._diagnostic_aggregator is None:
+            return
+
+        snapshot = self._diagnostic_aggregator.aggregate()
+
+        severity = snapshot.severity.name
+        severity_label = self.SEVERITY_LABELS.get(
+            severity,
+            severity.title(),
+        )
+
+        self.overall_label.setText(
+            f"Overall health: {severity_label}"
+        )
+
+        self.coordinator_label.setText(
+            f"Coordinator: {snapshot.coordinator_status}"
+        )
+
+        self.counts_label.setText(
+            f"Healthy: {snapshot.healthy_count}  |  "
+            f"Warning: {snapshot.warning_count}  |  "
+            f"Error: {snapshot.error_count}  |  "
+            f"Unknown: {snapshot.unknown_count}"
+        )
+
+        coordinator_error = snapshot.coordinator_error or ""
+        self.coordinator_error_label.setText(
+            f"Coordinator error: {coordinator_error}"
+            if coordinator_error
+            else ""
+        )
+        self.coordinator_error_label.setVisible(bool(coordinator_error))
+
+        for index, service_name in enumerate(self.SERVICE_NAMES):
+            diagnostic = snapshot.services.get(service_name)
+            existing_widget = self.service_cards[service_name]
+
+            if diagnostic is None:
+                if isinstance(existing_widget, ServiceHealthCard):
+                    placeholder = QLabel(
+                        f"{service_name.replace('_', ' ').title()}: "
+                        "Waiting for diagnostics"
+                    )
+                    placeholder.setObjectName("service_health_detail")
+
+                    self.service_cards[service_name] = placeholder
+                    self.cards_layout.replaceWidget(
+                        existing_widget,
+                        placeholder,
+                    )
+                    existing_widget.deleteLater()
+
+                continue
+
+            if isinstance(existing_widget, ServiceHealthCard):
+                existing_widget.set_diagnostic(diagnostic)
+            else:
+                card = ServiceHealthCard(diagnostic)
+                self.service_cards[service_name] = card
+                self.cards_layout.replaceWidget(
+                    existing_widget,
+                    card,
+                )
+                existing_widget.deleteLater()
+
+
+
+def build_monitoring_pages(
+    controller,
+    diagnostic_aggregator=None,
+    coordinator=None,
+):
     """Return page widgets keyed by the existing navigation labels."""
-
     return {
-
         "Overview": OverviewPage(controller),
-
         "CPU": CpuPage(controller),
-
         "Memory": MemoryPage(controller),
-
         "Disk": DiskPage(controller),
-
         "Network": NetworkPage(controller),
-
         "Processes": ProcessesPage(controller),
-
+        "Diagnostics": DiagnosticsPage(
+            diagnostic_aggregator=diagnostic_aggregator,
+            data_controller=controller,
+            coordinator=coordinator,
+        ),
     }

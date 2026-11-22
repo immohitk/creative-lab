@@ -13,6 +13,10 @@ from system_monitor.presentation.widgets.process_category_card import (
     ProcessCategoryCard,
 )
 
+from system_monitor.presentation.widgets.service_health_card import (
+    ServiceHealthCard,
+)
+
 
 __all__ = [
     "MetricCard",
@@ -23,6 +27,7 @@ __all__ = [
     "ErrorState",
     "HistoryChart",
     "ProcessCategoryCard",
+    "ServiceHealthCard",
 ]
 
 from system_monitor.presentation.widgets.history_chart import HistoryChart

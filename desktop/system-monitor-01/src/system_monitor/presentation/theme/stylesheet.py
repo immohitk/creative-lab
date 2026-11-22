@@ -323,4 +323,33 @@ def build_stylesheet() -> str:
         padding: 7px 9px;
         font-size: {typography.FONT_SIZE_SMALL}px;
     }}
+
+    /* Diagnostics service health cards */
+    QFrame#service_health_card {{
+        background-color: {colors.SIDEBAR_BACKGROUND};
+        border: 1px solid {colors.BORDER};
+        border-radius: 10px;
+    }}
+
+    QLabel#service_health_title {{
+        color: {colors.TEXT_PRIMARY};
+        font-size: {typography.FONT_SIZE_SECTION}px;
+        font-weight: {typography.FONT_WEIGHT_SEMIBOLD};
+    }}
+
+    QLabel#service_health_detail {{
+        color: {colors.TEXT_MUTED};
+        font-size: {typography.FONT_SIZE_BODY}px;
+    }}
+
+    QLabel#service_health_error {{
+        color: {colors.STATUS_ERROR};
+        font-size: {typography.FONT_SIZE_SMALL}px;
+    }}
+
+        QLabel#diagnostics_overall {{
+        color: {colors.TEXT_PRIMARY};
+        font-size: {typography.FONT_SIZE_TITLE}px;
+        font-weight: {typography.FONT_WEIGHT_SEMIBOLD};
+    }}
     """

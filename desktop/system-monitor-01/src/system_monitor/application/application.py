@@ -31,6 +31,9 @@ from system_monitor.services.network_monitoring_service import (
 from system_monitor.services.process_monitoring_service import (
     ProcessMonitoringService,
 )
+from system_monitor.presentation.diagnostics.diagnostic_aggregator import (
+    DiagnosticAggregator,
+)
 
 
 logger = logging.getLogger(__name__)
@@ -48,6 +51,7 @@ class SystemMonitorApplication(QObject):
         self._services = {}
         self._coordinator = None
         self._monitoring_data_controller = None
+        self._diagnostic_aggregator = None
         self._system_information_worker = None
         self._system_profile = None
         self._system_information_error = None
@@ -109,13 +113,23 @@ class SystemMonitorApplication(QObject):
         self._application.setQuitOnLastWindowClosed(False)
 
         self._create_dependencies()
+
         self._monitoring_data_controller = MonitoringDataController(
             self._services,
             parent=self,
         )
+
+        self._diagnostic_aggregator = DiagnosticAggregator(
+            coordinator=self._coordinator,
+            data_controller=self._monitoring_data_controller,
+        )
+
         self._main_window = MainWindow(
             controller=self._monitoring_data_controller,
+            diagnostic_aggregator=self._diagnostic_aggregator,
+            coordinator=self._coordinator,
         )
+
         self._main_window.close_requested.connect(
             self._request_shutdown
         )
@@ -123,9 +137,11 @@ class SystemMonitorApplication(QObject):
         self._coordinator.status_changed.connect(
             self._handle_coordinator_status_changed
         )
+
         self._handle_coordinator_status_changed(
             self._coordinator.get_status()
         )
+
 
 
     def _start_system_information_collection(self):
@@ -223,7 +239,6 @@ class SystemMonitorApplication(QObject):
 
         if self._application is not None:
             self._application.quit()
-
 
     def run(self):
         self._initialize()

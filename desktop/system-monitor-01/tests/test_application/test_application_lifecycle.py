@@ -1,6 +1,7 @@
 from types import SimpleNamespace
 
 from system_monitor.application.application import SystemMonitorApplication
+from system_monitor.application import application as application_module
 
 
 class FakeService:
@@ -143,3 +144,182 @@ def test_shutdown_waits_for_system_information_worker(qt_application):
     assert information_worker.delete_called is False
 
     application._shutdown_timer.stop()
+
+
+
+def _build_run_application(monkeypatch, *, accepted, error=None):
+    application = SystemMonitorApplication(argv=[])
+    calls = []
+    logged_errors = []
+
+    application._initialize = lambda: calls.append("initialize")
+
+    application._main_window = SimpleNamespace(
+        show=lambda: calls.append("show")
+    )
+
+    application._start_system_information_collection = (
+        lambda: calls.append("system_information")
+    )
+
+    def start_coordinator():
+        calls.append("coordinator_start")
+        return SimpleNamespace(accepted=accepted, error=error)
+
+    application._coordinator = SimpleNamespace(
+        start=start_coordinator
+    )
+
+    application._application = SimpleNamespace(
+        exec=lambda: calls.append("event_loop") or 7
+    )
+
+    monkeypatch.setattr(
+        application_module.logger,
+        "error",
+        logged_errors.append,
+    )
+
+    return application, calls, logged_errors
+
+
+def test_run_starts_coordinator_and_enters_event_loop(monkeypatch):
+    application, calls, logged_errors = _build_run_application(
+        monkeypatch,
+        accepted=True,
+    )
+
+    assert application.run() == 7
+
+    assert calls == [
+        "initialize",
+        "show",
+        "system_information",
+        "coordinator_start",
+        "event_loop",
+    ]
+    assert logged_errors == []
+
+
+def test_run_logs_rejected_coordinator_start_and_enters_event_loop(
+    monkeypatch,
+):
+    application, calls, logged_errors = _build_run_application(
+        monkeypatch,
+        accepted=False,
+        error="CPU service startup was rejected.",
+    )
+
+    assert application.run() == 7
+
+    assert calls == [
+        "initialize",
+        "show",
+        "system_information",
+        "coordinator_start",
+        "event_loop",
+    ]
+    assert logged_errors == ["CPU service startup was rejected."]
+
+
+class FakeSignal:
+    def __init__(self):
+        self.connected = []
+
+    def connect(self, callback):
+        self.connected.append(callback)
+
+
+class FakeStatusLabel:
+    def __init__(self):
+        self.text = None
+
+    def setText(self, value):
+        self.text = value
+
+
+class FakeInitializationCoordinator:
+    def __init__(self):
+        self.status_changed = FakeSignal()
+
+    def get_status(self):
+        return "RUNNING"
+
+
+class FakeInitializationWindow:
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+        self.close_requested = FakeSignal()
+        self.application_status = FakeStatusLabel()
+
+
+def test_initialize_wires_diagnostic_aggregator_to_main_window(
+    qt_application,
+    monkeypatch,
+):
+    application = SystemMonitorApplication(argv=[])
+
+    services = {
+        "cpu": object(),
+        "memory": object(),
+        "disk": object(),
+        "network": object(),
+        "process": object(),
+    }
+    coordinator = FakeInitializationCoordinator()
+    dependencies = {}
+
+    def create_dependencies():
+        application._services = services
+        application._coordinator = coordinator
+
+    class FakeDataController:
+        def __init__(self, received_services, parent=None):
+            dependencies["services"] = received_services
+            dependencies["controller_parent"] = parent
+
+    class FakeDiagnosticAggregator:
+        def __init__(self, coordinator, data_controller):
+            dependencies["aggregator_coordinator"] = coordinator
+            dependencies["aggregator_controller"] = data_controller
+
+    monkeypatch.setattr(
+        application,
+        "_create_dependencies",
+        create_dependencies,
+    )
+    monkeypatch.setattr(
+        application_module,
+        "MonitoringDataController",
+        FakeDataController,
+    )
+    monkeypatch.setattr(
+        application_module,
+        "DiagnosticAggregator",
+        FakeDiagnosticAggregator,
+    )
+    monkeypatch.setattr(
+        application_module,
+        "MainWindow",
+        FakeInitializationWindow,
+    )
+
+    application._initialize()
+
+    assert dependencies["services"] is services
+    assert dependencies["controller_parent"] is application
+    assert dependencies["aggregator_coordinator"] is coordinator
+    assert (
+        dependencies["aggregator_controller"]
+        is application._monitoring_data_controller
+    )
+    assert (
+        application._main_window.kwargs["controller"]
+        is application._monitoring_data_controller
+    )
+    assert (
+        application._main_window.kwargs["diagnostic_aggregator"]
+        is application._diagnostic_aggregator
+    )
+    assert len(coordinator.status_changed.connected) == 1
+    assert len(application._main_window.close_requested.connected) == 1

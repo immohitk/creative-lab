@@ -34,10 +34,18 @@ class MainWindow(QMainWindow):
 
     close_requested = Signal()
 
-    def __init__(self, parent=None, controller=None):
+    def __init__(
+        self,
+        parent=None,
+        controller=None,
+        diagnostic_aggregator=None,
+        coordinator=None,
+    ):
         super().__init__(parent)
 
         self._controller = controller
+        self._diagnostic_aggregator = diagnostic_aggregator
+        self._coordinator = coordinator
         self.page_widgets = {}
         self._allow_close = False
         self._navigation_buttons = {}
@@ -164,7 +172,11 @@ class MainWindow(QMainWindow):
         monitoring_pages = {}
         if self._controller is not None:
             from system_monitor.presentation.pages import build_monitoring_pages
-            monitoring_pages = build_monitoring_pages(self._controller)
+            monitoring_pages = build_monitoring_pages(
+                self._controller,
+                self._diagnostic_aggregator,
+                self._coordinator,
+            )
 
         for page_name in ALL_PAGES:
             page = monitoring_pages.get(page_name)
@@ -223,5 +235,6 @@ class MainWindow(QMainWindow):
         if self._allow_close:
             event.accept()
             return
+
         event.ignore()
         self.close_requested.emit()
