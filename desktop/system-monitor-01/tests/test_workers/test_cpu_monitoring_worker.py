@@ -377,3 +377,31 @@ def test_reconfiguration_interrupts_counter_recovery(monkeypatch):
     assert prime_calls == [1.0, 2.0]
     assert worker.sampling_interval == 2.0
     assert not worker.reconfigure_event.is_set()
+
+def test_unexpected_run_loop_failure_reports_worker_failure_once_and_terminates():
+    worker, _, _, worker_failures = make_worker()
+
+    def fail_worker():
+        raise RuntimeError("unexpected worker failure")
+
+    worker._run_loop = fail_worker
+    thread = threading.Thread(target=worker.run)
+    thread.start()
+    thread.join(timeout=1.0)
+
+    assert not thread.is_alive()
+    assert worker_failures == [True]
+
+
+def test_startup_callback_failure_reports_worker_failure(monkeypatch):
+    worker, _, _, worker_failures = make_worker(
+        on_started=lambda: (_ for _ in ()).throw(
+            RuntimeError("startup callback failed")
+        )
+    )
+    monkeypatch.setattr(worker, "_get_logical_cpu_count", lambda: 1)
+    monkeypatch.setattr(worker, "_prime_counters", lambda: None)
+
+    worker.run()
+
+    assert worker_failures == [True]

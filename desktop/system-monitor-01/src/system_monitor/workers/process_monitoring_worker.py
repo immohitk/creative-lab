@@ -120,7 +120,7 @@ class ProcessMonitoringWorker:
             return
 
         if self._on_started is not None:
-            self._safe_callback(self._on_started)
+            self._on_started()
 
         while not self._stop_event.is_set():
             interval = self.sampling_interval

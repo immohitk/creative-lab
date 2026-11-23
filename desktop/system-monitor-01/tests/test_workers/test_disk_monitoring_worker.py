@@ -723,3 +723,31 @@ def test_worker_failure_callback_failure_is_isolated():
 
     worker.run()
 
+def test_unexpected_run_loop_failure_reports_worker_failure_once_and_terminates():
+    worker, _, _, worker_failures = make_worker()
+
+    def fail_worker():
+        raise RuntimeError("unexpected worker failure")
+
+    worker._run_loop = fail_worker
+    thread = threading.Thread(target=worker.run)
+    thread.start()
+    thread.join(timeout=1.0)
+
+    assert not thread.is_alive()
+    assert worker_failures == [True]
+
+
+def test_startup_callback_failure_reports_worker_failure(monkeypatch):
+    worker, _, _, worker_failures = make_worker(
+        on_started=lambda: (_ for _ in ()).throw(
+            RuntimeError("startup callback failed")
+        )
+    )
+    monkeypatch.setattr(
+        worker, "_wait_for_next_window", lambda interval: _WaitResult.STOP
+    )
+
+    worker.run()
+
+    assert worker_failures == [True]
