@@ -1480,3 +1480,64 @@ def test_real_worker_startup_then_unexpected_failure(monkeypatch, qt_app):
 
         if worker_thread is not None:
             assert not worker_thread.is_alive()
+
+def test_concurrent_stop_requests_share_one_shutdown_operation(
+    monkeypatch, qt_app
+):
+    monkeypatch.setattr(
+        service_module,
+        "NetworkMonitoringWorker",
+        UncooperativeFakeWorker,
+    )
+    UncooperativeFakeWorker.instances.clear()
+    instance = NetworkMonitoringService()
+    worker = None
+
+    try:
+        start_result = instance.start()
+        assert start_result.accepted is True
+
+        worker = UncooperativeFakeWorker.instances[-1]
+        assert worker.entered.wait(timeout=1)
+        assert wait_for_condition(
+            qt_app,
+            lambda: instance.get_worker_state() == NetworkWorkerState.RUNNING,
+        )
+
+        first_result = instance.stop()
+        deadline = instance._shutdown_deadline
+
+        assert first_result.success is False
+        assert first_result.worker_state == NetworkWorkerState.STOPPING
+        assert deadline is not None
+        assert instance._pending_stop is True
+
+        second_result = instance.stop()
+        third_result = instance.stop()
+
+        for result in (second_result, third_result):
+            assert result.success is False
+            assert result.worker_state == NetworkWorkerState.STOPPING
+
+        assert instance._shutdown_deadline == deadline
+        assert instance._pending_stop is True
+        assert instance.get_worker_state() == NetworkWorkerState.STOPPING
+
+        worker.release.set()
+
+        assert wait_for_condition(
+            qt_app,
+            lambda: instance._worker_thread is None
+            and instance.get_worker_state() == NetworkWorkerState.STOPPED,
+        )
+        assert instance._pending_stop is False
+        assert instance._shutdown_deadline is None
+        assert instance.is_cleanup_complete() is True
+    finally:
+        if worker is not None:
+            worker.release.set()
+        thread = instance._worker_thread
+        if thread is not None and thread.is_alive():
+            thread.join(timeout=2)
+        qt_app.processEvents()
+        qt_app.processEvents()

@@ -1087,3 +1087,61 @@ def test_expired_dispatched_request_is_not_executed(
     process_events(qt_app)
 
     assert callback_calls == []
+
+def test_concurrent_stop_requests_share_one_shutdown_operation(
+    service, qt_app, monkeypatch
+):
+    monkeypatch.setattr(
+        service_module,
+        "ProcessMonitoringWorker",
+        UncooperativeFakeWorker,
+    )
+    worker = None
+
+    try:
+        start_running_service(service, qt_app)
+        worker = service._worker
+        worker_thread = service._worker_thread
+
+        first_result = service.stop()
+        deadline = service._shutdown_deadline
+
+        assert first_result.success is False
+        assert first_result.worker_state == ProcessWorkerState.STOPPING
+        assert deadline is not None
+        assert service._pending_stop is True
+        assert service._shutdown_cleanup_pending is True
+
+        second_result = service.stop()
+        third_result = service.stop()
+
+        for result in (second_result, third_result):
+            assert result.success is False
+            assert result.worker_state == ProcessWorkerState.STOPPING
+
+        assert service._shutdown_deadline == deadline
+        assert service._pending_stop is True
+        assert service._shutdown_cleanup_pending is True
+        assert service._worker is worker
+        assert service._worker_thread is worker_thread
+        assert service.get_worker_state() == ProcessWorkerState.STOPPING
+
+        worker.release_event.set()
+
+        assert wait_for_condition(
+            qt_app,
+            lambda: service._worker_thread is None
+            and service.get_worker_state() == ProcessWorkerState.STOPPED,
+        )
+        assert service._pending_stop is False
+        assert service._shutdown_cleanup_pending is False
+        assert service._shutdown_deadline is None
+        assert service.is_cleanup_complete() is True
+    finally:
+        if worker is not None:
+            worker.release_event.set()
+        worker_thread = service._worker_thread
+        if worker_thread is not None and worker_thread.is_alive():
+            worker_thread.join(timeout=2)
+        qt_app.processEvents()
+        qt_app.processEvents()
