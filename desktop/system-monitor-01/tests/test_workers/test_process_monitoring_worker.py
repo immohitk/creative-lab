@@ -659,3 +659,92 @@ def test_process_metadata_state_is_unavailable_without_metadata(
     snapshot = worker._collect_measurement(2.0)
 
     assert snapshot.processes[0].metadata_state == "unavailable"
+
+
+def test_inaccessible_executable_path_preserves_process_measurement(
+    monkeypatch,
+):
+    worker, _, _, _ = make_worker()
+    process = make_process()
+    process.info["exe"] = None
+
+    def fake_process_iter(**kwargs):
+        process.info["exe"] = kwargs["ad_value"]
+        return iter([process])
+
+    monkeypatch.setattr(
+        "system_monitor.workers.process_monitoring_worker.psutil.process_iter",
+        fake_process_iter,
+    )
+    monkeypatch.setattr(
+        psutil,
+        "win_service_iter",
+        lambda: iter([]),
+        raising=False,
+    )
+    patch_clock(monkeypatch, [10.0])
+
+    snapshot = worker._collect_measurement(2.0)
+
+    assert len(snapshot.processes) == 1
+    assert snapshot.processes[0].executable_path is None
+    assert snapshot.processes[0].metadata_state == "partial"
+    assert snapshot.process_errors == ()
+
+
+def test_decreasing_cpu_counter_resets_baseline(monkeypatch):
+    worker, _, _, _ = make_worker()
+
+    samples = iter([
+        [make_process(user_time=2.0, system_time=1.0)],
+        [make_process(user_time=1.5, system_time=0.5)],
+        [make_process(user_time=2.5, system_time=0.5)],
+    ])
+
+    monkeypatch.setattr(
+        "system_monitor.workers.process_monitoring_worker.psutil.process_iter",
+        lambda **kwargs: iter(next(samples)),
+    )
+    patch_clock(monkeypatch, [10.0, 12.0, 14.0])
+
+    first = worker._collect_measurement(2.0)
+    second = worker._collect_measurement(2.0)
+    third = worker._collect_measurement(2.0)
+
+    assert first.processes[0].cpu_percent is None
+    assert second.processes[0].cpu_percent is None
+    assert third.processes[0].cpu_percent == 50.0
+
+
+@pytest.mark.parametrize(
+    ("user_time", "system_time"),
+    [
+        (-1.0, 0.0),
+        (float("inf"), 0.0),
+        (float("nan"), 0.0),
+        ("invalid", 0.0),
+        (True, 0.0),
+    ],
+)
+def test_invalid_cpu_counters_produce_unavailable_cpu(
+    monkeypatch,
+    user_time,
+    system_time,
+):
+    worker, _, _, _ = make_worker()
+
+    samples = iter([
+        [make_process(user_time=2.0, system_time=1.0)],
+        [make_process(user_time=user_time, system_time=system_time)],
+    ])
+
+    monkeypatch.setattr(
+        "system_monitor.workers.process_monitoring_worker.psutil.process_iter",
+        lambda **kwargs: iter(next(samples)),
+    )
+    patch_clock(monkeypatch, [10.0, 12.0])
+
+    worker._collect_measurement(2.0)
+    snapshot = worker._collect_measurement(2.0)
+
+    assert snapshot.processes[0].cpu_percent is None
