@@ -3,7 +3,7 @@
 import heapq
 import os
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import (
     QAbstractItemView,
     QFrame,
@@ -390,27 +390,17 @@ class MonitoringPage(QWidget):
 
                         item.setTextAlignment(alignment)
 
-                    # Let the outer page scroll area own vertical scrolling.
-
-                    # Expand the table to fit all its rows.
-
-                    header_height = table.horizontalHeader().height()
-
-                    row_height = table.verticalHeader().defaultSectionSize()
-
-                    frame_height = table.frameWidth() * 2
-
-                    content_height = (
-
-                        header_height
-
-                        + table.rowCount() * row_height
-
-                        + frame_height
-
-                    )
-
-                    table.setMinimumHeight(max(180, content_height))
+            # Let the outer page scroll area own vertical scrolling.
+            # Expand the table to fit all its rows.
+            header_height = table.horizontalHeader().height()
+            row_height = table.verticalHeader().defaultSectionSize()
+            frame_height = table.frameWidth() * 2
+            content_height = (
+                header_height
+                + table.rowCount() * row_height
+                + frame_height
+            )
+            table.setMinimumHeight(max(180, content_height))
 
         finally:
 
@@ -975,6 +965,11 @@ class ProcessesPage(MonitoringPage):
         self._cached_processes = ()
         self._cached_classifications = {}
 
+        self._search_timer = QTimer(self)
+        self._search_timer.setSingleShot(True)
+        self._search_timer.setInterval(150)
+        self._search_timer.timeout.connect(self._refresh_inventory)
+
         self.overview_cards = {
 
             "total": MetricCard("Total Processes", "—"),
@@ -1145,10 +1140,10 @@ class ProcessesPage(MonitoringPage):
 
         self.layout.addLayout(toolbar)
 
-        self.search_input.textChanged.connect(self._refresh_inventory)
-        self.category_filter.currentTextChanged.connect(self._refresh_inventory)
-        self.sort_selector.currentIndexChanged.connect(self._refresh_inventory)
-        self.sort_direction.currentIndexChanged.connect(self._refresh_inventory)
+        self.search_input.textChanged.connect(self._schedule_inventory_refresh)
+        self.category_filter.currentTextChanged.connect(self._refresh_inventory_immediately)
+        self.sort_selector.currentIndexChanged.connect(self._refresh_inventory_immediately)
+        self.sort_direction.currentIndexChanged.connect(self._refresh_inventory_immediately)
 
         self.process_table = self._create_table(
 
@@ -1275,6 +1270,13 @@ class ProcessesPage(MonitoringPage):
                 f"PID {process.pid}  ·  {value_text}"
 
             )
+
+    def _schedule_inventory_refresh(self, *_args):
+        self._search_timer.start()
+
+    def _refresh_inventory_immediately(self, *_args):
+        self._search_timer.stop()
+        self._refresh_inventory()
 
     def _refresh_inventory(self):
         """Refresh only the filtered and sorted process inventory."""

@@ -6,6 +6,7 @@ from types import SimpleNamespace
 
 import pytest
 from PySide6.QtCore import QObject, Signal
+from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication
 
 from system_monitor.models.process_measurement import ProcessMeasurement
@@ -360,6 +361,7 @@ def test_inventory_search_matches_process_name(
     page = page_factory(processes)
 
     page.search_input.setText("chrome")
+    QTest.qWait(200)
 
     assert table_process_names(page) == ["chrome"]
 
@@ -377,6 +379,7 @@ def test_inventory_search_matches_pid(
     page = page_factory(processes)
 
     page.search_input.setText("642")
+    QTest.qWait(200)
 
     assert table_process_names(page) == ["second"]
 
@@ -401,6 +404,7 @@ def test_inventory_search_matches_executable_path(
     page = page_factory(processes)
 
     page.search_input.setText("AppOne")
+    QTest.qWait(200)
 
     assert table_process_names(page) == ["first"]
 
@@ -448,6 +452,7 @@ def test_inventory_combines_search_and_category_filter(
 
     page.category_filter.setCurrentText("Application")
     page.search_input.setText("chrome")
+    QTest.qWait(200)
 
     assert set(table_process_names(page)) == {
         "chrome-helper",
@@ -540,3 +545,83 @@ def test_inventory_displays_placeholder_for_missing_executable_path(
     page = page_factory([process])
 
     assert page.process_table.item(0, 6).text() == "—"
+
+def test_process_search_debounces_rapid_typing(page_factory, monkeypatch):
+    refresh_calls = []
+    original_refresh = ProcessesPage._refresh_inventory
+
+    def tracked_refresh(page):
+        refresh_calls.append(page.search_input.text())
+        original_refresh(page)
+
+    monkeypatch.setattr(
+        ProcessesPage,
+        "_refresh_inventory",
+        tracked_refresh,
+    )
+
+    page = page_factory([
+        make_process(pid=801, name="chrome"),
+        make_process(pid=802, name="firefox"),
+    ])
+    refresh_calls.clear()
+
+    page.search_input.setText("c")
+    QTest.qWait(40)
+    page.search_input.setText("ch")
+    QTest.qWait(40)
+    page.search_input.setText("chrome")
+
+    assert refresh_calls == []
+
+    QTest.qWait(200)
+
+    assert refresh_calls == ["chrome"]
+    assert table_process_names(page) == ["chrome"]
+
+
+@pytest.mark.parametrize("control", ["category", "sort"])
+def test_category_and_sort_changes_cancel_pending_search(
+    page_factory,
+    category_map,
+    monkeypatch,
+    control,
+):
+    category_map.update({
+        811: "Application",
+        812: "Application",
+    })
+
+    refresh_calls = []
+    original_refresh = ProcessesPage._refresh_inventory
+
+    def tracked_refresh(page):
+        refresh_calls.append(page.search_input.text())
+        original_refresh(page)
+
+    monkeypatch.setattr(
+        ProcessesPage,
+        "_refresh_inventory",
+        tracked_refresh,
+    )
+
+    page = page_factory([
+        make_process(pid=811, name="app-alpha"),
+        make_process(pid=812, name="app-beta"),
+    ])
+    refresh_calls.clear()
+
+    page.search_input.setText("app")
+    assert page._search_timer.isActive()
+
+    if control == "category":
+        page.category_filter.setCurrentText("Application")
+    else:
+        page.sort_selector.setCurrentIndex(1)
+
+    assert not page._search_timer.isActive()
+    assert refresh_calls == ["app"]
+
+    QTest.qWait(200)
+
+    assert refresh_calls == ["app"]

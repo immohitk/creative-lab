@@ -33,3 +33,28 @@ def test_table_update_centers_new_cell_values():
 
     assert table.item(0, 0).textAlignment() & Qt.AlignmentFlag.AlignHCenter
     assert table.item(0, 0).textAlignment() & Qt.AlignmentFlag.AlignVCenter
+
+
+def test_table_height_is_calculated_once_per_update():
+    class HeightTrackingTable(QTableWidget):
+        def __init__(self):
+            super().__init__(0, 3)
+            self.minimum_height_calls = []
+
+        def setMinimumHeight(self, height):
+            self.minimum_height_calls.append(height)
+            super().setMinimumHeight(height)
+
+    table = HeightTrackingTable()
+
+    MonitoringPage._update_table(
+        table,
+        [
+            ("101", "Chrome", "Running"),
+            ("202", "Python", "Running"),
+            ("303", "Explorer", "Running"),
+        ],
+    )
+
+    assert len(table.minimum_height_calls) == 1
+    assert table.minimum_height_calls[0] >= 180
