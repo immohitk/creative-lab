@@ -86,3 +86,14 @@ def test_collect_handles_registry_access_failure(monkeypatch):
     assert result.data["edition"] is None
     assert result.error is not None
     assert "Access denied" in result.error
+
+
+def test_collect_returns_unsupported_when_winreg_is_unavailable(monkeypatch):
+    monkeypatch.setattr(platform, "system", lambda: "Windows")
+    monkeypatch.setattr(operating_system, "winreg", None)
+
+    result = operating_system.collect()
+
+    assert result.status == Availability.UNSUPPORTED
+    assert result.data is None
+    assert result.error is not None
