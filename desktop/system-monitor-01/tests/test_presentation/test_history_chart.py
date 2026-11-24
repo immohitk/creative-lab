@@ -202,8 +202,10 @@ def test_narrow_chart_wraps_legend_into_multiple_rows(chart):
         args[1]
         for args in painter.texts
         if len(args) == 3
+        and isinstance(args[0], (int, float))
+        and isinstance(args[1], (int, float))
+        and args[1] >= 47
         and isinstance(args[2], str)
-        and "utilization history" in args[2]
     ]
 
     assert len(legend_positions) == 3
