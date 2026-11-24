@@ -453,3 +453,209 @@ def test_worker_recovers_after_measurement_failure(monkeypatch):
     ]
     assert measurements == [successful_snapshot]
     assert worker_failures == []
+
+
+def make_service(pid, name):
+    return SimpleNamespace(
+        as_dict=lambda: {"pid": pid, "name": name}
+    )
+
+
+def test_service_map_is_unavailable_without_windows_api(monkeypatch):
+    worker, _, _, _ = make_worker()
+
+    monkeypatch.delattr(psutil, "win_service_iter", raising=False)
+
+    service_map, available = worker._collect_service_map()
+
+    assert service_map == {}
+    assert available is False
+
+
+def test_service_map_groups_deduplicates_and_sorts_names(monkeypatch):
+    worker, _, _, _ = make_worker()
+
+    services = [
+        make_service(100, "Zulu"),
+        make_service(100, "alpha"),
+        make_service(100, "alpha"),
+        make_service(200, "Beta"),
+    ]
+
+    monkeypatch.setattr(
+        psutil,
+        "win_service_iter",
+        lambda: iter(services),
+        raising=False,
+    )
+
+    service_map, available = worker._collect_service_map()
+
+    assert service_map == {
+        100: ("alpha", "Zulu"),
+        200: ("Beta",),
+    }
+    assert available is True
+
+
+def test_service_map_ignores_invalid_service_metadata(monkeypatch):
+    worker, _, _, _ = make_worker()
+
+    services = [
+        make_service(100, "Valid"),
+        make_service(0, "Invalid PID"),
+        make_service(True, "Boolean PID"),
+        make_service(200, ""),
+        make_service(300, None),
+    ]
+
+    monkeypatch.setattr(
+        psutil,
+        "win_service_iter",
+        lambda: iter(services),
+        raising=False,
+    )
+
+    service_map, available = worker._collect_service_map()
+
+    assert service_map == {100: ("Valid",)}
+    assert available is True
+
+
+def test_service_map_continues_after_individual_service_failure(monkeypatch):
+    worker, _, _, _ = make_worker()
+
+    class FailingService:
+        def as_dict(self):
+            raise OSError("service unavailable")
+
+    monkeypatch.setattr(
+        psutil,
+        "win_service_iter",
+        lambda: iter([
+            make_service(100, "First"),
+            FailingService(),
+            make_service(200, "Second"),
+        ]),
+        raising=False,
+    )
+
+    service_map, available = worker._collect_service_map()
+
+    assert service_map == {
+        100: ("First",),
+        200: ("Second",),
+    }
+    assert available is False
+
+
+def test_service_map_preserves_partial_results_on_iterator_failure(
+    monkeypatch,
+):
+    worker, _, _, _ = make_worker()
+
+    def failing_iterator():
+        yield make_service(100, "First")
+        raise OSError("enumeration failed")
+
+    monkeypatch.setattr(
+        psutil,
+        "win_service_iter",
+        failing_iterator,
+        raising=False,
+    )
+
+    service_map, available = worker._collect_service_map()
+
+    assert service_map == {100: ("First",)}
+    assert available is False
+
+
+def test_service_map_stops_during_enumeration(monkeypatch):
+    worker, _, _, _ = make_worker()
+
+    def service_iterator():
+        yield make_service(100, "First")
+        worker._stop_event.set()
+        yield make_service(200, "Second")
+
+    monkeypatch.setattr(
+        psutil,
+        "win_service_iter",
+        service_iterator,
+        raising=False,
+    )
+
+    service_map, available = worker._collect_service_map()
+
+    assert service_map == {100: ("First",)}
+    assert available is False
+
+
+def test_service_map_returns_unavailable_when_already_stopped(monkeypatch):
+    worker, _, _, _ = make_worker()
+
+    worker.stop()
+
+    monkeypatch.setattr(
+        psutil,
+        "win_service_iter",
+        lambda: pytest.fail("Service enumeration should not start."),
+        raising=False,
+    )
+
+    service_map, available = worker._collect_service_map()
+
+    assert service_map == {}
+    assert available is False
+
+
+def test_process_metadata_state_is_verified_when_collection_is_complete(
+    monkeypatch,
+):
+    worker, _, _, _ = make_worker()
+    process = make_process()
+    process.info["exe"] = r"C:\Windows\example.exe"
+
+    patch_processes(monkeypatch, [process])
+    patch_clock(monkeypatch, [10.0])
+    monkeypatch.setattr(
+        psutil,
+        "win_service_iter",
+        lambda: iter([]),
+        raising=False,
+    )
+
+    snapshot = worker._collect_measurement(2.0)
+
+    assert snapshot.processes[0].metadata_state == "verified"
+
+
+def test_process_metadata_state_is_partial_when_service_collection_is_unavailable(
+    monkeypatch,
+):
+    worker, _, _, _ = make_worker()
+    process = make_process()
+    process.info["exe"] = r"C:\Windows\example.exe"
+
+    patch_processes(monkeypatch, [process])
+    patch_clock(monkeypatch, [10.0])
+    monkeypatch.delattr(psutil, "win_service_iter", raising=False)
+
+    snapshot = worker._collect_measurement(2.0)
+
+    assert snapshot.processes[0].metadata_state == "partial"
+
+
+def test_process_metadata_state_is_unavailable_without_metadata(
+    monkeypatch,
+):
+    worker, _, _, _ = make_worker()
+
+    patch_processes(monkeypatch, [make_process()])
+    patch_clock(monkeypatch, [10.0])
+    monkeypatch.delattr(psutil, "win_service_iter", raising=False)
+
+    snapshot = worker._collect_measurement(2.0)
+
+    assert snapshot.processes[0].metadata_state == "unavailable"
