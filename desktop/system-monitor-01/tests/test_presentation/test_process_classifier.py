@@ -151,3 +151,43 @@ def test_partial_metadata_without_recognized_path_is_partial(classifier):
 def test_invalid_measurement_type_is_rejected(classifier):
     with pytest.raises(TypeError):
         classifier.classify("not a process measurement")
+
+
+def test_windows_path_matching_is_case_insensitive(classifier):
+    measurement = make_measurement(
+        executable_path=r"c:\wInDoWs\sYsTeM32\example.exe",
+        metadata_state="verified",
+    )
+
+    result = classifier.classify(measurement)
+
+    assert result.category == "System"
+    assert result.confidence == "Verified"
+
+
+def test_cross_drive_path_does_not_match_windows_directory(classifier):
+    measurement = make_measurement(
+        executable_path=r"D:\Windows\System32\example.exe",
+        metadata_state="verified",
+    )
+
+    result = classifier.classify(measurement)
+
+    assert result.category == "Unclassified"
+    assert result.confidence == "Partial"
+
+
+def test_cross_drive_directory_comparison_does_not_raise():
+    cross_drive_classifier = ProcessClassifier(
+        windows_directory=r"D:\Windows",
+        application_directories=(r"C:\Program Files",),
+    )
+    measurement = make_measurement(
+        executable_path=r"C:\Program Files\Example\example.exe",
+        metadata_state="verified",
+    )
+
+    result = cross_drive_classifier.classify(measurement)
+
+    assert result.category == "Application"
+    assert result.confidence == "Verified"
