@@ -279,3 +279,87 @@ def test_filtering_is_not_limited_to_250_processes():
 
     assert len(result) == 1
     assert result[0].pid == 1299
+
+
+def test_memory_sort_ascending_and_descending():
+    processes = [
+        make_process(pid=1, memory_bytes=100),
+        make_process(pid=2, memory_bytes=500),
+        make_process(pid=3, memory_bytes=300),
+    ]
+    classifications = make_classifications(processes)
+
+    descending = filter_and_sort_processes(
+        processes, classifications, sort_key="memory_bytes"
+    )
+    ascending = filter_and_sort_processes(
+        processes, classifications,
+        sort_key="memory_bytes", descending=False,
+    )
+
+    assert [p.pid for p in descending] == [2, 3, 1]
+    assert [p.pid for p in ascending] == [1, 3, 2]
+
+
+def test_category_sort_ascending_and_descending():
+    processes = [
+        make_process(pid=1),
+        make_process(pid=2),
+        make_process(pid=3),
+    ]
+    classifications = {
+        1: SimpleNamespace(category="System"),
+        2: SimpleNamespace(category="Application"),
+        3: SimpleNamespace(category="Service"),
+    }
+
+    descending = filter_and_sort_processes(
+        processes, classifications, sort_key="category"
+    )
+    ascending = filter_and_sort_processes(
+        processes, classifications,
+        sort_key="category", descending=False,
+    )
+
+    assert [p.pid for p in descending] == [1, 3, 2]
+    assert [p.pid for p in ascending] == [2, 3, 1]
+
+
+def test_status_sort_ascending_and_descending():
+    processes = [
+        make_process(pid=1, status="running"),
+        make_process(pid=2, status="stopped"),
+        make_process(pid=3, status="sleeping"),
+    ]
+    classifications = make_classifications(processes)
+
+    descending = filter_and_sort_processes(
+        processes, classifications, sort_key="status"
+    )
+    ascending = filter_and_sort_processes(
+        processes, classifications,
+        sort_key="status", descending=False,
+    )
+
+    assert [p.pid for p in descending] == [2, 3, 1]
+    assert [p.pid for p in ascending] == [1, 3, 2]
+
+
+def test_executable_path_sort_ascending_and_descending():
+    processes = [
+        make_process(pid=1, executable_path=r"C:\Windows\System32\b.exe"),
+        make_process(pid=2, executable_path=r"C:\Program Files\a.exe"),
+        make_process(pid=3, executable_path=None),
+    ]
+    classifications = make_classifications(processes)
+
+    descending = filter_and_sort_processes(
+        processes, classifications, sort_key="executable_path"
+    )
+    ascending = filter_and_sort_processes(
+        processes, classifications,
+        sort_key="executable_path", descending=False,
+    )
+
+    assert [p.pid for p in descending] == [1, 2, 3]
+    assert [p.pid for p in ascending] == [2, 1, 3]

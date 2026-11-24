@@ -92,9 +92,8 @@ def filter_and_sort_processes(
         if sort_key == "status":
             return process.status.casefold()
 
-        return (
-            getattr(process, "executable_path", None) or ""
-        ).casefold()
+        executable_path = getattr(process, "executable_path", None)
+        return executable_path.casefold() if executable_path else None
 
     available = [
         item for item in filtered
