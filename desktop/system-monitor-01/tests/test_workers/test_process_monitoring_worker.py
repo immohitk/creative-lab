@@ -407,3 +407,49 @@ def test_startup_callback_failure_reports_worker_failure(monkeypatch):
     worker.run()
 
     assert worker_failures == [True]
+
+def test_worker_recovers_after_measurement_failure(monkeypatch):
+    worker, measurements, measurement_failures, worker_failures = make_worker()
+
+    successful_snapshot = object()
+    wait_results = iter([
+        _WaitResult.TIMEOUT,
+        _WaitResult.TIMEOUT,
+        _WaitResult.STOP,
+    ])
+
+    collection_calls = []
+
+    def collect_measurement(interval):
+        collection_calls.append(interval)
+
+        if len(collection_calls) == 1:
+            raise ProcessWorkerError(
+                "PROCESS_PROVIDER_FAILED",
+                "Process provider temporarily unavailable.",
+            )
+
+        return successful_snapshot
+
+    monkeypatch.setattr(
+        worker,
+        "_wait_for_next_window",
+        lambda interval: next(wait_results),
+    )
+    monkeypatch.setattr(
+        worker,
+        "_collect_measurement",
+        collect_measurement,
+    )
+
+    worker.run()
+
+    assert collection_calls == [2.0, 2.0]
+    assert measurement_failures == [
+        (
+            "PROCESS_PROVIDER_FAILED",
+            "Process provider temporarily unavailable.",
+        )
+    ]
+    assert measurements == [successful_snapshot]
+    assert worker_failures == []

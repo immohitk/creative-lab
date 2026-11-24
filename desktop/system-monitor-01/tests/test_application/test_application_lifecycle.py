@@ -323,3 +323,67 @@ def test_initialize_wires_diagnostic_aggregator_to_main_window(
     )
     assert len(coordinator.status_changed.connected) == 1
     assert len(application._main_window.close_requested.connected) == 1
+
+
+def test_application_shutdown_stops_all_real_monitoring_workers(qt_application):
+    import time
+
+    application = SystemMonitorApplication(argv=[])
+    application._create_dependencies()
+    services = application.services
+
+    try:
+        result = application.coordinator.start()
+        assert result.accepted is True, result.error
+
+        startup_deadline = time.monotonic() + 10.0
+
+        while time.monotonic() < startup_deadline:
+            qt_application.processEvents()
+
+            if all(
+                service.get_worker_state().value == "RUNNING"
+                for service in services.values()
+            ):
+                break
+
+            time.sleep(0.01)
+
+        startup_states = {
+            name: service.get_worker_state().value
+            for name, service in services.items()
+        }
+        assert all(
+            state == "RUNNING" for state in startup_states.values()
+        ), startup_states
+
+        application._request_shutdown()
+
+        shutdown_deadline = time.monotonic() + 10.0
+
+        while (
+            not application._shutdown_complete
+            and time.monotonic() < shutdown_deadline
+        ):
+            qt_application.processEvents()
+            time.sleep(0.01)
+
+        assert application._shutdown_complete is True
+
+        for name, service in services.items():
+            assert service.is_worker_thread_alive() is False, name
+            assert service.is_cleanup_complete() is True, name
+
+        assert application._shutdown_timer.isActive() is False
+
+    finally:
+        if not application._shutdown_complete:
+            application._request_shutdown()
+            cleanup_deadline = time.monotonic() + 10.0
+
+            while (
+                not application._shutdown_complete
+                and time.monotonic() < cleanup_deadline
+            ):
+                qt_application.processEvents()
+                time.sleep(0.01)

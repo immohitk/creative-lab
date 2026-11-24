@@ -260,3 +260,29 @@ def test_main_window_forwards_coordinator_to_monitoring_pages(
         window.close()
         window.deleteLater()
         qapp.processEvents()
+
+def test_repeated_rapid_navigation_preserves_page_state(main_window, qapp):
+    main_window.show()
+    qapp.processEvents()
+
+    for _ in range(50):
+        for page_name in ALL_PAGES:
+            main_window._navigation_buttons[page_name].click()
+
+    qapp.processEvents()
+
+    final_page = ALL_PAGES[-1]
+
+    assert main_window.pages.count() == len(ALL_PAGES)
+    assert main_window.pages.currentIndex() == (\n        main_window._page_indices[final_page]\n    )
+    assert main_window.page_title.text() == final_page
+
+    selected_buttons = [
+        name
+        for name, button in main_window._navigation_buttons.items()
+        if button.isChecked()
+    ]
+    assert selected_buttons == [final_page]
+
+    for page_name, page in main_window.page_widgets.items():
+        assert page.isVisible() == (page_name == final_page)
