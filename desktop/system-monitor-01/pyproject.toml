@@ -24,3 +24,6 @@ where = ["src"]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 addopts = "-ra"
+
+[project.gui-scripts]
+system-monitor = "system_monitor.__main__:main"

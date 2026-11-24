@@ -2,3 +2,7 @@
 # Keep project documentation private (except README)
 *.md
 !README.md
+
+# Public project documentation
+!docs/
+!docs/*.md

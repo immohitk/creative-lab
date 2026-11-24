@@ -34,7 +34,7 @@ def main_window(qapp):
 
 
 def test_main_window_initializes_with_expected_title(main_window):
-    assert main_window.windowTitle() == "Creative Lab System Monitor"
+    assert main_window.windowTitle() == "CL System Monitor"
 
 
 def test_main_window_applies_centralized_theme(main_window):

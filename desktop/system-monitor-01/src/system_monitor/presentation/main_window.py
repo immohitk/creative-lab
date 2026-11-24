@@ -1,8 +1,10 @@
-﻿"""Main application window for the system monitor presentation layer."""
+﻿
+"""Main application window for the system monitor presentation layer."""
 
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtWidgets import (
+    QApplication,
     QFrame,
     QHBoxLayout,
     QLabel,
@@ -51,7 +53,9 @@ class MainWindow(QMainWindow):
         self._navigation_buttons = {}
         self._page_indices = {}
 
-        self.setWindowTitle("Creative Lab System Monitor")
+        self.setWindowTitle("CL System Monitor")
+        self.setWindowIcon(QApplication.windowIcon())
+
         self.setMinimumSize(1000, 650)
         self._configure_initial_geometry()
         self._build_ui()
@@ -88,8 +92,10 @@ class MainWindow(QMainWindow):
 
         self.sidebar = self._build_sidebar()
         self.content_area = self._build_content_area()
+
         central_layout.addWidget(self.sidebar)
         central_layout.addWidget(self.content_area, 1)
+
         self.setCentralWidget(central_widget)
 
     def _build_sidebar(self):
@@ -109,12 +115,14 @@ class MainWindow(QMainWindow):
         subtitle = QLabel("CREATIVE LAB")
         subtitle.setObjectName("brand_subtitle")
         layout.addWidget(subtitle)
+
         layout.addSpacing(28)
 
         for page_name in PRIMARY_NAVIGATION:
             self._add_navigation_button(layout, page_name)
 
         layout.addStretch()
+
         separator = QFrame()
         separator.setObjectName("navigation_separator")
         separator.setFrameShape(QFrame.Shape.HLine)
@@ -127,6 +135,7 @@ class MainWindow(QMainWindow):
         version_label = QLabel("VERSION 0.1.0")
         version_label.setObjectName("version_label")
         layout.addWidget(version_label)
+
         return sidebar
 
     def _add_navigation_button(self, layout, page_name):
@@ -137,10 +146,14 @@ class MainWindow(QMainWindow):
         button.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         button.setCheckable(True)
         button.setAccessibleName(page_name)
-        button.setAccessibleDescription(f"Navigate to the {page_name} page")
+        button.setAccessibleDescription(
+            f"Navigate to the {page_name} page"
+        )
+
         button.clicked.connect(
             lambda checked=False, page=page_name: self._navigate_to(page)
         )
+
         self._navigation_buttons[page_name] = button
         layout.addWidget(button)
 
@@ -148,14 +161,17 @@ class MainWindow(QMainWindow):
         """Create the header and page content container."""
         container = QWidget()
         container.setObjectName("content_area")
+
         layout = QVBoxLayout(container)
         layout.setContentsMargins(24, 20, 24, 22)
         layout.setSpacing(18)
 
         header = QHBoxLayout()
+
         self.page_title = QLabel("Overview")
         self.page_title.setObjectName("page_title")
         self.page_title.setAccessibleName("Current page")
+
         header.addWidget(self.page_title)
         header.addStretch()
 
@@ -164,14 +180,20 @@ class MainWindow(QMainWindow):
         self.application_status.setAccessibleName(
             "Application status: initializing"
         )
+
         header.addWidget(self.application_status)
         layout.addLayout(header)
 
         self.pages = QStackedWidget()
         self.pages.setObjectName("page_stack")
+
         monitoring_pages = {}
+
         if self._controller is not None:
-            from system_monitor.presentation.pages import build_monitoring_pages
+            from system_monitor.presentation.pages import (
+                build_monitoring_pages,
+            )
+
             monitoring_pages = build_monitoring_pages(
                 self._controller,
                 self._diagnostic_aggregator,
@@ -180,31 +202,38 @@ class MainWindow(QMainWindow):
 
         for page_name in ALL_PAGES:
             page = monitoring_pages.get(page_name)
+
             if page is None:
                 page = self._build_placeholder_page(page_name)
+
             self.page_widgets[page_name] = page
             self._page_indices[page_name] = self.pages.addWidget(page)
 
         layout.addWidget(self.pages, 1)
+
         return container
 
     def _build_placeholder_page(self, page_name):
         """Create a temporary page for the navigation shell."""
         page = QWidget()
         page.setObjectName(f"{page_name.lower()}_page")
+
         page_layout = QVBoxLayout(page)
         page_layout.setContentsMargins(0, 0, 0, 0)
 
         heading = QLabel(page_name)
         heading.setObjectName("section_heading")
         page_layout.addWidget(heading)
+
         description = QLabel(
             f"The {page_name.lower()} workspace is being prepared."
         )
         description.setObjectName("placeholder_description")
         description.setWordWrap(True)
+
         page_layout.addWidget(description)
         page_layout.addStretch()
+
         return page
 
     def _navigate_to(self, page_name):
@@ -214,8 +243,10 @@ class MainWindow(QMainWindow):
 
         self.pages.setCurrentIndex(self._page_indices[page_name])
         self.page_title.setText(page_name)
+
         active_page = self.page_widgets[page_name]
         refresh = getattr(active_page, "refresh", None)
+
         if callable(refresh):
             refresh()
 

@@ -1,9 +1,12 @@
+
 """Application bootstrap and lifecycle management."""
 
 import logging
 import sys
+from pathlib import Path
 
 from PySide6.QtCore import QObject, QTimer
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
 
 from system_monitor.application.system_information_worker import (
@@ -11,6 +14,9 @@ from system_monitor.application.system_information_worker import (
 )
 from system_monitor.coordinator.monitoring_coordinator import (
     MonitoringCoordinator,
+)
+from system_monitor.presentation.diagnostics.diagnostic_aggregator import (
+    DiagnosticAggregator,
 )
 from system_monitor.presentation.main_window import MainWindow
 from system_monitor.presentation.monitoring_data_controller import (
@@ -31,12 +37,19 @@ from system_monitor.services.network_monitoring_service import (
 from system_monitor.services.process_monitoring_service import (
     ProcessMonitoringService,
 )
-from system_monitor.presentation.diagnostics.diagnostic_aggregator import (
-    DiagnosticAggregator,
-)
 
 
 logger = logging.getLogger(__name__)
+
+
+def _get_application_icon_path():
+    """Return the application icon path for development and packaged builds."""
+    if getattr(sys, "frozen", False):
+        base_path = Path(sys._MEIPASS)
+    else:
+        base_path = Path(__file__).resolve().parents[3]
+
+    return base_path / "assets" / "CL-SM.ico"
 
 
 class SystemMonitorApplication(QObject):
@@ -83,7 +96,6 @@ class SystemMonitorApplication(QObject):
         """Return a read-only copy of the monitoring services mapping."""
         return dict(self._services)
 
-
     def _create_dependencies(self):
         """Construct monitoring services and their coordinator."""
         self._services = {
@@ -102,13 +114,26 @@ class SystemMonitorApplication(QObject):
             process_service=self._services["process"],
         )
 
-
     def _initialize(self):
         """Initialize Qt, monitoring dependencies and the main window."""
         self._application = QApplication.instance()
 
         if self._application is None:
             self._application = QApplication(self._argv)
+
+        self._application.setApplicationName("CL System Monitor")
+        self._application.setOrganizationName("Creative Lab")
+
+        icon_path = _get_application_icon_path()
+        application_icon = QIcon(str(icon_path))
+
+        if application_icon.isNull():
+            logger.warning(
+                "Application icon could not be loaded: %s",
+                icon_path,
+            )
+        else:
+            self._application.setWindowIcon(application_icon)
 
         self._application.setQuitOnLastWindowClosed(False)
 
@@ -142,8 +167,6 @@ class SystemMonitorApplication(QObject):
             self._coordinator.get_status()
         )
 
-
-
     def _start_system_information_collection(self):
         """Collect the initial system profile outside the GUI thread."""
         self._system_information_worker = SystemInformationWorker()
@@ -173,8 +196,10 @@ class SystemMonitorApplication(QObject):
     def _handle_system_information_finished(self):
         """Release the completed system information worker safely."""
         worker = self._system_information_worker
+
         if worker is None:
             return
+
         worker.wait()
         worker.deleteLater()
         self._system_information_worker = None
@@ -183,6 +208,7 @@ class SystemMonitorApplication(QObject):
     def _handle_coordinator_status_changed(self, status):
         """Update the window status label from coordinator status."""
         status_value = getattr(status, "value", status)
+
         labels = {
             "STOPPED": "STOPPED",
             "STARTING": "INITIALIZING",
@@ -191,25 +217,28 @@ class SystemMonitorApplication(QObject):
             "STOPPING": "SHUTTING DOWN",
             "FAILED": "ERROR",
         }
+
         if self._main_window is not None:
             self._main_window.application_status.setText(
                 labels.get(status_value, status_value)
             )
 
     def _request_shutdown(self):
+        """Request coordinated shutdown of monitoring services."""
         if self._shutdown_requested:
             return
 
         self._shutdown_requested = True
         result = self._coordinator.stop()
+
         if not result.success and result.error:
             logger.warning(result.error)
 
         self._shutdown_timer.start()
         self._check_shutdown_completion()
 
-
     def _check_shutdown_completion(self):
+        """Wait until all workers and services have stopped safely."""
         if not self._shutdown_requested or self._shutdown_complete:
             return
 
@@ -219,13 +248,16 @@ class SystemMonitorApplication(QObject):
 
             if not service.is_cleanup_complete():
                 service.stop()
+
                 if not service.is_cleanup_complete():
                     return
 
         worker = self._system_information_worker
+
         if worker is not None:
             if worker.isRunning():
                 return
+
             worker.wait()
             worker.deleteLater()
             self._system_information_worker = None
@@ -241,12 +273,14 @@ class SystemMonitorApplication(QObject):
             self._application.quit()
 
     def run(self):
+        """Initialize, start monitoring and execute the Qt event loop."""
         self._initialize()
         self._main_window.show()
 
         self._start_system_information_collection()
 
         result = self._coordinator.start()
+
         if not result.accepted:
             logger.error(result.error)
 

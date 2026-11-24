@@ -1096,15 +1096,68 @@ class ProcessesPage(MonitoringPage):
 
         self.search_input = QLineEdit()
 
+        self.search_input.setStyleSheet("""
+            QLineEdit {
+                color: #F1F5F9;
+                background-color: #111B2B;
+                border: 1px solid #243247;
+                border-radius: 7px;
+                padding: 6px 10px;
+            }
+            QLineEdit:focus {
+                border: 1px solid #60A5FA;
+            }
+        """)
+
         self.search_input.setPlaceholderText("Search process name, PID or path...")
 
         self.search_input.setClearButtonEnabled(True)
 
         self.category_filter = QComboBox()
 
+        self.category_filter.setStyleSheet("""
+            QComboBox {
+                color: #F1F5F9;
+                background-color: #111B2B;
+                border: 1px solid #243247;
+                border-radius: 7px;
+                padding: 6px 10px;
+            }
+            QComboBox:focus {
+                border: 1px solid #60A5FA;
+            }
+            QComboBox QAbstractItemView {
+                color: #F1F5F9;
+                background-color: #111B2B;
+                border: 1px solid #243247;
+                selection-background-color: #1D4ED8;
+                selection-color: #FFFFFF;
+            }
+        """)
+
         self.category_filter.addItems(CATEGORY_FILTERS)
 
         self.sort_selector = QComboBox()
+
+        self.sort_selector.setStyleSheet("""
+            QComboBox {
+                color: #F1F5F9;
+                background-color: #111B2B;
+                border: 1px solid #243247;
+                border-radius: 7px;
+                padding: 6px 10px;
+            }
+            QComboBox:focus {
+                border: 1px solid #60A5FA;
+            }
+            QComboBox QAbstractItemView {
+                color: #F1F5F9;
+                background-color: #111B2B;
+                border: 1px solid #243247;
+                selection-background-color: #1D4ED8;
+                selection-color: #FFFFFF;
+            }
+        """)
 
         self.sort_selector.addItem("CPU", "cpu_percent")
 
@@ -1121,6 +1174,26 @@ class ProcessesPage(MonitoringPage):
         self.sort_selector.addItem("Executable Path", "executable_path")
 
         self.sort_direction = QComboBox()
+
+        self.sort_direction.setStyleSheet("""
+            QComboBox {
+                color: #F1F5F9;
+                background-color: #111B2B;
+                border: 1px solid #243247;
+                border-radius: 7px;
+                padding: 6px 10px;
+            }
+            QComboBox:focus {
+                border: 1px solid #60A5FA;
+            }
+            QComboBox QAbstractItemView {
+                color: #F1F5F9;
+                background-color: #111B2B;
+                border: 1px solid #243247;
+                selection-background-color: #1D4ED8;
+                selection-color: #FFFFFF;
+            }
+        """)
 
         self.sort_direction.addItem("Descending", True)
 

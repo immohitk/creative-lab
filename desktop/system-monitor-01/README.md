@@ -1,148 +1,275 @@
-﻿# Creative Lab System Monitor
+﻿# CL System Monitor
 
-A Windows desktop application for real-time system monitoring, performance history, and evidence-based diagnostics.
+**A local-first Windows desktop application for real-time system monitoring and application-health diagnostics.**
+
+CL System Monitor is a read-only Windows desktop application developed by Creative Lab. It provides visibility into CPU, memory, storage, network and running processes through a graphical dashboard, resource-history charts and monitoring-health diagnostics.
 
 ## Project Information
 
-| Field | Details |
-|---|---|
-| Project ID | D01 |
-| Project Name | Creative Lab System Monitor |
-| Category | Desktop Application |
-| Target Platform | Windows |
-| Primary Audience | Everyday Windows users, power users, and developers |
-| Development Status | Scope and research |
-| Version | V1 (Planned) |
+| Field              | Details                                              |
+| ------------------ | ---------------------------------------------------- |
+| Project ID         | D01                                                  |
+| Product Name       | CL System Monitor                                    |
+| Publisher          | Creative Lab                                         |
+| Category           | Windows Desktop Application                          |
+| Version            | 0.1.0                                                |
+| Target Platform    | Windows 10/11, x64                                   |
+| Python Requirement | Python 3.14+                                         |
+| Development Status | Topic 16 — Packaging, Documentation & Release Assets |
 
-## Product Vision
-
-Help users understand what their computer is doing, identify unusual resource usage, investigate performance problems, and generate useful diagnostic reports.
-
-The application will provide a simple experience by default while allowing users to access deeper technical information when needed.
-
-## Core Product Principles
-
-- **Clarity:** Present important information first and advanced details progressively.
-- **Evidence-based diagnostics:** Explain warnings using actual measurements, thresholds, and duration.
-- **Local-first privacy:** Keep monitoring data and history on the user's computer.
-- **Lightweight operation:** Minimize the application's CPU, memory, and storage overhead.
-- **Honest reporting:** Distinguish between zero, unavailable, unsupported, and access-denied readings.
-- **Read-only monitoring:** Observe and explain system activity without modifying processes or system configuration.
-
-## Planned V1 Features
+## Features
 
 ### 1. System Overview
-- Live CPU, memory, disk, and network summaries.
-- Recent resource usage trends.
-- Top resource-consuming processes.
-- Evidence-based system status indicators.
+
+- Live CPU utilization.
+- Physical memory utilization.
+- Combined disk-volume utilization.
+- Network download and upload throughput.
+- Monitoring-service status and data freshness.
 
 ### 2. CPU Monitoring
+
 - Overall CPU utilization.
+- Logical processor count.
 - Per-core utilization.
-- Frequency information where available.
-- Live and historical usage charts.
+- CPU utilization history chart.
 
 ### 3. Memory Monitoring
-- Total and used physical memory.
-- Available memory.
-- Swap/page-file information where supported.
-- Memory usage history.
+
+- Used, available and free physical memory.
+- Swap usage and utilization.
+- Memory utilization history chart.
 
 ### 4. Disk and Storage Monitoring
-- Mounted volumes and storage capacity.
-- Used and available space.
-- Read/write activity where supported.
-- Storage activity history.
+
+- Combined storage capacity, used space and free space.
+- Individual volume and partition information.
+- Device, mount point and filesystem details.
+- Per-volume capacity and utilization.
+- Combined storage-utilization history.
+
+**Current limitation:** Disk read/write throughput is not currently collected.
 
 ### 5. Network Monitoring
-- Network interface information.
-- Upload and download speeds.
-- Cumulative network traffic.
-- Interface-level traffic history.
+
+- Download and upload throughput.
+- Per-interface received and sent traffic counters.
+- Individual network-interface measurements.
+- Download and upload history charts.
+- Interface counter-reset and measurement-baseline handling.
 
 ### 6. Process Monitoring
-- Running process list.
-- CPU and memory usage.
-- Process search, filtering, and sorting.
-- Recent resource peaks where supported.
+
+- Running process inventory.
+- Process ID, name, CPU usage, memory usage and status.
+- Executable path when accessible.
+- Windows service associations when available.
+- Process classification:
+  - System
+  - Service
+  - Application
+  - Unclassified
+- Search by process name, PID or executable path.
+- Category filtering.
+- Sorting by name, PID, category, CPU, memory, status or executable path.
+- Top CPU-consuming and memory-consuming processes.
+
+Process classification includes confidence and explanatory reasons. The inventory is read-only and displays a maximum of 250 filtered processes.
 
 ### 7. Performance History
-- Configurable sampling interval.
-- Historical resource timelines.
-- Configurable data retention.
-- Local history storage.
 
-### 8. Performance Diagnostics
-- Rule-based performance warnings.
-- Warning severity and triggering evidence.
-- Duration of detected conditions.
-- Suggested investigation steps.
+- CPU, memory, disk and network metric histories.
+- Timestamped history samples.
+- Bounded in-memory history buffers.
+- Up to 120 samples per metric.
 
-### 9. Diagnostic Reports
-- Local HTML reports.
-- CSV data exports.
-- System summary and resource history.
-- Top processes and detected warnings.
+**Current limitation:** History is held in memory and is not persisted between application sessions. Configurable retention and historical exports are not implemented.
 
-### 10. Settings and User Experience
-- Refresh interval.
-- Diagnostic thresholds.
-- History retention.
-- Light and dark themes.
-- Application preferences.
+### 8. Monitoring Diagnostics
 
-## Proposed Technology Stack
+- Overall monitoring-health severity.
+- Coordinator status and error information.
+- Individual monitoring-service health.
+- Worker states and measurement availability.
+- Data freshness and last-update information.
+- Consecutive collection failures.
+- Sampling interval and service revision information.
 
-| Technology | Planned Purpose |
-|---|---|
-| Python | Application logic |
-| PySide6 | Desktop graphical interface |
-| psutil | Primary system information and monitoring library |
-| SQLite | Local performance history |
-| pytest | Automated testing |
-| Windows packaging tools | Application distribution |
+Diagnostics describe the health of the application's monitoring services. They are not malware scans, security assessments, hardware benchmarks or predictive failure analysis.
 
-Final dependency versions and architecture will be established during the architecture phase.
+### 9. System Information
 
-## Privacy and Safety
+The application collects a system profile covering:
 
-- No account requirement.
-- No automatic cloud uploads.
-- No automatic collection for external analytics.
-- No process termination or modification.
-- No system-setting modification.
-- Ordinary monitoring should not require administrator privileges.
-- Users control diagnostic report exports.
+- Operating system.
+- Machine information.
+- Processor.
+- Memory.
+- Storage.
+- Network interfaces.
+
+Collection takes place in a background thread, separately from continuous resource monitoring.
+
+## Technology Stack
+
+| Technology   | Purpose                          |
+| ------------ | -------------------------------- |
+| Python 3.14+ | Application logic                |
+| PySide6      | Desktop graphical interface      |
+| psutil       | System and process monitoring    |
+| pytest       | Automated testing                |
+| PyInstaller  | Standalone application packaging |
+| Inno Setup   | Windows installer generation     |
+
+## Installation
+
+### Windows Installer
+
+Download and run:
+
+`CL-System-Monitor-Setup-0.1.0.exe`
+
+The installer provides:
+
+- CL System Monitor application installation.
+- Start Menu shortcut.
+- Optional desktop shortcut.
+- Uninstaller registration.
+- Optional launch after installation.
+
+The installer is configured for 64-bit Windows.
+
+### Standalone Application
+
+The packaged application can also be launched directly:
+
+`CLSystemMonitor.exe`
+
+The standalone distribution includes the application runtime and required dependencies.
+
+## Development Setup
+
+### Requirements
+
+- Windows 10/11, 64-bit.
+- Python 3.14 or newer.
+- Git.
+
+### Setup
+
+Clone the repository and enter the project directory:
+
+```powershell
+git clone https://github.com/immohitk/creative-lab
+cd creative-lab/desktop/system-monitor-01
+```
+
+Create and activate a virtual environment:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+Install the project in editable mode:
+
+```powershell
+python -m pip install -e .
+```
+
+Install development dependencies:
+
+```powershell
+python -m pip install -e ".[dev]"
+```
+
+Launch the application:
+
+```powershell
+python -m system_monitor
+```
+
+Alternatively, use the installed command:
+
+```powershell
+system-monitor
+```
+
+### Run Tests
+
+```powershell
+pytest -q
+```
+
+Run tests with warnings treated as errors:
+
+```powershell
+pytest -q -W error
+```
+
+## Privacy and Operating Principles
+
+CL System Monitor follows a local-first, read-only monitoring approach.
+
+- Monitoring and system-information collection take place locally.
+- No account is required.
+- No application-level cloud upload or external analytics integration is implemented.
+- Process information is collected for observation, not process control.
+- The application does not terminate, suspend or modify processes.
+- The application does not intentionally modify Windows system configuration.
+- Monitoring results are presented with availability and error states rather than treating unavailable readings as zero.
+
+Some process and system information may be inaccessible because of Windows permissions or process protection. Such cases can result in partial or unavailable measurements.
+
+## Current Limitations
+
+The following capabilities are not implemented in version 0.1.0:
+
+- Persistent performance history or SQLite storage.
+- CSV, JSON or HTML report exports.
+- Configurable history retention.
+- User-facing sampling-interval settings.
+- User-configurable diagnostic thresholds.
+- Light/dark theme selection.
+- Disk read/write throughput monitoring.
+- Process termination or management controls.
+- Predictive diagnostics or security scanning.
 
 ## Development Roadmap
 
-Development follows the approved 17-topic D01 roadmap:
+Development follows the approved 17-topic D01 roadmap.
 
-1. Product Scope, Requirements & Research
-2. Technical Architecture & Repository Design
-3. Repository Foundation & Development Environment
-4. System Information & Hardware Identification
-5. CPU Monitoring Service
-6. Memory Monitoring Service
-7. Disk & Storage Monitoring Service
-8. Network Monitoring Service
-9. Process Monitoring Service
-10. Monitoring Coordinator, Background Workers & History Storage
-11. Main Window & Dashboard Foundation
-12. Monitoring Panels, Charts & Data Presentation
-13. Diagnostics, Settings & User Experience
-14. Diagnostic Reports, Reliability, Performance & Error Handling
-15. Automated Testing, Windows Compatibility & QA
-16. Packaging, Installer, Documentation & Release Assets
-17. Final Repository Audit, Release Commit & Push
+| Topic | Area                                                                                 | Status      |
+| ----- | ------------------------------------------------------------------------------------ | ----------- |
+| 01–14 | Product foundation, architecture, monitoring, interface, diagnostics and reliability | Complete    |
+| 15    | Automated Testing & Compatibility Verification                                       | Complete    |
+| 16    | Packaging, Installer, Documentation & Release Assets                                 | In Progress |
+| 17    | Final Repository Audit, Release Commit & Push                                        | Pending     |
 
-## Project Status
+## Project Structure
 
-**Current phase:** Topic 01 — Product Scope, Requirements & Research.
-
-This repository document describes the planned product. It does not indicate that the features have already been implemented or verified.
+```text
+system-monitor-01/
+├── assets/
+├── src/
+│   └── system_monitor/
+│       ├── application/
+│       ├── collectors/
+│       ├── coordinator/
+│       ├── models/
+│       ├── presentation/
+│       ├── services/
+│       └── workers/
+├── tests/
+├── installer.iss
+├── pyproject.toml
+└── README.md
+```
 
 ## License
 
-See the root Creative Lab repository license.
+CL System Monitor is licensed under the MIT License.
+
+Copyright (c) 2026 Mohit Kumar.
+
+See the root Creative Lab repository `LICENSE` file for the complete license terms.
