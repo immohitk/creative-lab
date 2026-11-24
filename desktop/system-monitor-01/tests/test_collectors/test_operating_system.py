@@ -97,3 +97,69 @@ def test_collect_returns_unsupported_when_winreg_is_unavailable(monkeypatch):
     assert result.status == Availability.UNSUPPORTED
     assert result.data is None
     assert result.error is not None
+
+
+def test_collect_handles_registry_value_query_failure(monkeypatch):
+    monkeypatch.setattr(platform, "system", lambda: "Windows")
+    monkeypatch.setattr(
+        platform,
+        "win32_ver",
+        lambda: ("10", "19045", "SP0", "Multiprocessor Free"),
+    )
+    monkeypatch.setattr(platform, "release", lambda: "10")
+
+    class FakeRegistryKey:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc_value, traceback):
+            return False
+
+    class FakeWinreg:
+        HKEY_LOCAL_MACHINE = object()
+
+        @staticmethod
+        def OpenKey(root, path):
+            return FakeRegistryKey()
+
+        @staticmethod
+        def QueryValueEx(key, name):
+            raise PermissionError("Registry value access denied")
+
+    monkeypatch.setattr(operating_system, "winreg", FakeWinreg)
+
+    result = operating_system.collect()
+
+    assert result.status == Availability.AVAILABLE
+    assert result.data["edition"] is None
+    assert result.data["build"] == "19045"
+    assert result.error is not None
+    assert "Registry value access denied" in result.error
+
+
+def test_collect_handles_missing_platform_version_information(monkeypatch):
+    monkeypatch.setattr(platform, "system", lambda: "Windows")
+    monkeypatch.setattr(
+        platform,
+        "win32_ver",
+        lambda: ("", "", "", ""),
+    )
+    monkeypatch.setattr(platform, "release", lambda: "")
+
+    class FakeWinreg:
+        HKEY_LOCAL_MACHINE = object()
+
+        @staticmethod
+        def OpenKey(root, path):
+            raise OSError("Registry unavailable")
+
+    monkeypatch.setattr(operating_system, "winreg", FakeWinreg)
+
+    result = operating_system.collect()
+
+    assert result.status == Availability.AVAILABLE
+    assert result.data["version"] is None
+    assert result.data["release"] is None
+    assert result.data["edition"] is None
+    assert result.data["build"] is None
+    assert result.error is not None
