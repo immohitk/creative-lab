@@ -274,7 +274,9 @@ def test_repeated_rapid_navigation_preserves_page_state(main_window, qapp):
     final_page = ALL_PAGES[-1]
 
     assert main_window.pages.count() == len(ALL_PAGES)
-    assert main_window.pages.currentIndex() == (\n        main_window._page_indices[final_page]\n    )
+    assert main_window.pages.currentIndex() == (
+        main_window._page_indices[final_page]
+    )
     assert main_window.page_title.text() == final_page
 
     selected_buttons = [
