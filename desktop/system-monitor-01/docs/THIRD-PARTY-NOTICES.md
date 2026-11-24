@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-**Product:** CL System Monitor
+**Product:** CL System Monitorq
 **Version:** 0.1.0
 **Publisher:** Creative Lab
 **Platform:** Windows x64
