@@ -16,17 +16,17 @@ Python is not required when installing through the packaged installer.
 
 **Compatibility note:** Windows 10 has been tested. Windows 11 compatibility has not yet been independently verified.
 
-## 2. Download
+## 2. Distribution Status
 
-Download the installer:
+The installer is not currently available for public download.
 
 `CL-System-Monitor-Setup-0.1.0.exe`
 
-The installer is distributed through the Creative Lab repository's release assets.
+The installer has been built and tested as part of development. Public binary distribution is currently on hold pending completion of the applicable licensing and redistribution reviews. The locally generated installer should not be treated as an approved public release asset.
 
 ## 3. Installation
 
-1. Locate and run `CL-System-Monitor-Setup-0.1.0.exe`.
+1. For local development and testing only, run `CL-System-Monitor-Setup-0.1.0.exe`.
 2. Approve the Windows User Account Control prompt.
 3. Follow the Inno Setup installation wizard.
 4. The application is installed in:
@@ -52,7 +52,7 @@ To uninstall CL System Monitor:
 
 1. Close the application.
 2. Open Windows Settings.
-3. Navigate to **Apps → Installed apps**.
+3. Navigate to **Settings > Apps > Installed apps**.
 4. Find **CL System Monitor**.
 5. Select Uninstall and follow the prompts.
 
@@ -74,7 +74,7 @@ Keep the complete `CLSystemMonitor` distribution directory together. Do not copy
 
 Windows may display a security or reputation warning when running an installer that is not signed with a trusted code-signing certificate.
 
-Only proceed when the installer was obtained from a trusted Creative Lab release source.
+Only use a locally generated installer from a trusted development build.
 
 ### The application does not start
 

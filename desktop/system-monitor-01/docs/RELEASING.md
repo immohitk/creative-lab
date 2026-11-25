@@ -6,6 +6,18 @@ This document defines the release procedure for CL System Monitor.
 
 The goal is to produce a tested Windows x64 application distribution and installer while keeping generated files, development artifacts and private project documents out of the Git repository.
 
+### Current Release Status
+
+CL System Monitor development is complete.
+
+However, development completion and public distribution approval are separate milestones.
+
+**Public binary distribution is currently on hold** pending review of applicable licensing and redistribution requirements.
+
+Building, testing or locally installing the application does not, by itself, authorize public distribution.
+
+
+
 ## 2. Release Identity
 
 Current release identity:
@@ -73,9 +85,11 @@ Verify the installer:
 - [ ] Launches the application when requested.
 - [ ] Uninstalls successfully.
 
+Successful local installation is a development verification result, not public release approval.
+
 ## 6. Release Asset Review
 
-Before publishing, verify:
+Before publication, verify:
 
 - [ ] Installer filename and version are correct.
 - [ ] Executable and installer are built from the same source revision.
@@ -83,28 +97,44 @@ Before publishing, verify:
 - [ ] No temporary or development files are included.
 - [ ] Release notes describe the actual changes.
 - [ ] Known limitations are documented.
+- [ ] Required licence and third-party notice materials are included.
+- [ ] Release candidate checksums are generated and recorded.
+- [ ] Applicable licensing and redistribution requirements have been reviewed and resolved.
 
 Keep the complete installer as the primary distribution asset.
 
+Do not publish release assets while any mandatory release or redistribution requirement remains unresolved.
+
 ## 7. Third-Party Licensing and Redistribution
 
-Before distributing the application or installer:
+Third-party licensing and redistribution review is a mandatory condition for public binary distribution.
 
-- [ ] Maintain an inventory of third-party components included in the final application payload.
-- [ ] Identify the applicable licence for each bundled component.
-- [ ] Include required licence texts, copyright notices, conditions and disclaimers.
+
+
+The review must cover:
+
+- [ ] Inventory every third-party component included in the final application payload.
+- [ ] Record component names, versions, origins and bundled locations.
+- [ ] Identify the applicable licence for each shipped component.
+- [ ] Obtain and include required licence texts, copyright notices, conditions and disclaimers.
 - [ ] Verify redistribution permissions for Qt, PySide6 and Shiboken6.
-- [ ] Verify applicable Qt LGPL requirements, including shared-library replacement or relinking obligations where applicable.
+- [ ] Review applicable Qt LGPL requirements, including shared-library replacement or relinking obligations where applicable.
+- [ ] Review source-code availability, replacement capability and relevant user restrictions where required.
+- [ ] Verify Microsoft runtime redistribution requirements for the exact bundled runtime files.
 - [ ] Verify the OpenSSL licence and required notices for the bundled version.
-- [ ] Review Python runtime and Microsoft runtime redistribution requirements.
-- [ ] Include the applicable psutil and PyInstaller notices.
-- [ ] Confirm that build-only and development dependencies have not been incorrectly represented as shipped components.
-- [ ] Review the final notices against the actual packaged distribution.
-- [ ] Obtain appropriate legal review before public distribution where licensing obligations remain uncertain.
+- [ ] Review Python runtime redistribution requirements.
+- [ ] Include applicable psutil and PyInstaller notices and exceptions.
+- [ ] Distinguish shipped runtime components from build-only and development dependencies.
+- [ ] Compare the final third-party notices against the actual packaged distribution and installer.
+- [ ] Record unresolved licensing questions and obtain appropriate legal review where necessary.
 
-Do not publish the installer while any required redistribution permission, licence notice or compliance obligation remains unresolved.
+The presence of `THIRD-PARTY-NOTICES.md` alone does not establish that all redistribution obligations have been satisfied.
 
-Record the component inventory, licence sources and review results as release audit evidence.
+Record the component inventory, licence evidence, review decisions and supporting materials as release audit evidence.
+
+**Release-blocking condition:** Do not publish the installer while any required redistribution permission, licence notice, source-code obligation or other applicable compliance requirement remains unresolved.
+
+
 
 ## 8. Git Repository Review
 
@@ -142,16 +172,27 @@ Do not amend previous topic commits or rewrite history without explicit approval
 
 ## 10. Publishing
 
-Publish the release assets only after the final repository audit and explicit release approval.
+Publishing is permitted only after:
+
+- All applicable release and redistribution requirements have been satisfied.
+- Licensing and redistribution obligations have been reviewed and resolved.
+- Required notices and supporting materials have been prepared.
+- Final release candidate verification has passed.
+- The final repository audit has been completed.
+- Explicit release approval has been obtained.
 
 The release should include:
 
 - Version number.
 - Release notes.
-- Windows x64 installer.
-- Any additional approved distribution assets.
+- Approved Windows x64 installer.
+- Required third-party licence and notice materials.
+- Source-code or other supporting materials where required.
+- SHA-256 checksums for published assets.
 
 The installer should be available from the project's official release location.
+
+Do not treat a locally generated installer as an approved public release asset.
 
 ## 11. Post-release Verification
 
@@ -160,7 +201,10 @@ After publishing:
 - [ ] Confirm the release page is accessible.
 - [ ] Confirm the installer asset is available.
 - [ ] Verify the published filename and version.
+- [ ] Verify published SHA-256 checksums against the approved release candidate.
 - [ ] Download and test the published installer.
 - [ ] Confirm the installed application launches correctly.
+- [ ] Confirm the published notices and supporting materials are accessible.
+- [ ] Record the final release commit and published asset details.
 
 Record any release issues for the next development cycle.

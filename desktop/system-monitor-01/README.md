@@ -1,4 +1,4 @@
-﻿# CL System Monitor
+# CL System Monitor
 
 **A local-first Windows desktop application for real-time system monitoring and application-health diagnostics.**
 
@@ -6,16 +6,16 @@ CL System Monitor is a read-only Windows desktop application developed by Creati
 
 ## Project Information
 
-| Field              | Details                                              |
-| ------------------ | ---------------------------------------------------- |
-| Project ID         | D01                                                  |
-| Product Name       | CL System Monitor                                    |
-| Publisher          | Creative Lab                                         |
-| Category           | Windows Desktop Application                          |
-| Version            | 0.1.0                                                |
-| Target Platform    | Windows 10/11, x64                                   |
-| Python Requirement | Python 3.14+                                         |
-| Development Status | Topic 16 — Packaging, Documentation & Release Assets |
+| Field              | Details                                                     |
+| ------------------ | ----------------------------------------------------------- |
+| Project ID         | D01                                                         |
+| Product Name       | CL System Monitor                                           |
+| Publisher          | Creative Lab                                                |
+| Category           | Windows Desktop Application                                 |
+| Version            | 0.1.0                                                       |
+| Target Platform    | Windows 10/11, x64                                          |
+| Python Requirement | Python 3.14+                                                |
+| Development Status | Development roadmap complete; release readiness in progress |
 
 ## Features
 
@@ -237,15 +237,22 @@ The following capabilities are not implemented in version 0.1.0:
 
 ## Development Roadmap
 
-Development follows the approved 17-topic D01 roadmap.
+The original 17-topic CL System Monitor development roadmap is formally complete.
 
-| Topic | Area                                                                                 | Status      |
-| ----- | ------------------------------------------------------------------------------------ | ----------- |
-| 01–14 | Product foundation, architecture, monitoring, interface, diagnostics and reliability | Complete    |
-| 15    | Automated Testing & Compatibility Verification                                       | Complete    |
-| 16    | Packaging, Installer, Documentation & Release Assets                                 | In Progress |
-| 17    | Final Repository Audit, Release Commit & Push                                        | Pending     |
+| Topics | Area                                                                                 | Status   |
+| ------ | ------------------------------------------------------------------------------------ | -------- |
+| 01–14  | Product foundation, architecture, monitoring, interface, diagnostics and reliability | Complete |
+| 15     | Automated Testing & Compatibility Verification                                       | Complete |
+| 16     | Packaging, Installer, Documentation & Release Assets                                 | Complete |
+| 17     | Final Repository Audit, Release Commit & Push                                        | Complete |
 
+All 17 development topics have been implemented, tested and closed.
+
+### Release Status
+
+The original 17-topic development roadmap is complete.
+
+Public binary distribution is currently on hold pending review of applicable third-party licensing and redistribution requirements.
 ## Project Structure
 
 ```text
