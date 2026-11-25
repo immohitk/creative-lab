@@ -120,6 +120,37 @@ A customizable floating Windows desktop clock with a transparent, frameless inte
 
 **Technology:** HTML, CSS, JavaScript, Node.js, Electron.
 
+### Desktop Applications
+
+#### D01 — CL System Monitor
+
+`desktop/system-monitor-01/`
+
+A Windows desktop system-monitoring application built with Python and PySide6. Designed to provide system-performance visibility, resource monitoring, and application-health diagnostics through a dedicated desktop interface.
+
+**Highlights**
+
+- CPU and processor monitoring.
+- Memory and RAM monitoring.
+- Storage and disk monitoring.
+- Network interface and activity monitoring.
+- Process inventory and monitoring.
+- Structured system information and availability reporting.
+- Performance visualization and monitoring dashboard.
+- Application-health diagnostics.
+- Local-first desktop application architecture.
+- Windows x64 application packaging and installer.
+
+**Technology:** Python, PySide6, psutil, pytest, PyInstaller, Inno Setup.
+
+**Development status:** Complete — all 17 development roadmap topics completed.
+
+**Quality verification:** 1,350 automated tests passed, including a separate run with warnings treated as errors.
+
+**Distribution status:** Public binary distribution pending third-party licensing and redistribution review. Local building, testing, and installation do not constitute public distribution approval.
+
+[View Project Documentation](desktop/system-monitor-01/README.md)
+
 ## Repository Structure
 
 ```text
@@ -135,6 +166,8 @@ creative-lab/
 │   └── floating-clock-03/
 │
 ├── desktop/
+│   └── system-monitor-01/
+│
 ├── design/
 ├── assets/
 ├── tests/
@@ -164,12 +197,15 @@ Technologies are selected according to individual project requirements.
 - Node.js
 - Electron
 - Electron Builder
+- PyInstaller
 
 **Design and Development Tools**
 
 - Figma
 - Git
 - GitHub
+- pytest
+- Inno Setup
 
 ## Project Documentation
 
@@ -205,6 +241,8 @@ The objective is to create useful, polished projects rather than unnecessary com
 Creative Lab is an actively maintained development portfolio. Existing projects are documented individually, and new projects are introduced progressively.
 
 Project completion and release status are determined by their actual implementation, testing, documentation, and release evidence.
+
+Development completion and public distribution approval are separate milestones. Projects requiring additional licensing, redistribution, or release verification must satisfy those requirements before public distribution.
 
 ## License
 
