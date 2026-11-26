@@ -1,0 +1,19 @@
+/* ========================================
+   NEXORA — GLOBAL STYLESHEET
+   Central CSS entry point
+======================================== */
+
+/* 1. Design tokens */
+@import './tokens.css';
+
+/* 2. Browser reset */
+@import './reset.css';
+
+/* 3. Global foundations */
+@import './global.css';
+
+/* 4. Typography system */
+@import './typography.css';
+
+/* 5. Reusable component styles */
+@import './components.css';
