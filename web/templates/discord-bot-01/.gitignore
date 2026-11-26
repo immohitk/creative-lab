@@ -1,0 +1,15 @@
+# Dependencies
+/node_modules/
+
+# Build output
+/dist/
+/.astro/
+
+# Environment files
+.env*
+!.env.example
+
+# Internal documentation - do not publish
+/docs/
+*.md
+!/README.md
