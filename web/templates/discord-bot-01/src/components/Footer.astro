@@ -1,3 +1,4 @@
+
 ---
 import Logo from './Logo.astro';
 
@@ -57,6 +58,11 @@ const footerGroups = [
       <p>
         © {new Date().getFullYear()} Nexora. Fictional product concept.
       </p>
+
+      <p class="footer-credit">
+        A Creative Lab project · Designed & developed by Mohit Kumar.
+      </p>
+
       <p class="footer-disclaimer">
         Nexora is an independent demonstration project and is not affiliated
         with or endorsed by Discord.
@@ -120,6 +126,10 @@ const footerGroups = [
   .footer-bottom p {
     font-size: var(--font-size-xs);
     color: var(--color-text-muted);
+  }
+
+  .footer-credit {
+    color: var(--color-text-secondary);
   }
 
   .footer-disclaimer {

@@ -1,11 +1,387 @@
 ﻿---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
 ---
 
-<BaseLayout>
-  <section class="container">
-    <h1>Nexora</h1>
-    <p>One bot. Complete community control.</p>
-    <p>A multipurpose Discord bot concept.</p>
+<BaseLayout
+  title="Nexora - One bot. Complete community control."
+  description="Discover Nexora, a multipurpose Discord bot concept for smarter moderation, community automation and engagement."
+>
+  <section class="hero-section">
+    <div class="container hero-container">
+      <div class="hero-content">
+        <span class="badge hero-badge">
+          Built for modern Discord communities
+        </span>
+
+        <h1 class="hero-title">
+          One bot.
+          <span class="text-gradient">Complete community control.</span>
+        </h1>
+
+        <p class="hero-description">
+          Smarter automation. Better moderation. Stronger communities.
+          Bring your community management tools together in one
+          powerful bot concept.
+        </p>
+
+        <div class="hero-actions">
+          <Button href="/features/" variant="primary">
+            Explore Features
+          </Button>
+
+          <Button href="/commands/" variant="secondary">
+            Explore Commands
+          </Button>
+        </div>
+
+        <p class="hero-note">
+          A conceptual multipurpose Discord bot experience.
+        </p>
+      </div>
+
+      <div class="hero-visual" aria-label="Illustrative Nexora server dashboard preview">
+        <div class="dashboard-preview">
+          <div class="dashboard-topbar">
+            <span class="dashboard-indicator"></span>
+            <span>NEXORA COMMUNITY</span>
+            <span class="dashboard-status">Concept preview</span>
+          </div>
+
+          <div class="dashboard-body">
+            <aside class="dashboard-sidebar">
+              <span class="sidebar-icon active">N</span>
+              <span class="sidebar-icon">M</span>
+              <span class="sidebar-icon">C</span>
+              <span class="sidebar-icon">S</span>
+            </aside>
+
+            <div class="dashboard-main">
+              <div class="dashboard-heading">
+                <div>
+                  <span class="dashboard-eyebrow">COMMUNITY OVERVIEW</span>
+                  <h2>Server Control</h2>
+                </div>
+                <span class="dashboard-avatar">N</span>
+              </div>
+
+              <div class="dashboard-stats">
+                <article class="dashboard-stat">
+                  <span>Members</span>
+                  <strong>2,480</strong>
+                  <small>Illustrative data</small>
+                </article>
+
+                <article class="dashboard-stat">
+                  <span>Moderation</span>
+                  <strong>Active</strong>
+                  <small>Concept status</small>
+                </article>
+              </div>
+
+              <div class="dashboard-panel">
+                <div class="panel-heading">
+                  <h3>Community tools</h3>
+                  <span>PREVIEW</span>
+                </div>
+
+                <div class="tool-row">
+                  <span class="tool-icon violet">M</span>
+                  <span>Moderation</span>
+                  <span class="tool-state">Concept</span>
+                </div>
+
+                <div class="tool-row">
+                  <span class="tool-icon blue">W</span>
+                  <span>Welcome system</span>
+                  <span class="tool-state">Concept</span>
+                </div>
+
+                <div class="tool-row">
+                  <span class="tool-icon green">E</span>
+                  <span>Engagement</span>
+                  <span class="tool-state">Concept</span>
+                </div>
+
+                <div class="tool-row">
+                  <span class="tool-icon orange">T</span>
+                  <span>Ticket system</span>
+                  <span class="tool-state">Concept</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-disclaimer">
+            Fictional interface · No live Discord connection
+          </div>
+        </div>
+
+        <div class="hero-glow" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Features -->
+  <section class="features-section" id="core-features" aria-labelledby="features-heading">
+    <div class="container">
+      <div class="features-intro">
+        <span class="badge">CORE CAPABILITIES</span>
+
+        <h2 id="features-heading">
+          Everything your community needs.
+          <span class="text-gradient">One unified concept.</span>
+        </h2>
+
+        <p>
+          Explore how Nexora brings essential community management
+          capabilities together in one streamlined experience.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <article class="card feature-card">
+          <div class="feature-icon feature-icon-violet" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <h3>Smart Moderation</h3>
+          <p>
+            Explore moderation and auto-moderation concepts designed
+            to help maintain safer, better-managed communities.
+          </p>
+          <a href="/features/">Explore moderation <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="card feature-card">
+          <div class="feature-icon feature-icon-blue" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="2"/>
+              <rect x="14" y="14" width="7" height="7" rx="2"/>
+              <path d="M17.5 3v4h-4M6.5 21v-4h4"/>
+              <path d="M14 7a7 7 0 0 0-8 7M10 17a7 7 0 0 0 8-7"/>
+            </svg>
+          </div>
+          <h3>Intelligent Automation</h3>
+          <p>
+            Discover welcome messages, automatic role assignment
+            and simplified community workflows.
+          </p>
+          <a href="/features/">Explore automation <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="card feature-card">
+          <div class="feature-icon feature-icon-violet" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="8" r="3"/>
+              <path d="M3 20v-2a6 6 0 0 1 12 0v2"/>
+              <path d="M17 5a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 5v1"/>
+            </svg>
+          </div>
+          <h3>Community Engagement</h3>
+          <p>
+            Imagine XP systems, leveling, leaderboards and
+            community activities that encourage participation.
+          </p>
+          <a href="/features/">Explore engagement <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="card feature-card">
+          <div class="feature-icon feature-icon-blue" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16v5a3 3 0 0 0 0 6v5H4v-5a3 3 0 0 0 0-6V4Z"/>
+              <path d="M12 4v16" stroke-dasharray="2 3"/>
+            </svg>
+          </div>
+          <h3>Support & Utilities</h3>
+          <p>
+            Explore ticket management, utility commands and
+            tools for organizing everyday server operations.
+          </p>
+          <a href="/features/">Explore utilities <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+
+      <p class="features-disclaimer">
+        Nexora is a fictional product concept. These capabilities are illustrative.
+      </p>
+    </div>
+  </section>
+
+  <!-- Why Nexora -->
+  <section class="benefits-section" aria-labelledby="benefits-heading">
+    <div class="container benefits-container">
+      <div class="benefits-content">
+        <span class="badge">WHY NEXORA</span>
+
+        <h2 id="benefits-heading">
+          More control.
+          <span class="text-gradient">Less complexity.</span>
+        </h2>
+
+        <p>
+          Managing a growing Discord community involves many moving
+          parts. Nexora brings those ideas together in one unified
+          community management experience.
+        </p>
+
+        <p>
+          From moderation to engagement, explore a concept designed
+          around clarity, organization and control.
+        </p>
+
+        <a class="benefits-link" href="/features/">
+          Discover all capabilities <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="benefits-list">
+        <article class="benefit-item">
+          <span class="benefit-number">01</span>
+          <div>
+            <h3>Unified Management</h3>
+            <p>Bring essential community management concepts together.</p>
+          </div>
+        </article>
+
+        <article class="benefit-item">
+          <span class="benefit-number">02</span>
+          <div>
+            <h3>Smarter Automation</h3>
+            <p>Explore ways to simplify repetitive community tasks.</p>
+          </div>
+        </article>
+
+        <article class="benefit-item">
+          <span class="benefit-number">03</span>
+          <div>
+            <h3>Organized Moderation</h3>
+            <p>Keep moderation workflows structured and easy to understand.</p>
+          </div>
+        </article>
+
+        <article class="benefit-item">
+          <span class="benefit-number">04</span>
+          <div>
+            <h3>Community Engagement</h3>
+            <p>Discover concepts that encourage participation and activity.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- How Nexora Works -->
+  <section class="workflow-section" aria-labelledby="workflow-heading">
+    <div class="container">
+      <div class="workflow-intro">
+        <span class="badge">THE EXPERIENCE</span>
+
+        <h2 id="workflow-heading">
+          Community management,
+          <span class="text-gradient">simplified.</span>
+        </h2>
+
+        <p>
+          Discover a conceptual approach to bringing your
+          community management tools together.
+        </p>
+      </div>
+
+      <div class="workflow-grid">
+        <article class="workflow-card">
+          <span class="workflow-number">01</span>
+          <div class="workflow-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 1.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5v.2h-2.6v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1-1.8-1.8.1-.1A1.7 1.7 0 0 0 8 15a1.7 1.7 0 0 0-1.5-1H6.3v-2.6h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1 1.8-1.8.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.5v-.2H15v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1 1.8 1.8-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.2V14h-.2a1.7 1.7 0 0 0-1.5 1Z"/>
+            </svg>
+          </div>
+          <h3>Configure Your Community</h3>
+          <p>
+            Explore how community settings and management
+            preferences could be organized.
+          </p>
+        </article>
+
+        <article class="workflow-card">
+          <span class="workflow-number">02</span>
+          <div class="workflow-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="8" height="7" rx="2"/>
+              <rect x="13" y="13" width="8" height="7" rx="2"/>
+              <path d="M7 11v3a2 2 0 0 0 2 2h4"/>
+              <path d="m16 9 2 2 3-3"/>
+            </svg>
+          </div>
+          <h3>Choose Your Tools</h3>
+          <p>
+            Discover moderation, automation, engagement
+            and utility capabilities in one place.
+          </p>
+        </article>
+
+        <article class="workflow-card">
+          <span class="workflow-number">03</span>
+          <div class="workflow-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12h4l3 8 4-16 3 8h4"/>
+            </svg>
+          </div>
+          <h3>Manage With Clarity</h3>
+          <p>
+            Explore how a unified community management
+            experience could bring everything together.
+          </p>
+        </article>
+      </div>
+
+      <p class="workflow-disclaimer">
+        Illustrative workflow only. Nexora has no live bot installation or server integration.
+      </p>
+    </div>
+  </section>
+
+  <!-- Final Call to Action -->
+  <section class="final-cta-section" aria-labelledby="final-cta-heading">
+    <div class="container">
+      <div class="final-cta-panel">
+        <span class="badge">THE NEXORA EXPERIENCE</span>
+
+        <h2 id="final-cta-heading">
+          Your community deserves
+          <span class="text-gradient">better tools.</span>
+        </h2>
+
+        <p>
+          Explore a smarter approach to moderation, automation
+          and community management. Discover what a unified
+          community experience could look like.
+        </p>
+
+        <div class="final-cta-actions">
+          <a class="button button-primary" href="/features/">
+            Explore Features
+          </a>
+
+          <a class="button button-secondary" href="/docs/">
+            Read Documentation
+          </a>
+        </div>
+
+        <p class="final-cta-disclaimer">
+          Nexora is a fictional product concept. No live bot installation or Discord integration is available.
+        </p>
+      </div>
+    </div>
   </section>
 </BaseLayout>
