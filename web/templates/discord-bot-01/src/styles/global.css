@@ -1,19 +1,90 @@
 /* ========================================
-   NEXORA — GLOBAL STYLESHEET
-   Central CSS entry point
+   NEXORA — GLOBAL FOUNDATIONS
 ======================================== */
 
-/* 1. Design tokens */
-@import './tokens.css';
+html {
+  min-width: 320px;
+  background-color: var(--color-midnight);
+  color-scheme: dark;
+}
 
-/* 2. Browser reset */
-@import './reset.css';
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--color-midnight);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-base);
+}
 
-/* 3. Global foundations */
-@import './global.css';
+/* Text selection */
+::selection {
+  background-color: var(--color-violet);
+  color: var(--color-text-inverse);
+}
 
-/* 4. Typography system */
-@import './typography.css';
+/* Keyboard accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-violet);
+  outline-offset: 3px;
+}
 
-/* 5. Reusable component styles */
-@import './components.css';
+/* Responsive content container */
+.container {
+  width: min(
+    calc(100% - (var(--container-padding-mobile) * 2)),
+    var(--container-max-width)
+  );
+  margin-inline: auto;
+}
+
+@media (min-width: 48rem) {
+  .container {
+    width: min(
+      calc(100% - (var(--container-padding-tablet) * 2)),
+      var(--container-max-width)
+    );
+  }
+}
+
+@media (min-width: 64rem) {
+  .container {
+    width: min(
+      calc(100% - (var(--container-padding-desktop) * 2)),
+      var(--container-max-width)
+    );
+  }
+}
+
+/* Keyboard-accessible skip link */
+.skip-link {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  z-index: var(--z-tooltip);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-violet);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+  transform: translateY(-200%);
+  transition: transform var(--duration-fast) var(--easing-standard);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

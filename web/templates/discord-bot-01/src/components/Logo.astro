@@ -1,0 +1,110 @@
+---
+interface Props {
+  size?: 'small' | 'medium' | 'large';
+  showTagline?: boolean;
+  href?: string;
+}
+
+const {
+  size = 'medium',
+  showTagline = false,
+  href = '/',
+} = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={['brand', `brand-${size}`]}
+  aria-label="Nexora home"
+>
+  <svg
+    class="brand-mark"
+    viewBox="0 0 40 40"
+    fill="none"
+    aria-hidden="true"
+  >
+    <defs>
+      <linearGradient id="nexora-gradient" x1="4" y1="4" x2="36" y2="36">
+        <stop offset="0%" stop-color="#8B5CF6" />
+        <stop offset="100%" stop-color="#3B82F6" />
+      </linearGradient>
+    </defs>
+
+    <rect
+      x="1"
+      y="1"
+      width="38"
+      height="38"
+      rx="10"
+      stroke="url(#nexora-gradient)"
+      stroke-width="2"
+    />
+
+    <path
+      d="M11 29V11L29 29V11"
+      stroke="url(#nexora-gradient)"
+      stroke-width="4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+
+  <span class="brand-copy">
+    <span class="brand-name">NEXORA</span>
+    {showTagline && (
+        <span class="brand-tagline">One bot. Complete community control.</span>
+    )}
+  </span>
+</a>
+
+<style>
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-text-primary);
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .brand-name {
+    font-size: 1.125rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+  }
+
+  .brand-tagline {
+    color: var(--color-text-muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.01em;
+  }
+
+  .brand-small .brand-mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-small .brand-name {
+    font-size: 0.9375rem;
+  }
+
+  .brand-large .brand-mark {
+    width: 48px;
+    height: 48px;
+  }
+
+  .brand-large .brand-name {
+    font-size: 1.375rem;
+  }
+</style>

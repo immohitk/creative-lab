@@ -1,0 +1,149 @@
+---
+import Logo from './Logo.astro';
+
+const footerGroups = [
+  {
+    title: 'Product',
+    links: [
+      { label: 'Features', href: '/features/' },
+      { label: 'Commands', href: '/commands/' },
+      { label: 'Changelog', href: '/changelog/' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Getting Started', href: '/getting-started/' },
+      { label: 'Documentation', href: '/docs/' },
+      { label: 'FAQ', href: '/faq/' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'Support', href: '/support/' },
+      { label: 'Privacy Policy', href: '/privacy/' },
+      { label: 'Terms of Service', href: '/terms/' },
+    ],
+  },
+];
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <Logo size="medium" />
+        <p>
+          Smarter automation. Better moderation. Stronger communities.
+        </p>
+      </div>
+
+      {footerGroups.map((group) => (
+        <nav class="footer-group" aria-label={`${group.title} links`}>
+          <h2>{group.title}</h2>
+          <ul>
+            {group.links.map((link) => (
+              <li>
+                <a href={link.href}>{link.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ))}
+    </div>
+
+    <div class="footer-bottom">
+      <p>
+        © {new Date().getFullYear()} Nexora. Fictional product concept.
+      </p>
+      <p class="footer-disclaimer">
+        Nexora is an independent demonstration project and is not affiliated
+        with or endorsed by Discord.
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding: var(--space-16) 0 var(--space-8);
+    border-top: 1px solid var(--color-border-subtle);
+    background: var(--color-deep-slate);
+  }
+
+  .footer-main {
+    display: grid;
+    grid-template-columns: 1.5fr repeat(3, 1fr);
+    gap: var(--space-8);
+    padding-bottom: var(--space-12);
+  }
+
+  .footer-brand {
+    max-width: 280px;
+  }
+
+  .footer-brand p {
+    margin-top: var(--space-4);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .footer-group h2 {
+    margin-bottom: var(--space-4);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .footer-group ul {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .footer-group a {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+  }
+
+  .footer-group a:hover {
+    color: var(--color-text-primary);
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .footer-bottom p {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+  }
+
+  .footer-disclaimer {
+    max-width: 700px;
+  }
+
+  @media (max-width: 48rem) {
+    .footer-main {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-8) var(--space-6);
+    }
+
+    .footer-brand {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 30rem) {
+    .footer-main {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-brand {
+      grid-column: auto;
+    }
+  }
+</style>
