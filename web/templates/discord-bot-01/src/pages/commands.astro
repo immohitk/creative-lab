@@ -1,0 +1,509 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/commands.css';
+
+const categories = [
+  'All Commands',
+  'Moderation',
+  'Auto Moderation',
+  'Server Management',
+  'Welcome & Roles',
+  'Engagement',
+  'Tickets & Support',
+  'Utility',
+];
+
+const commands = [
+  {
+    name: '/ban',
+    category: 'Moderation',
+    description: 'Ban a member from the server.',
+    usage: '/ban <user> [reason]',
+    example: '/ban @Alex Spamming',
+    permission: 'Ban Members',
+  },
+  {
+    name: '/kick',
+    category: 'Moderation',
+    description: 'Remove a member from the server.',
+    usage: '/kick <user> [reason]',
+    example: '/kick @Alex Rule violation',
+    permission: 'Kick Members',
+  },
+  {
+    name: '/warn',
+    category: 'Moderation',
+    description: 'Issue a warning to a member.',
+    usage: '/warn <user> <reason>',
+    example: '/warn @Alex Inappropriate language',
+    permission: 'Moderate Members',
+  },
+  {
+    name: '/timeout',
+    category: 'Moderation',
+    description: 'Temporarily restrict a member from interacting.',
+    usage: '/timeout <user> <duration> [reason]',
+    example: '/timeout @Alex 10m Spamming',
+    permission: 'Moderate Members',
+  },
+  {
+    name: '/clear',
+    category: 'Moderation',
+    description: 'Remove a specified number of recent messages.',
+    usage: '/clear <amount>',
+    example: '/clear 25',
+    permission: 'Manage Messages',
+  },
+  {
+    name: '/automod',
+    category: 'Auto Moderation',
+    description: 'View or configure automated moderation rules.',
+    usage: '/automod <action>',
+    example: '/automod status',
+    permission: 'Manage Server',
+  },
+  {
+    name: '/filter',
+    category: 'Auto Moderation',
+    description: 'Manage filtered words and phrases.',
+    usage: '/filter <action> <word>',
+    example: '/filter add example',
+    permission: 'Manage Server',
+  },
+  {
+    name: '/antispam',
+    category: 'Auto Moderation',
+    description: 'Configure automated spam protection.',
+    usage: '/antispam <action>',
+    example: '/antispam enable',
+    permission: 'Manage Server',
+  },
+  {
+    name: '/server-info',
+    category: 'Server Management',
+    description: 'View an overview of server information.',
+    usage: '/server-info',
+    example: '/server-info',
+    permission: 'Everyone',
+  },
+  {
+    name: '/role-info',
+    category: 'Server Management',
+    description: 'View details about a server role.',
+    usage: '/role-info <role>',
+    example: '/role-info @Moderator',
+    permission: 'Everyone',
+  },
+  {
+    name: '/channel-info',
+    category: 'Server Management',
+    description: 'View details about a server channel.',
+    usage: '/channel-info <channel>',
+    example: '/channel-info #general',
+    permission: 'Everyone',
+  },
+  {
+    name: '/welcome',
+    category: 'Welcome & Roles',
+    description: 'Configure the server welcome message.',
+    usage: '/welcome <action>',
+    example: '/welcome setup',
+    permission: 'Manage Server',
+  },
+  {
+    name: '/autorole',
+    category: 'Welcome & Roles',
+    description: 'Configure roles assigned to new members.',
+    usage: '/autorole <action> [role]',
+    example: '/autorole add @Member',
+    permission: 'Manage Roles',
+  },
+  {
+    name: '/role',
+    category: 'Welcome & Roles',
+    description: 'Manage or assign a member role.',
+    usage: '/role <action> <user> <role>',
+    example: '/role add @Alex @Member',
+    permission: 'Manage Roles',
+  },
+  {
+    name: '/rank',
+    category: 'Engagement',
+    description: 'View your community activity rank.',
+    usage: '/rank [user]',
+    example: '/rank @Alex',
+    permission: 'Everyone',
+  },
+  {
+    name: '/leaderboard',
+    category: 'Engagement',
+    description: 'View the community activity leaderboard.',
+    usage: '/leaderboard',
+    example: '/leaderboard',
+    permission: 'Everyone',
+  },
+  {
+    name: '/profile',
+    category: 'Engagement',
+    description: 'View a member engagement profile.',
+    usage: '/profile [user]',
+    example: '/profile @Alex',
+    permission: 'Everyone',
+  },
+  {
+    name: '/ticket',
+    category: 'Tickets & Support',
+    description: 'Create a support ticket.',
+    usage: '/ticket [topic]',
+    example: '/ticket Billing question',
+    permission: 'Everyone',
+  },
+  {
+    name: '/ticket-close',
+    category: 'Tickets & Support',
+    description: 'Close an existing support ticket.',
+    usage: '/ticket-close [reason]',
+    example: '/ticket-close Resolved',
+    permission: 'Ticket Staff',
+  },
+  {
+    name: '/ticket-setup',
+    category: 'Tickets & Support',
+    description: 'Configure the ticket system.',
+    usage: '/ticket-setup <action>',
+    example: '/ticket-setup create-panel',
+    permission: 'Manage Server',
+  },
+  {
+    name: '/help',
+    category: 'Utility',
+    description: 'Explore available command categories.',
+    usage: '/help [command]',
+    example: '/help moderation',
+    permission: 'Everyone',
+  },
+  {
+    name: '/ping',
+    category: 'Utility',
+    description: 'View a demonstration response-time reading.',
+    usage: '/ping',
+    example: '/ping',
+    permission: 'Everyone',
+  },
+  {
+    name: '/avatar',
+    category: 'Utility',
+    description: 'View a member avatar.',
+    usage: '/avatar [user]',
+    example: '/avatar @Alex',
+    permission: 'Everyone',
+  },
+  {
+    name: '/userinfo',
+    category: 'Utility',
+    description: 'View information about a server member.',
+    usage: '/userinfo [user]',
+    example: '/userinfo @Alex',
+    permission: 'Everyone',
+  },
+];
+---
+
+<BaseLayout
+  title="Commands | Nexora"
+  description="Explore the proposed Nexora command directory, including moderation, automation, server management, engagement and utility commands."
+>
+  <section class="commands-hero">
+    <div class="commands-container">
+      <span class="commands-eyebrow">COMMAND DIRECTORY</span>
+      <h1>Powerful tools.<br /><span>Simple commands.</span></h1>
+      <p>
+        Explore the proposed Nexora command collection.
+        Find the tools designed to help communities stay organized,
+        protected and connected.
+      </p>
+
+      <div class="commands-hero-meta">
+        <span>{commands.length} Proposed Commands</span>
+        <span>7 Categories</span>
+        <span>One unified experience</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="commands-directory" id="commands-directory">
+    <div class="commands-container">
+      <div class="commands-section-heading">
+        <div>
+          <span class="commands-eyebrow">EXPLORE NEXORA</span>
+          <h2>Command directory</h2>
+          <p>Browse the available command concepts by category.</p>
+        </div>
+      </div>
+
+      <div class="commands-toolbar">
+        <label class="commands-search">
+          <span class="sr-only">Search commands</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m16 16 4 4"></path>
+          </svg>
+          <input
+            type="search"
+            id="command-search"
+            placeholder="Search commands..."
+            autocomplete="off"
+          />
+        </label>
+
+        <span class="commands-count">
+          <strong>{commands.length}</strong> commands
+        </span>
+      </div>
+
+      <div class="commands-filters" aria-label="Filter commands by category">
+        {categories.map((category, index) => (
+          <button
+            type="button"
+            class:list={['command-filter', { 'is-active': index === 0 }]}
+            data-category={category}
+            aria-pressed={index === 0 ? 'true' : 'false'}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
+      <div class="commands-grid" id="commands-grid">
+        {commands.map((command) => (
+          <article
+            class="command-card"
+            data-command={command.name}
+            data-category={command.category}
+          >
+            
+        <div class="command-card-header">
+            <code class="command-name">{command.name}</code>
+            <div class="command-card-actions">
+                <span class="command-category">{command.category}</span>
+                <button
+                    type="button"
+                    class="command-copy"
+                    data-copy={command.usage}
+                    aria-label={`Copy ${command.name} usage syntax`}
+                   >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="8" y="8" width="12" height="12" rx="2"></rect>
+                        <path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"></path>
+                    </svg>
+                    <span>Copy</span>
+                </button>
+            </div>
+        </div>
+
+
+            <p class="command-description">{command.description}</p>
+
+            <div class="command-detail">
+              <span class="command-detail-label">USAGE</span>
+              <code>{command.usage}</code>
+            </div>
+
+            <div class="command-detail">
+              <span class="command-detail-label">EXAMPLE</span>
+              <code>{command.example}</code>
+            </div>
+
+            <div class="command-card-footer">
+              <span>Permission</span>
+              <strong>{command.permission}</strong>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <p class="commands-empty" id="commands-empty" hidden>
+        No commands found. Try another search or category.
+      </p>
+
+      <p class="commands-results" id="commands-results" aria-live="polite">
+        Showing {commands.length} proposed commands
+      </p>
+    </div>
+  </section>
+
+  <section class="commands-guide">
+    <div class="commands-container commands-guide-inner">
+      <div>
+        <span class="commands-eyebrow">COMMAND BASICS</span>
+        <h2>Understand the syntax</h2>
+        <p>
+          Each command includes a usage pattern, an example and
+          a permission requirement to explain its intended behavior.
+        </p>
+      </div>
+
+      <div class="commands-guide-panel">
+        <div>
+          <code class="guide-token">/command</code>
+          <span>Command name</span>
+        </div>
+        <div>
+          <code class="guide-token">&lt;required&gt;</code>
+          <span>Required argument</span>
+        </div>
+        <div>
+          <code class="guide-token">[optional]</code>
+          <span>Optional argument</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="commands-cta">
+    <div class="commands-container">
+      <span class="commands-eyebrow">DISCOVER MORE</span>
+      <h2>Explore what Nexora is designed to do.</h2>
+      <p>
+        Learn about the features and ideas behind the Nexora community
+        management concept.
+      </p>
+      <div class="commands-cta-actions">
+        <a class="button button-primary" href="/features/">
+          Explore Features
+        </a>
+        <a class="button button-secondary" href="/getting-started/">
+          Getting Started
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <p class="commands-disclaimer">
+    Nexora is a fictional product concept. These command specifications
+    are illustrative and are not executable Discord bot commands.
+  </p>
+</BaseLayout>
+
+<script>
+  const searchInput = document.querySelector<HTMLInputElement>(
+    '#command-search'
+  );
+
+  const filterButtons = document.querySelectorAll<HTMLButtonElement>(
+    '.command-filter'
+  );
+
+  const commandCards = document.querySelectorAll<HTMLElement>(
+    '.command-card'
+  );
+
+  const emptyMessage = document.querySelector<HTMLElement>(
+    '#commands-empty'
+  );
+
+  const resultsMessage = document.querySelector<HTMLElement>(
+    '#commands-results'
+  );
+
+  let activeCategory = 'All Commands';
+
+  function filterCommands() {
+    const searchTerm = searchInput?.value.trim().toLowerCase() ?? '';
+    let visibleCount = 0;
+
+    commandCards.forEach((card) => {
+      const category = card.dataset.category ?? '';
+      const searchableText = card.textContent?.toLowerCase() ?? '';
+
+      const matchesCategory =
+        activeCategory === 'All Commands' ||
+        category === activeCategory;
+
+      const matchesSearch = searchableText.includes(searchTerm);
+
+      const isVisible = matchesCategory && matchesSearch;
+
+      card.hidden = !isVisible;
+
+      if (isVisible) {
+        visibleCount++;
+      }
+    });
+
+    if (emptyMessage) {
+      emptyMessage.hidden = visibleCount !== 0;
+    }
+
+    if (resultsMessage) {
+      resultsMessage.textContent =
+        `Showing ${visibleCount} of ${commandCards.length} proposed commands`;
+    }
+  }
+
+  searchInput?.addEventListener('input', filterCommands);
+
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      activeCategory = button.dataset.category ?? 'All Commands';
+
+      filterButtons.forEach((filterButton) => {
+        const isActive = filterButton === button;
+
+        filterButton.classList.toggle('is-active', isActive);
+        filterButton.setAttribute('aria-pressed', String(isActive));
+      });
+
+      filterCommands();
+    });
+  });
+
+  const copyButtons = document.querySelectorAll<HTMLButtonElement>(
+    '.command-copy'
+  );
+
+  copyButtons.forEach((button) => {
+    button.addEventListener('click', async () => {
+      const textToCopy = button.dataset.copy;
+
+      if (!textToCopy) return;
+
+      const label = button.querySelector('span');
+
+      if (!label) return;
+
+      const originalLabel = 'Copy';
+
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+
+        label.textContent = 'Copied!';
+        button.classList.add('is-copied');
+        button.setAttribute('aria-label', 'Command syntax copied');
+
+        button.disabled = true;
+
+        window.setTimeout(() => {
+          label.textContent = originalLabel;
+          button.classList.remove('is-copied');
+          button.setAttribute(
+            'aria-label',
+            `Copy ${button.closest('.command-card')?.dataset.command} usage syntax`
+          );
+          button.disabled = false;
+        }, 1800);
+      } catch {
+        label.textContent = 'Failed';
+        button.setAttribute('aria-label', 'Unable to copy command syntax');
+
+        window.setTimeout(() => {
+          label.textContent = originalLabel;
+          button.setAttribute(
+            'aria-label',
+            `Copy ${button.closest('.command-card')?.dataset.command} usage syntax`
+          );
+        }, 1800);
+      }
+    });
+  });
+</script>

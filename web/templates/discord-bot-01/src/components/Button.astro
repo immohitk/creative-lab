@@ -20,10 +20,10 @@ const {
 
 {href ? (
   <a
-    href={href}
+    href={disabled ? undefined : href}
     class:list={['button', `button-${variant}`, className]}
-    target={target}
-    rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+    target={disabled ? undefined : target}
+    rel={!disabled && target === '_blank' ? 'noopener noreferrer' : undefined}
     aria-disabled={disabled ? 'true' : undefined}
     tabindex={disabled ? -1 : undefined}
   >
