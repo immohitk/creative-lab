@@ -1,0 +1,698 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import Button from '../components/Button.astro';
+
+import '../styles/features.css';
+---
+
+<BaseLayout
+  title="Features | Nexora — Complete Community Control"
+  description="Explore Nexora's proposed moderation, automation, engagement, server management and community support capabilities."
+>
+  <!-- FEATURES HERO -->
+  <section class="features-hero">
+    <Container class="features-hero-container">
+      <div class="features-hero-content">
+        <span class="section-eyebrow">THE NEXORA ECOSYSTEM</span>
+
+        <h1>
+          Everything your community needs.
+          <span>All in one place.</span>
+        </h1>
+
+        <p class="features-hero-description">
+          From smarter moderation to meaningful engagement, explore a unified
+          concept designed to make managing online communities simpler.
+        </p>
+
+        <div class="features-hero-actions">
+          <Button href="#feature-overview">
+            Explore features
+            <span aria-hidden="true">→</span>
+          </Button>
+
+          <Button href="/commands/" variant="secondary">
+            Explore commands
+          </Button>
+        </div>
+
+        <p class="features-hero-note">
+          A fictional Discord bot concept. All capabilities shown are illustrative.
+        </p>
+      </div>
+
+      <div class="features-hero-visual" aria-label="Illustrative Nexora feature dashboard">
+        <div class="features-visual-glow"></div>
+
+        <div class="features-preview">
+          <div class="features-preview-header">
+            <div>
+              <span class="preview-label">NEXORA OVERVIEW</span>
+              <h2>Community toolkit</h2>
+            </div>
+
+            <span class="preview-indicator">
+              Concept preview
+            </span>
+          </div>
+
+          <div class="preview-feature-list">
+            <div class="preview-feature-item">
+              <span class="preview-feature-icon preview-icon-violet">01</span>
+              <div>
+                <strong>Moderation</strong>
+                <span>Community safety tools</span>
+              </div>
+              <span class="preview-arrow">↗</span>
+            </div>
+
+            <div class="preview-feature-item">
+              <span class="preview-feature-icon preview-icon-blue">02</span>
+              <div>
+                <strong>Automation</strong>
+                <span>Reduce repetitive tasks</span>
+              </div>
+              <span class="preview-arrow">↗</span>
+            </div>
+
+            <div class="preview-feature-item">
+              <span class="preview-feature-icon preview-icon-purple">03</span>
+              <div>
+                <strong>Engagement</strong>
+                <span>Encourage participation</span>
+              </div>
+              <span class="preview-arrow">↗</span>
+            </div>
+
+            <div class="preview-feature-item">
+              <span class="preview-feature-icon preview-icon-cyan">04</span>
+              <div>
+                <strong>Community support</strong>
+                <span>Organized support workflows</span>
+              </div>
+              <span class="preview-arrow">↗</span>
+            </div>
+          </div>
+
+          <div class="preview-footer">
+            <span class="preview-footer-dot"></span>
+            Illustrative interface · Not connected to Discord
+          </div>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- FEATURE OVERVIEW -->
+  <section class="feature-overview section-padding" id="feature-overview">
+    <Container>
+      <div class="section-heading">
+        <span class="section-eyebrow">EXPLORE THE ECOSYSTEM</span>
+
+        <h2>
+          One platform.
+          <span>Nine powerful categories.</span>
+        </h2>
+
+        <p>
+          Discover the proposed tools that bring moderation, automation and
+          community management together.
+        </p>
+      </div>
+
+      <div class="feature-overview-grid">
+        <a class="feature-overview-card" href="#smart-moderation">
+          <span class="feature-card-number">01</span>
+          <span class="feature-card-icon">⌘</span>
+          <h3>Smart Moderation</h3>
+          <p>Organize moderation workflows and community safety tools.</p>
+          <span class="feature-card-link">Explore feature <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a class="feature-overview-card" href="#auto-moderation">
+          <span class="feature-card-number">02</span>
+          <span class="feature-card-icon">✳</span>
+          <h3>Auto Moderation</h3>
+          <p>Conceptual tools for handling spam, unwanted links and keywords.</p>
+          <span class="feature-card-link">Explore feature <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a class="feature-overview-card" href="#welcome-onboarding">
+          <span class="feature-card-number">03</span>
+          <span class="feature-card-icon">↗</span>
+          <h3>Welcome & Onboarding</h3>
+          <p>Create a more organized first experience for new members.</p>
+          <span class="feature-card-link">Explore feature <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a class="feature-overview-card" href="#auto-roles">
+          <span class="feature-card-number">04</span>
+          <span class="feature-card-icon">◎</span>
+          <h3>Auto Roles</h3>
+          <p>Explore role assignment and member organization concepts.</p>
+          <span class="feature-card-link">Explore feature <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a class="feature-overview-card" href="#server-management">
+          <span class="feature-card-number">05</span>
+          <span class="feature-card-icon">⚙</span>
+          <h3>Server Management</h3>
+          <p>Bring essential community management utilities together.</p>
+          <span class="feature-card-link">Explore feature <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a class="feature-overview-card" href="#community-engagement">
+          <span class="feature-card-number">06</span>
+          <span class="feature-card-icon">◇</span>
+          <h3>Community Engagement</h3>
+          <p>Encourage participation through community-focused tools.</p>
+          <span class="feature-card-link">Explore feature <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a class="feature-overview-card" href="#xp-leaderboards">
+          <span class="feature-card-number">07</span>
+          <span class="feature-card-icon">★</span>
+          <h3>XP & Leaderboards</h3>
+          <p>Explore activity-based progression and ranking concepts.</p>
+          <span class="feature-card-link">Explore feature <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a class="feature-overview-card" href="#tickets-support">
+          <span class="feature-card-number">08</span>
+          <span class="feature-card-icon">▤</span>
+          <h3>Tickets & Support</h3>
+          <p>Organize member questions and structured support workflows.</p>
+          <span class="feature-card-link">Explore feature <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a class="feature-overview-card" href="#utility-commands">
+          <span class="feature-card-number">09</span>
+          <span class="feature-card-icon">⌘</span>
+          <h3>Utility Commands</h3>
+          <p>Explore practical information and server utility tools.</p>
+          <span class="feature-card-link">Explore feature <span aria-hidden="true">→</span></span>
+        </a>
+      </div>
+    </Container>
+  </section>
+
+  <!-- DETAILED FEATURES -->
+  <section class="feature-details section-padding">
+    <Container>
+      <div class="section-heading">
+        <span class="section-eyebrow">BUILT AROUND YOUR COMMUNITY</span>
+
+        <h2>
+          More than individual tools.
+          <span>A connected ecosystem.</span>
+        </h2>
+
+        <p>
+          Explore how each proposed capability could contribute to a more
+          organized and engaging community.
+        </p>
+      </div>
+
+      <!-- MODERATION -->
+      <article class="feature-detail-panel" id="smart-moderation">
+        <div class="feature-detail-content">
+          <span class="feature-detail-label">01 / COMMUNITY SAFETY</span>
+          <h3>Smart Moderation</h3>
+          <p>
+            A conceptual moderation toolkit designed to help community teams
+            organize their moderation activities and maintain clear records.
+          </p>
+
+          <ul class="feature-capability-list">
+            <li>Warning management concepts</li>
+            <li>Member moderation actions</li>
+            <li>Moderation history and logs</li>
+            <li>Organized staff workflows</li>
+          </ul>
+        </div>
+
+        <div class="feature-detail-visual moderation-visual">
+          <div class="mock-panel">
+            <div class="mock-panel-heading">
+              <span>MODERATION OVERVIEW</span>
+              <span class="mock-tag">Illustrative</span>
+            </div>
+
+            <div class="mock-moderation-item">
+              <span class="mock-status-dot status-warning"></span>
+              <div>
+                <strong>Warning workflow</strong>
+                <span>Conceptual member warning</span>
+              </div>
+            </div>
+
+            <div class="mock-moderation-item">
+              <span class="mock-status-dot status-success"></span>
+              <div>
+                <strong>Moderation records</strong>
+                <span>Organized activity history</span>
+              </div>
+            </div>
+
+            <div class="mock-moderation-item">
+              <span class="mock-status-dot status-info"></span>
+              <div>
+                <strong>Staff tools</strong>
+                <span>Illustrative moderation controls</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="feature-detail-panel feature-detail-reverse" id="auto-moderation">
+        <div class="feature-detail-content">
+          <span class="feature-detail-label">02 / AUTOMATED PROTECTION</span>
+          <h3>Auto Moderation</h3>
+          <p>
+            A proposed set of automated safeguards to help communities define
+            rules for unwanted messages and disruptive behavior.
+          </p>
+
+          <ul class="feature-capability-list">
+            <li>Spam detection concepts</li>
+            <li>Keyword filtering rules</li>
+            <li>Unwanted link restrictions</li>
+            <li>Configurable moderation policies</li>
+          </ul>
+        </div>
+
+        <div class="feature-detail-visual automation-visual">
+          <div class="mock-panel">
+            <div class="mock-panel-heading">
+              <span>AUTOMATION RULES</span>
+              <span class="mock-tag">Concept preview</span>
+            </div>
+
+            <div class="mock-rule">
+              <div>
+                <strong>Spam protection</strong>
+                <span>Illustrative rule</span>
+              </div>
+              <span class="mock-rule-state">Proposed</span>
+            </div>
+
+            <div class="mock-rule">
+              <div>
+                <strong>Keyword filtering</strong>
+                <span>Illustrative rule</span>
+              </div>
+              <span class="mock-rule-state">Proposed</span>
+            </div>
+
+            <div class="mock-rule">
+              <div>
+                <strong>Link restrictions</strong>
+                <span>Illustrative rule</span>
+              </div>
+              <span class="mock-rule-state">Proposed</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ONBOARDING -->
+      <article class="feature-detail-panel" id="welcome-onboarding">
+        <div class="feature-detail-content">
+          <span class="feature-detail-label">03 / FIRST IMPRESSIONS</span>
+          <h3>Welcome & Onboarding</h3>
+          <p>
+            A welcoming experience concept that helps communities introduce
+            their spaces, guidelines and important information to new members.
+          </p>
+
+          <ul class="feature-capability-list">
+            <li>Custom welcome message concepts</li>
+            <li>New member introductions</li>
+            <li>Guideline and resource presentation</li>
+            <li>Structured onboarding flows</li>
+          </ul>
+        </div>
+
+        <div class="feature-detail-visual onboarding-visual">
+          <div class="mock-panel welcome-card">
+            <span class="welcome-icon">✦</span>
+            <span class="preview-label">WELCOME EXPERIENCE</span>
+            <h4>Welcome to the community!</h4>
+            <p>
+              A place to connect, share ideas and grow together.
+            </p>
+            <div class="welcome-resource">
+              <span>01</span>
+              Read the community guidelines
+            </div>
+            <div class="welcome-resource">
+              <span>02</span>
+              Explore community channels
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- AUTO ROLES -->
+      <article class="feature-detail-panel feature-detail-reverse" id="auto-roles">
+        <div class="feature-detail-content">
+          <span class="feature-detail-label">04 / MEMBER ORGANIZATION</span>
+          <h3>Auto Roles</h3>
+          <p>
+            A proposed role-management experience focused on organizing
+            members through structured role assignment concepts.
+          </p>
+
+          <ul class="feature-capability-list">
+            <li>Automatic role assignment concepts</li>
+            <li>Default member role workflows</li>
+            <li>Role organization ideas</li>
+            <li>Community access organization</li>
+          </ul>
+        </div>
+
+        <div class="feature-detail-visual roles-visual">
+          <div class="mock-panel">
+            <div class="mock-panel-heading">
+              <span>ROLE ORGANIZATION</span>
+              <span class="mock-tag">Illustrative</span>
+            </div>
+
+            <div class="mock-role-item">
+              <span class="mock-role-dot role-violet"></span>
+              <strong>Community Member</strong>
+              <span>Default</span>
+            </div>
+
+            <div class="mock-role-item">
+              <span class="mock-role-dot role-blue"></span>
+              <strong>Contributor</strong>
+              <span>Example</span>
+            </div>
+
+            <div class="mock-role-item">
+              <span class="mock-role-dot role-cyan"></span>
+              <strong>Community Team</strong>
+              <span>Example</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- SERVER MANAGEMENT -->
+      <article class="feature-detail-panel" id="server-management">
+        <div class="feature-detail-content">
+          <span class="feature-detail-label">05 / COMMUNITY CONTROL</span>
+          <h3>Server Management</h3>
+          <p>
+            A collection of proposed management utilities intended to make
+            common community administration tasks easier to organize.
+          </p>
+
+          <ul class="feature-capability-list">
+            <li>Server information utilities</li>
+            <li>Configuration concepts</li>
+            <li>Channel and role organization</li>
+            <li>Administrative utility workflows</li>
+          </ul>
+        </div>
+
+        <div class="feature-detail-visual management-visual">
+          <div class="mock-panel">
+            <div class="mock-panel-heading">
+              <span>SERVER TOOLKIT</span>
+              <span class="mock-tag">Concept preview</span>
+            </div>
+
+            <div class="management-grid">
+              <div>
+                <span>⌘</span>
+                <strong>Channels</strong>
+              </div>
+              <div>
+                <span>◎</span>
+                <strong>Roles</strong>
+              </div>
+              <div>
+                <span>⚙</span>
+                <strong>Settings</strong>
+              </div>
+              <div>
+                <span>◇</span>
+                <strong>Information</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ENGAGEMENT -->
+      <article class="feature-detail-panel feature-detail-reverse" id="community-engagement">
+        <div class="feature-detail-content">
+          <span class="feature-detail-label">06 / COMMUNITY PARTICIPATION</span>
+          <h3>Community Engagement</h3>
+          <p>
+            Engagement-focused concepts designed to encourage participation
+            and make community interactions more meaningful.
+          </p>
+
+          <ul class="feature-capability-list">
+            <li>Community activity concepts</li>
+            <li>Interactive participation ideas</li>
+            <li>Community event utilities</li>
+            <li>Engagement-focused tools</li>
+          </ul>
+        </div>
+
+        <div class="feature-detail-visual engagement-visual">
+          <div class="mock-panel">
+            <div class="mock-panel-heading">
+              <span>COMMUNITY ACTIVITY</span>
+              <span class="mock-tag">Illustrative</span>
+            </div>
+
+            <div class="engagement-highlight">
+              <span>✦</span>
+              <div>
+                <strong>Community participation</strong>
+                <p>Tools designed around interaction.</p>
+              </div>
+            </div>
+
+            <div class="engagement-bars">
+              <span style="--bar-height: 35%"></span>
+              <span style="--bar-height: 65%"></span>
+              <span style="--bar-height: 48%"></span>
+              <span style="--bar-height: 85%"></span>
+              <span style="--bar-height: 58%"></span>
+              <span style="--bar-height: 100%"></span>
+              <span style="--bar-height: 72%"></span>
+            </div>
+
+            <p class="mock-disclaimer">Decorative illustration · Not live analytics</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- XP -->
+      <article class="feature-detail-panel" id="xp-leaderboards">
+        <div class="feature-detail-content">
+          <span class="feature-detail-label">07 / RECOGNITION & PROGRESSION</span>
+          <h3>XP & Leaderboards</h3>
+          <p>
+            A proposed activity-based progression system that could recognize
+            participation and celebrate community contributions.
+          </p>
+
+          <ul class="feature-capability-list">
+            <li>Experience point concepts</li>
+            <li>Activity-based levels</li>
+            <li>Community leaderboards</li>
+            <li>Member progression recognition</li>
+          </ul>
+        </div>
+
+        <div class="feature-detail-visual leaderboard-visual">
+          <div class="mock-panel">
+            <div class="mock-panel-heading">
+              <span>COMMUNITY LEADERBOARD</span>
+              <span class="mock-tag">Example data</span>
+            </div>
+
+            <div class="leaderboard-item">
+              <span class="leaderboard-rank">01</span>
+              <strong>Member One</strong>
+              <span>Level 24</span>
+            </div>
+
+            <div class="leaderboard-item">
+              <span class="leaderboard-rank">02</span>
+              <strong>Member Two</strong>
+              <span>Level 19</span>
+            </div>
+
+            <div class="leaderboard-item">
+              <span class="leaderboard-rank">03</span>
+              <strong>Member Three</strong>
+              <span>Level 15</span>
+            </div>
+
+            <p class="mock-disclaimer">Fictional member names and example levels</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- TICKETS -->
+      <article class="feature-detail-panel feature-detail-reverse" id="tickets-support">
+        <div class="feature-detail-content">
+          <span class="feature-detail-label">08 / MEMBER ASSISTANCE</span>
+          <h3>Tickets & Support</h3>
+          <p>
+            A structured support workflow concept to help communities
+            organize member requests and support conversations.
+          </p>
+
+          <ul class="feature-capability-list">
+            <li>Ticket creation concepts</li>
+            <li>Organized support requests</li>
+            <li>Staff assistance workflows</li>
+            <li>Structured request handling</li>
+          </ul>
+        </div>
+
+        <div class="feature-detail-visual tickets-visual">
+          <div class="mock-panel">
+            <div class="mock-panel-heading">
+              <span>SUPPORT WORKFLOW</span>
+              <span class="mock-tag">Illustrative</span>
+            </div>
+
+            <div class="mock-ticket">
+              <span class="ticket-icon">▤</span>
+              <div>
+                <strong>General assistance</strong>
+                <span>Example support request</span>
+              </div>
+              <span class="ticket-status">Example</span>
+            </div>
+
+            <div class="mock-ticket">
+              <span class="ticket-icon">◇</span>
+              <div>
+                <strong>Member question</strong>
+                <span>Example support request</span>
+              </div>
+              <span class="ticket-status">Example</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- UTILITIES -->
+      <article class="feature-detail-panel" id="utility-commands">
+        <div class="feature-detail-content">
+          <span class="feature-detail-label">09 / EVERYDAY TOOLS</span>
+          <h3>Utility Commands</h3>
+          <p>
+            Practical utility concepts that bring useful community information
+            and everyday tools into one organized experience.
+          </p>
+
+          <ul class="feature-capability-list">
+            <li>General information commands</li>
+            <li>Server utility tools</li>
+            <li>Member information concepts</li>
+            <li>Everyday community shortcuts</li>
+          </ul>
+        </div>
+
+        <div class="feature-detail-visual utility-visual">
+          <div class="mock-panel">
+            <div class="mock-panel-heading">
+              <span>UTILITY TOOLKIT</span>
+              <span class="mock-tag">Concept preview</span>
+            </div>
+
+            <div class="utility-command">
+              <code>/help</code>
+              <span>Explore available commands</span>
+            </div>
+
+            <div class="utility-command">
+              <code>/server-info</code>
+              <span>View server information</span>
+            </div>
+
+            <div class="utility-command">
+              <code>/user-info</code>
+              <span>View member information</span>
+            </div>
+          </div>
+        </div>
+      </article>
+    </Container>
+  </section>
+
+  <!-- UNIFIED ECOSYSTEM -->
+  <section class="unified-ecosystem section-padding">
+    <Container>
+      <div class="unified-ecosystem-content">
+        <span class="section-eyebrow">ONE CONNECTED ECOSYSTEM</span>
+
+        <h2>
+          Different capabilities.
+          <span>One community vision.</span>
+        </h2>
+
+        <p>
+          Nexora brings moderation, automation, organization and engagement
+          into one proposed ecosystem, with a consistent experience across
+          every capability.
+        </p>
+
+        <div class="ecosystem-points">
+          <span>Community safety</span>
+          <span>Smarter workflows</span>
+          <span>Organized management</span>
+          <span>Meaningful engagement</span>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="features-final-cta">
+    <Container>
+      <div class="features-cta-panel">
+        <span class="section-eyebrow">EXPLORE NEXORA</span>
+
+        <h2>
+          Your community deserves
+          <span>better tools.</span>
+        </h2>
+
+        <p>
+          Explore the proposed Nexora command directory and documentation
+          concept to discover the wider ecosystem.
+        </p>
+
+        <div class="features-hero-actions">
+          <Button href="/commands/">
+            Explore commands
+            <span aria-hidden="true">→</span>
+          </Button>
+
+          <Button href="/docs/" variant="secondary">
+            Read documentation
+          </Button>
+        </div>
+
+        <p class="features-hero-note">
+          Fictional product concept. No live bot installation or Discord integration is available.
+        </p>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>
