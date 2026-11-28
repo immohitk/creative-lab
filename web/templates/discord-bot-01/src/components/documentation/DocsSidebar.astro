@@ -1,0 +1,169 @@
+
+---
+interface Props {
+  section: 'getting-started' | 'documentation';
+}
+
+const { section } = Astro.props;
+
+const navigation = [
+  {
+    title: 'Getting Started',
+    links: [
+      { label: 'Overview', href: '/getting-started/' },
+    ],
+  },
+  {
+    title: 'Documentation',
+    links: [
+      { label: 'Documentation Home', href: '/docs/' },
+      { label: 'Moderation', href: '/docs/#moderation' },
+      { label: 'Welcome & Roles', href: '/docs/#welcome-roles' },
+      { label: 'Engagement', href: '/docs/#engagement' },
+      { label: 'Tickets & Support', href: '/docs/#tickets' },
+      { label: 'Utility', href: '/docs/#utility' },
+      { label: 'Commands Reference', href: '/commands/' },
+    ],
+  },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<aside class="docs-sidebar" aria-label="Documentation navigation">
+  <div class="docs-sidebar-inner">
+    <p class="docs-sidebar-label">NEXORA RESOURCES</p>
+
+    {navigation.map((group) => (
+      <div class="docs-nav-group">
+        <h2>{group.title}</h2>
+
+        <nav aria-label={group.title}>
+          <ul>
+            {group.links.map((link) => {
+              const isActive =
+                link.href === currentPath ||
+                (link.href === '/docs/' && currentPath === '/docs/');
+
+              return (
+                <li>
+                  <a
+                    href={link.href}
+                    class:list={{ 'is-active': isActive }}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </div>
+    ))}
+
+    <div class="docs-sidebar-note">
+      <span>Concept documentation</span>
+      <p>
+        Nexora is a fictional product demonstration. Features and setup
+        workflows are illustrative.
+      </p>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .docs-sidebar {
+    position: sticky;
+    top: 100px;
+  }
+
+  .docs-sidebar-inner {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  .docs-sidebar-label {
+    color: var(--color-violet);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.12em;
+  }
+
+  .docs-nav-group h2 {
+    margin-bottom: var(--space-3);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .docs-nav-group ul {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .docs-nav-group a {
+    display: block;
+    padding: 10px 12px;
+    border-left: 2px solid transparent;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    transition: var(--transition-standard);
+  }
+
+  .docs-nav-group a:hover,
+  .docs-nav-group a.is-active {
+    border-left-color: var(--color-violet);
+    background: rgb(139 92 246 / 10%);
+    color: var(--color-text-primary);
+  }
+
+  .docs-sidebar-note {
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--color-deep-slate);
+  }
+
+  .docs-sidebar-note span {
+    color: var(--color-violet);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .docs-sidebar-note p {
+    margin-top: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-relaxed);
+  }
+
+  @media (max-width: 700px) {
+    .docs-sidebar {
+      position: static;
+      max-height: none;
+      overflow: visible;
+    }
+
+    .docs-sidebar-inner {
+      gap: var(--space-4);
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+
+    .docs-sidebar-note {
+      display: none;
+    }
+
+    .docs-nav-group ul {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .docs-nav-group a {
+      border-left: 0;
+      border-radius: var(--radius-sm);
+    }
+  }
+</style>

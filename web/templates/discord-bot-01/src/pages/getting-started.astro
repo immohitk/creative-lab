@@ -1,0 +1,322 @@
+
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import DocsCallout from '../components/documentation/DocsCallout.astro';
+
+const steps = [
+  {
+    number: '01',
+    title: 'Choose your community goals',
+    description:
+      'Identify what your community needs: moderation, member onboarding, engagement, support, or everyday server utilities.',
+  },
+  {
+    number: '02',
+    title: 'Plan your server structure',
+    description:
+      'Organize channels, roles, permissions, and moderation guidelines before introducing automation.',
+  },
+  {
+    number: '03',
+    title: 'Review the Nexora features',
+    description:
+      'Explore the feature categories to understand how the proposed moderation, welcome, engagement, and utility workflows fit together.',
+  },
+  {
+    number: '04',
+    title: 'Configure your preferences',
+    description:
+      'Define the rules and settings your community would use, such as moderation thresholds, welcome messages, and role assignment policies.',
+  },
+  {
+    number: '05',
+    title: 'Review and maintain',
+    description:
+      'Regularly review your community guidelines, permissions, moderation approach, and engagement settings.',
+  },
+];
+
+const prerequisites = [
+  'A Discord account',
+  'A Discord server where you have appropriate administrative permissions',
+  'A clear idea of your community structure and requirements',
+  'Basic familiarity with Discord channels, roles, and permissions',
+];
+---
+
+<DocsLayout
+  title="Getting Started with Nexora"
+  description="Explore the proposed setup process and learn how Nexora is designed to support better-managed Discord communities."
+  section="getting-started"
+>
+  <div class="getting-started-page">
+    <section class="getting-started-intro">
+      <p>
+        Welcome to Nexora. This guide introduces the concepts, planning
+        considerations, and workflows behind our multipurpose Discord bot
+        demonstration.
+      </p>
+
+      <DocsCallout type="concept">
+        Nexora is a fictional product concept and website demonstration.
+        It does not currently provide a working bot, Discord integration,
+        installation, or server-management functionality. The steps below
+        describe an illustrative workflow rather than an operational setup.
+      </DocsCallout>
+    </section>
+
+    <section class="getting-started-section" aria-labelledby="before-starting">
+      <h2 id="before-starting">Before you start</h2>
+
+      <p>
+        A well-organized Discord server makes community management easier.
+        Before exploring the proposed Nexora workflows, consider preparing
+        the following:
+      </p>
+
+      <ul class="prerequisites-list">
+        {prerequisites.map((item) => (
+          <li>
+            <span class="list-check" aria-hidden="true">✓</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="getting-started-section" aria-labelledby="setup-overview">
+      <h2 id="setup-overview">The setup journey</h2>
+
+      <p>
+        The following five stages illustrate how a community could plan
+        and organize its experience around Nexora's proposed feature set.
+      </p>
+
+      <div class="setup-steps">
+        {steps.map((step) => (
+          <article class="setup-step">
+            <span class="setup-step-number">{step.number}</span>
+
+            <div class="setup-step-content">
+              <h3>{step.title}</h3>
+              <p>{step.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="getting-started-section" aria-labelledby="explore-features">
+      <h2 id="explore-features">Explore Nexora's capabilities</h2>
+
+      <p>
+        Discover the different areas of the Nexora concept and how they
+        are intended to work together.
+      </p>
+
+      <div class="resource-links">
+        <a href="/features/" class="resource-link">
+          <span>
+            <strong>Explore Features</strong>
+            <small>Discover the nine proposed feature categories.</small>
+          </span>
+          <span aria-hidden="true">→</span>
+        </a>
+
+        <a href="/commands/" class="resource-link">
+          <span>
+            <strong>Browse Commands</strong>
+            <small>Explore the illustrative command directory.</small>
+          </span>
+          <span aria-hidden="true">→</span>
+        </a>
+
+        <a href="/docs/" class="resource-link">
+          <span>
+            <strong>Read Documentation</strong>
+            <small>Learn about individual feature workflows.</small>
+          </span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="getting-started-section getting-started-next" aria-labelledby="next-step">
+      <h2 id="next-step">What's next?</h2>
+
+      <p>
+        Continue to the documentation overview to explore the proposed
+        workflows for moderation, welcome messages, engagement, tickets,
+        and utility features.
+      </p>
+
+      <a href="/docs/" class="next-step-link">
+        Explore Documentation <span aria-hidden="true">→</span>
+      </a>
+    </section>
+  </div>
+</DocsLayout>
+
+<style>
+  .getting-started-page {
+    display: grid;
+    gap: var(--space-12);
+  }
+
+  .getting-started-page p {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .getting-started-intro > p {
+    font-size: var(--font-size-lg);
+  }
+
+  .getting-started-section h2 {
+    margin-bottom: var(--space-3);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-heading);
+  }
+
+  .prerequisites-list {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .prerequisites-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .list-check {
+    display: grid;
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    place-items: center;
+    border-radius: var(--radius-full);
+    background: rgb(34 197 94 / 12%);
+    color: var(--color-success);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .setup-steps {
+    display: grid;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  .setup-step {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--color-deep-slate);
+  }
+
+  .setup-step-number {
+    color: var(--color-violet);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .setup-step-content {
+    min-width: 0;
+  }
+
+  .setup-step-content h3 {
+    margin-bottom: var(--space-2);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .resource-links {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .resource-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--color-deep-slate);
+    transition: var(--transition-standard);
+  }
+
+  .resource-link:hover {
+    border-color: var(--color-violet);
+    background: var(--color-surface);
+  }
+
+  .resource-link strong,
+  .resource-link small {
+    display: block;
+  }
+
+  .resource-link strong {
+    color: var(--color-text-primary);
+    font-size: var(--font-size-sm);
+  }
+
+  .resource-link small {
+    margin-top: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .resource-link > span:last-child {
+    color: var(--color-violet);
+    font-size: var(--font-size-xl);
+  }
+
+  .getting-started-next {
+    padding: var(--space-6);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-xl);
+    background: var(--color-deep-slate);
+  }
+
+  .next-step-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    color: var(--color-violet);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .next-step-link:hover {
+    color: var(--color-text-primary);
+  }
+
+  @media (max-width: 640px) {
+    .getting-started-page {
+      gap: var(--space-8);
+    }
+
+    .setup-step {
+      padding: var(--space-4);
+    }
+
+    .getting-started-next {
+      padding: var(--space-4);
+    }
+  }
+</style>

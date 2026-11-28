@@ -1,0 +1,451 @@
+
+---
+import DocsLayout from '../layouts/DocsLayout.astro';
+import DocsCallout from '../components/documentation/DocsCallout.astro';
+
+const documentationSections = [
+  {
+    id: 'moderation',
+    number: '01',
+    title: 'Moderation',
+    description:
+      'A proposed moderation workflow for maintaining a safe, organized, and respectful community.',
+    features: [
+      {
+        title: 'Moderation commands',
+        description:
+          'Illustrative actions for warnings, message cleanup, timeouts, kicks, and bans.',
+      },
+      {
+        title: 'Moderation logs',
+        description:
+          'A conceptual record of moderation actions to support transparency and accountability.',
+      },
+      {
+        title: 'Automated moderation',
+        description:
+          'Proposed detection workflows for spam, inappropriate language, repeated messages, and unwanted links.',
+      },
+    ],
+  },
+  {
+    id: 'welcome-roles',
+    number: '02',
+    title: 'Welcome & Roles',
+    description:
+      'A proposed onboarding experience to help new members understand the community and find their place.',
+    features: [
+      {
+        title: 'Welcome messages',
+        description:
+          'Illustrative welcome messages that introduce new members to the server.',
+      },
+      {
+        title: 'Automatic role assignment',
+        description:
+          'A conceptual role-assignment workflow based on predefined community rules.',
+      },
+      {
+        title: 'Onboarding guidance',
+        description:
+          'Suggested channel introductions, community guidelines, and important links for new members.',
+      },
+    ],
+  },
+  {
+    id: 'engagement',
+    number: '03',
+    title: 'Community Engagement',
+    description:
+      'Concepts designed to encourage participation and make community interaction more rewarding.',
+    features: [
+      {
+        title: 'XP and levels',
+        description:
+          'An illustrative experience-point system that recognizes member participation.',
+      },
+      {
+        title: 'Leaderboards',
+        description:
+          'A proposed leaderboard displaying community participation and member rankings.',
+      },
+      {
+        title: 'Engagement tools',
+        description:
+          'Ideas for prompts, community activities, and participation-focused commands.',
+      },
+    ],
+  },
+  {
+    id: 'tickets',
+    number: '04',
+    title: 'Tickets & Support',
+    description:
+      'A proposed support workflow for organizing member questions and private assistance requests.',
+    features: [
+      {
+        title: 'Ticket creation',
+        description:
+          'A conceptual process for allowing members to submit support requests.',
+      },
+      {
+        title: 'Private support channels',
+        description:
+          'An illustrative private conversation space for members and authorized support staff.',
+      },
+      {
+        title: 'Ticket management',
+        description:
+          'Suggested workflows for assigning, reviewing, and closing support requests.',
+      },
+    ],
+  },
+  {
+    id: 'utility',
+    number: '05',
+    title: 'Utility',
+    description:
+      'A collection of everyday tools intended to make common server tasks easier.',
+    features: [
+      {
+        title: 'Information commands',
+        description:
+          'Conceptual commands for displaying server, user, and channel information.',
+      },
+      {
+        title: 'Convenience tools',
+        description:
+          'Illustrative utilities for common community and server-management tasks.',
+      },
+      {
+        title: 'Server assistance',
+        description:
+          'Proposed tools that help members and administrators access useful information.',
+      },
+    ],
+  },
+];
+---
+
+<DocsLayout
+  title="Nexora Documentation"
+  description="Explore the proposed workflows, feature concepts, and tools behind the Nexora multipurpose Discord bot."
+  section="documentation"
+>
+  <div class="docs-overview">
+    <section class="docs-introduction">
+      <p>
+        This documentation introduces the different systems that make up
+        the Nexora concept. Each section explains its purpose and the
+        proposed capabilities it is designed to represent.
+      </p>
+
+      <DocsCallout type="concept">
+        This is concept documentation for a fictional product demonstration.
+        The features, commands, and workflows described here are illustrative.
+        No live bot, backend, Discord API integration, or server operations
+        are currently available.
+      </DocsCallout>
+    </section>
+
+    <section class="docs-contents" aria-labelledby="docs-contents-title">
+      <div class="docs-section-heading">
+        <p class="docs-section-eyebrow">EXPLORE THE GUIDE</p>
+        <h2 id="docs-contents-title">Documentation contents</h2>
+        <p>
+          Choose a category to explore its proposed functionality and
+          workflow.
+        </p>
+      </div>
+
+      <div class="docs-contents-grid">
+        {documentationSections.map((section) => (
+          <a class="docs-content-card" href={`#${section.id}`}>
+            <span class="docs-card-number">{section.number}</span>
+            <h3>{section.title}</h3>
+            <p>{section.description}</p>
+            <span class="docs-card-link">
+              Explore section <span aria-hidden="true">→</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {documentationSections.map((section) => (
+      <section
+        class="docs-feature-section"
+        id={section.id}
+        aria-labelledby={`${section.id}-title`}
+      >
+        <div class="docs-feature-heading">
+          <span class="docs-feature-number">{section.number}</span>
+          <div>
+            <p class="docs-section-eyebrow">FEATURE GUIDE</p>
+            <h2 id={`${section.id}-title`}>{section.title}</h2>
+            <p>{section.description}</p>
+          </div>
+        </div>
+
+        <div class="docs-feature-list">
+          {section.features.map((feature) => (
+            <article class="docs-feature-item">
+              <span class="docs-feature-indicator" aria-hidden="true">
+                <span></span>
+              </span>
+              <div>
+                <h3>{feature.title}</h3>
+                <p>{feature.description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <section class="docs-commands-section" aria-labelledby="commands-title">
+      <div>
+        <p class="docs-section-eyebrow">COMMAND REFERENCE</p>
+        <h2 id="commands-title">Explore the command directory</h2>
+        <p>
+          Browse the illustrative command collection, search for commands,
+          and filter them by category.
+        </p>
+      </div>
+
+      <a href="/commands/" class="docs-command-link">
+        Browse Commands <span aria-hidden="true">→</span>
+      </a>
+    </section>
+
+    <section class="docs-next-section" aria-labelledby="docs-next-title">
+      <h2 id="docs-next-title">New to Nexora?</h2>
+      <p>
+        Start with the introductory guide to understand the concept and
+        its proposed community setup journey.
+      </p>
+      <a href="/getting-started/" class="docs-next-link">
+        Read Getting Started <span aria-hidden="true">→</span>
+      </a>
+    </section>
+  </div>
+</DocsLayout>
+
+<style>
+  .docs-overview {
+    display: grid;
+    gap: var(--space-12);
+  }
+
+  .docs-overview p {
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .docs-introduction > p {
+    font-size: var(--font-size-lg);
+  }
+
+  .docs-section-heading {
+    margin-bottom: var(--space-6);
+  }
+
+  .docs-section-eyebrow {
+    margin-bottom: var(--space-2);
+    color: var(--color-violet) !important;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.12em;
+  }
+
+  .docs-section-heading h2,
+  .docs-commands-section h2,
+  .docs-next-section h2 {
+    margin-bottom: var(--space-3);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-heading);
+  }
+
+  .docs-contents-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  .docs-content-card {
+    display: flex;
+    min-height: 220px;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-6);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--color-deep-slate);
+    transition: var(--transition-standard);
+  }
+
+  .docs-content-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-violet);
+    background: var(--color-surface);
+  }
+
+  .docs-card-number {
+    margin-bottom: var(--space-4);
+    color: var(--color-violet);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .docs-content-card h3 {
+    margin-bottom: var(--space-2);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-lg);
+  }
+
+  .docs-content-card > p {
+    font-size: var(--font-size-sm);
+  }
+
+  .docs-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: auto;
+    padding-top: var(--space-4);
+    color: var(--color-violet);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .docs-feature-section {
+    scroll-margin-top: 110px;
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border-subtle);
+  }
+
+  .docs-feature-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .docs-feature-number {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    place-items: center;
+    border: 1px solid rgb(139 92 246 / 30%);
+    border-radius: var(--radius-md);
+    background: rgb(139 92 246 / 10%);
+    color: var(--color-violet);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .docs-feature-heading h2 {
+    margin-bottom: var(--space-2);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-2xl);
+  }
+
+  .docs-feature-list {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .docs-feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--color-deep-slate);
+  }
+
+  .docs-feature-indicator {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    flex: 0 0 28px;
+    place-items: center;
+    border-radius: var(--radius-full);
+    background: rgb(139 92 246 / 12%);
+  }
+
+  .docs-feature-indicator span {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--color-violet);
+  }
+
+  .docs-feature-item h3 {
+    margin-bottom: var(--space-2);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .docs-feature-item p {
+    font-size: var(--font-size-sm);
+  }
+
+  .docs-commands-section,
+  .docs-next-section {
+    padding: var(--space-6);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-xl);
+    background: var(--color-deep-slate);
+  }
+
+  .docs-command-link,
+  .docs-next-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    color: var(--color-violet);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .docs-command-link:hover,
+  .docs-next-link:hover {
+    color: var(--color-text-primary);
+  }
+
+  @media (max-width: 640px) {
+    .docs-overview {
+      gap: var(--space-8);
+    }
+
+    .docs-contents-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .docs-content-card {
+      min-height: 190px;
+      padding: var(--space-4);
+    }
+
+    .docs-feature-heading {
+      gap: var(--space-3);
+    }
+
+    .docs-feature-number {
+      width: 38px;
+      height: 38px;
+      flex-basis: 38px;
+    }
+
+    .docs-commands-section,
+    .docs-next-section {
+      padding: var(--space-4);
+    }
+  }
+</style>
